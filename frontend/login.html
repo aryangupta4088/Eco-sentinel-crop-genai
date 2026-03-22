@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Login | Eco Sentinel</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- Google Translate Widget -->
+<div id="google_translate_element" style="position:fixed;top:80px;right:20px;z-index:999;"></div>
+<script type="text/javascript">
+
+</script>
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<style>
+  .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;}
+  body{background:#fcf9f1;font-family:'Be Vietnam Pro',sans-serif;}
+
+  @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes floatLeaf{0%{transform:translateY(100vh) rotate(0deg);opacity:0}10%{opacity:0.3}90%{opacity:0.15}100%{transform:translateY(-10vh) rotate(360deg);opacity:0}}
+  @keyframes logoPulse{0%,100%{box-shadow:0 0 0 0 rgba(13,99,27,0.2)}50%{box-shadow:0 0 0 16px rgba(13,99,27,0)}}
+  @keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  @keyframes blobMove{0%,100%{transform:scale(1) translate(0,0)}33%{transform:scale(1.05) translate(20px,-15px)}66%{transform:scale(0.97) translate(-15px,10px)}}
+
+  .fade-up{animation:fadeUp 0.6s cubic-bezier(.22,1,.36,1) both;}
+  .logo-pulse{animation:logoPulse 2.8s ease-in-out infinite;}
+  .shake{animation:shake 0.5s ease-in-out;}
+  .spinner{animation:spin 0.8s linear infinite;}
+  .blob{animation:blobMove 12s ease-in-out infinite;}
+  .blob2{animation:blobMove 16s ease-in-out 3s infinite;}
+  .leaf{position:fixed;pointer-events:none;z-index:0;animation:floatLeaf linear infinite;}
+
+  .input-group{position:relative;}
+  .input-field{
+    width:100%;padding:14px 16px 14px 48px;
+    background:white;border:1.5px solid #e5e2da;
+    border-radius:12px;font-size:15px;font-family:'Be Vietnam Pro',sans-serif;
+    outline:none;transition:border-color 0.2s,box-shadow 0.2s;
+    color:#1c1c17;
+  }
+  .input-field:focus{border-color:#0d631b;box-shadow:0 0 0 4px rgba(13,99,27,0.08);}
+  .input-field.error{border-color:#ba1a1a;box-shadow:0 0 0 4px rgba(186,26,26,0.08);}
+  .input-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#707a6c;font-size:20px;}
+  .input-toggle{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:#707a6c;cursor:pointer;font-size:20px;}
+
+  .login-btn{
+    width:100%;padding:15px;background:#0d631b;color:white;
+    border:none;border-radius:12px;font-size:15px;font-weight:700;
+    font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;
+    transition:all 0.2s;letter-spacing:0.02em;
+  }
+  .login-btn:hover{background:#0a5016;transform:translateY(-1px);box-shadow:0 8px 24px rgba(13,99,27,0.25);}
+  .login-btn:active{transform:scale(0.98);}
+  .login-btn:disabled{opacity:0.6;cursor:not-allowed;transform:none;}
+
+  .demo-card{
+    background:white;border:1.5px solid #e5e2da;border-radius:12px;
+    padding:12px 16px;cursor:pointer;transition:all 0.15s;
+  }
+  .demo-card:hover{border-color:#0d631b;background:#f7fef7;transform:translateX(4px);}
+
+  .error-msg{
+    display:none;background:#ffdad6;border:1px solid #ba1a1a;
+    border-radius:10px;padding:12px 16px;color:#93000a;
+    font-size:13px;font-weight:600;align-items:center;gap:8px;
+  }
+  .error-msg.show{display:flex;}
+
+  .success-overlay{
+    display:none;position:fixed;inset:0;z-index:100;
+    background:rgba(252,249,241,0.95);backdrop-filter:blur(8px);
+    flex-direction:column;align-items:center;justify-content:center;gap:16px;
+  }
+  .success-overlay.show{display:flex;}
+</style>
+</head>
+
+<body>
+
+<!-- Floating leaves -->
+<div id="leavesContainer"></div>
+
+<!-- Organic blobs -->
+<div class="blob" style="position:fixed;top:-10%;left:-5%;width:35vw;height:35vw;background:rgba(13,99,27,0.04);border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0;"></div>
+<div class="blob2" style="position:fixed;bottom:10%;right:-8%;width:30vw;height:30vw;background:rgba(144,76,39,0.04);border-radius:50%;filter:blur(70px);pointer-events:none;z-index:0;"></div>
+
+<!-- Success overlay -->
+<div class="success-overlay" id="successOverlay">
+  <div class="logo-pulse" style="width:72px;height:72px;background:#0d631b;border-radius:20px;display:flex;align-items:center;justify-content:center;">
+    <span class="material-symbols-outlined" style="color:white;font-size:36px;font-variation-settings:'FILL' 1;">check_circle</span>
+  </div>
+  <h2 style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1.5rem;font-weight:800;color:#0d631b;">Welcome back!</h2>
+  <p style="color:#40493d;font-size:0.9rem;" id="successName">Redirecting to dashboard...</p>
+  <div class="spinner" style="width:28px;height:28px;border:3px solid #e5e2da;border-top-color:#0d631b;border-radius:50%;"></div>
+</div>
+
+<!-- Main container -->
+<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem 1rem;position:relative;z-index:1;">
+  <div style="width:100%;max-width:420px;">
+
+    <!-- Logo + Brand -->
+    <div class="fade-up" style="text-align:center;margin-bottom:2rem;">
+      <div class="logo-pulse" style="width:64px;height:64px;background:#0d631b;border-radius:18px;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;">
+        <span class="material-symbols-outlined" style="color:white;font-size:32px;font-variation-settings:'FILL' 1;">psychiatry</span>
+      </div>
+      <h1 style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1.75rem;font-weight:800;color:#0d631b;margin-bottom:0.25rem;">Eco Sentinel</h1>
+      <p style="color:#40493d;font-size:0.9rem;">The Digital Pulse of Rural India</p>
+    </div>
+
+    <!-- Login Card -->
+    <div class="fade-up" style="background:white;border-radius:20px;padding:2rem;border:1.5px solid #e5e2da;box-shadow:0 20px 60px rgba(28,28,23,0.06);animation-delay:0.1s;">
+
+      <h2 style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1.25rem;font-weight:700;color:#1c1c17;margin-bottom:0.25rem;">Sign in to your account</h2>
+      <p style="color:#707a6c;font-size:0.85rem;margin-bottom:1.5rem;">Enter your Kisan ID or mobile number</p>
+
+      <!-- Error message -->
+      <div class="error-msg" id="errorMsg">
+        <span class="material-symbols-outlined" style="font-size:18px;flex-shrink:0;" style="font-variation-settings:'FILL' 1;">error</span>
+        <span id="errorText">Invalid credentials. Please try again.</span>
+      </div>
+
+      <!-- Form -->
+      <div style="display:flex;flex-direction:column;gap:1rem;margin-top:1rem;">
+
+        <!-- Kisan ID / Mobile -->
+        <div class="input-group">
+          <span class="material-symbols-outlined input-icon" style="font-variation-settings:'FILL' 1;">badge</span>
+          <input id="username" class="input-field" type="text"
+            placeholder="Kisan ID or Mobile Number"
+            oninput="clearError()"/>
+        </div>
+
+        <!-- Password -->
+        <div class="input-group">
+          <span class="material-symbols-outlined input-icon" style="font-variation-settings:'FILL' 1;">lock</span>
+          <input id="password" class="input-field" type="password"
+            placeholder="Password"
+            oninput="clearError()"
+            onkeydown="if(event.key==='Enter'){handleLogin();}"/>
+          <span class="material-symbols-outlined input-toggle" onclick="togglePassword()" id="eyeIcon">visibility</span>
+        </div>
+
+        <!-- Forgot password -->
+        <div style="text-align:right;margin-top:-0.5rem;">
+          <a href="#" style="color:#0d631b;font-size:0.8rem;font-weight:600;text-decoration:none;">Forgot password?</a>
+        </div>
+
+        <!-- Login button -->
+        <button class="login-btn" onclick="handleLogin()" id="loginBtn">
+          Sign In
+        </button>
+
+      </div>
+
+      <!-- Divider -->
+      <div style="display:flex;align-items:center;gap:12px;margin:1.5rem 0;">
+        <div style="flex:1;height:1px;background:#e5e2da;"></div>
+        <span style="font-size:0.75rem;color:#707a6c;font-weight:600;">Demo Accounts</span>
+        <div style="flex:1;height:1px;background:#e5e2da;"></div>
+      </div>
+
+      <!-- Demo accounts -->
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div class="demo-card" onclick="fillDemo('farmer')">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:36px;height:36px;background:#E1F5EE;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <span class="material-symbols-outlined" style="color:#085041;font-size:18px;font-variation-settings:'FILL' 1;">agriculture</span>
+            </div>
+            <div>
+              <p style="font-weight:700;font-size:0.85rem;color:#1c1c17;margin:0;">Farmer — Ramesh Kumar Singh</p>
+              <p style="font-size:0.75rem;color:#707a6c;margin:0;">ID: KP-2026-UP-AZM-00847 · Pass: kisan123</p>
+            </div>
+            <span class="material-symbols-outlined" style="color:#0d631b;margin-left:auto;font-size:16px;">arrow_forward</span>
+          </div>
+        </div>
+
+        <div class="demo-card" onclick="fillDemo('admin')">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:36px;height:36px;background:#EEEDFE;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <span class="material-symbols-outlined" style="color:#3C3489;font-size:18px;font-variation-settings:'FILL' 1;">admin_panel_settings</span>
+            </div>
+            <div>
+              <p style="font-weight:700;font-size:0.85rem;color:#1c1c17;margin:0;">Admin — Block Officer</p>
+              <p style="font-size:0.75rem;color:#707a6c;margin:0;">ID: ADMIN-AZM-001 · Pass: admin123</p>
+            </div>
+            <span class="material-symbols-outlined" style="color:#0d631b;margin-left:auto;font-size:16px;">arrow_forward</span>
+          </div>
+        </div>
+
+        <div class="demo-card" onclick="fillDemo('demo')">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:36px;height:36px;background:#FAEEDA;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <span class="material-symbols-outlined" style="color:#633806;font-size:18px;font-variation-settings:'FILL' 1;">visibility</span>
+            </div>
+            <div>
+              <p style="font-weight:700;font-size:0.85rem;color:#1c1c17;margin:0;">Judge Demo Mode</p>
+              <p style="font-size:0.75rem;color:#707a6c;margin:0;">ID: demo · Pass: demo123</p>
+            </div>
+            <span class="material-symbols-outlined" style="color:#0d631b;margin-left:auto;font-size:16px;">arrow_forward</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sign up link -->
+      <p style="text-align:center;margin-top:1.5rem;font-size:0.85rem;color:#707a6c;">
+        New farmer? <a href="#" style="color:#0d631b;font-weight:700;text-decoration:none;">Register with Kisan ID →</a>
+      </p>
+
+    </div>
+
+    <!-- Footer -->
+    <p class="fade-up" style="text-align:center;margin-top:1.5rem;font-size:0.75rem;color:#707a6c;animation-delay:0.2s;">
+      Powered by Gemini AI · 22 languages · 17 pillars
+    </p>
+
+  </div>
+</div>
+
+<script>
+// ── DEMO CREDENTIALS ──
+const DEMO_USERS = {
+  'KP-2026-UP-AZM-00847': { password: 'kisan123', name: 'Ramesh Kumar Singh', role: 'farmer', redirect: '/language-page/code.html' },
+  'ADMIN-AZM-001':         { password: 'admin123', name: 'Block Officer',       role: 'admin',  redirect: '/farmer_dashboard_synced_navbar/code.html' },
+  'demo':                  { password: 'demo123',  name: 'Demo User',           role: 'demo',   redirect: '/language-page/code.html' },
+  // Also allow mobile number login
+  '9999999999':            { password: 'kisan123', name: 'Ramesh Kumar Singh', role: 'farmer', redirect: '/language-page/code.html' },
+};
+
+// ── FILL DEMO ──
+function fillDemo(type) {
+  const map = {
+    farmer: { id: 'KP-2026-UP-AZM-00847', pass: 'kisan123' },
+    admin:  { id: 'ADMIN-AZM-001',         pass: 'admin123' },
+    demo:   { id: 'demo',                   pass: 'demo123'  },
+  };
+  document.getElementById('username').value = map[type].id;
+  document.getElementById('password').value = map[type].pass;
+  clearError();
+  document.getElementById('loginBtn').focus();
+}
+
+// ── TOGGLE PASSWORD ──
+function togglePassword() {
+  const input = document.getElementById('password');
+  const icon  = document.getElementById('eyeIcon');
+  if (input.type === 'password') {
+    input.type = 'text';
+    icon.textContent = 'visibility_off';
+  } else {
+    input.type = 'password';
+    icon.textContent = 'visibility';
+  }
+}
+
+// ── CLEAR ERROR ──
+function clearError() {
+  document.getElementById('errorMsg').classList.remove('show');
+  document.getElementById('username').classList.remove('error');
+  document.getElementById('password').classList.remove('error');
+}
+
+// ── SHOW ERROR ──
+function showError(msg) {
+  document.getElementById('errorText').textContent = msg;
+  document.getElementById('errorMsg').classList.add('show');
+  document.getElementById('username').classList.add('error');
+  document.getElementById('password').classList.add('error');
+  // shake the card
+  const card = document.getElementById('username').closest('div[style*="background:white"]') ||
+               document.getElementById('username').parentElement.parentElement.parentElement;
+  card.classList.add('shake');
+  setTimeout(() => card.classList.remove('shake'), 500);
+}
+
+// ── HANDLE LOGIN ──
+async function handleLogin() {
+  const username = document.getElementById('username').value.trim();
+  const password = document.getElementById('password').value.trim();
+  const btn      = document.getElementById('loginBtn');
+
+  if (!username || !password) {
+    showError('Please enter your Kisan ID and password.');
+    return;
+  }
+
+  // show loading
+  btn.disabled = true;
+  btn.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;gap:8px;"><div class="spinner" style="width:18px;height:18px;border:2px solid rgba(255,255,255,0.3);border-top-color:white;border-radius:50%;"></div>Signing in...</div>`;
+
+  try {
+    // ── BACKEND CALL ──
+    const res = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      // save user to session storage
+      sessionStorage.setItem('ecoSentinelUser', JSON.stringify(data.user));
+      showSuccess(data.user.name, data.user.redirect);
+    } else {
+      btn.disabled = false;
+      btn.textContent = 'Sign In';
+      showError(data.message || 'Invalid credentials. Please try again.');
+    }
+
+  } catch(e) {
+    // fallback to demo credentials if backend not ready
+    const user = DEMO_USERS[username];
+    if (user && user.password === password) {
+      sessionStorage.setItem('ecoSentinelUser', JSON.stringify({ name: user.name, role: user.role, kisanId: username }));
+      showSuccess(user.name, user.redirect);
+    } else {
+      btn.disabled = false;
+      btn.textContent = 'Sign In';
+      showError('Invalid Kisan ID or password. Try a demo account below.');
+    }
+  }
+}
+
+// ── SHOW SUCCESS ──
+function showSuccess(name, redirect) {
+  document.getElementById('successName').textContent = `Welcome, ${name}! Redirecting...`;
+  document.getElementById('successOverlay').classList.add('show');
+  setTimeout(() => {
+    window.location.href = './dashboard.html';
+  }, 1800);
+}
+
+// ── FLOATING LEAVES ──
+function spawnLeaf() {
+  const container = document.getElementById('leavesContainer');
+  const icons = ['eco', 'grass', 'yard', 'park'];
+  const leaf = document.createElement('div');
+  leaf.className = 'leaf material-symbols-outlined';
+  leaf.textContent = icons[Math.floor(Math.random() * icons.length)];
+  leaf.style.left = Math.random() * 100 + 'vw';
+  leaf.style.animationDuration = (14 + Math.random() * 10) + 's';
+  leaf.style.animationDelay = (Math.random() * 3) + 's';
+  leaf.style.fontSize = (14 + Math.random() * 12) + 'px';
+  leaf.style.color = `rgba(13,99,27,${0.06 + Math.random() * 0.1})`;
+  leaf.style.fontVariationSettings = "'FILL' 1";
+  container.appendChild(leaf);
+  setTimeout(() => leaf.remove(), 24000);
+}
+
+setInterval(spawnLeaf, 2000);
+for (let i = 0; i < 4; i++) setTimeout(spawnLeaf, i * 700);
+</script>
+</body>
+</html>

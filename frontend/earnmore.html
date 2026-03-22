@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Earn More | Eco Sentinel</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode:"class",
+    theme:{extend:{colors:{
+      "on-surface-variant":"#40493d","tertiary-fixed":"#ffdfa0","on-error":"#ffffff","surface-variant":"#e5e2da","primary-fixed-dim":"#88d982","outline-variant":"#bfcaba","on-primary":"#ffffff","on-primary-fixed":"#002204","primary-fixed":"#a3f69c","on-tertiary":"#ffffff","on-secondary-fixed-variant":"#733512","on-secondary-container":"#783916","secondary":"#904c27","on-tertiary-fixed-variant":"#5c4300","on-secondary-fixed":"#351000","on-secondary":"#ffffff","surface-tint":"#1b6d24","on-primary-fixed-variant":"#005312","on-tertiary-container":"#ffefd7","tertiary-container":"#8c6800","outline":"#707a6c","on-background":"#1c1c17","inverse-surface":"#31312b","inverse-on-surface":"#f4f0e8","surface-dim":"#dddad2","primary-container":"#2e7d32","surface-bright":"#fcf9f1","background":"#fcf9f1","secondary-fixed":"#ffdbcc","secondary-container":"#ffa67a","on-tertiary-fixed":"#261a00","inverse-primary":"#88d982","error-container":"#ffdad6","secondary-fixed-dim":"#ffb693","surface-container-high":"#ebe8e0","on-primary-container":"#cbffc2","error":"#ba1a1a","surface-container-low":"#f7f3eb","surface-container-lowest":"#ffffff","surface-container":"#f1eee6","surface":"#fcf9f1","primary":"#0d631b","on-surface":"#1c1c17","on-error-container":"#93000a","tertiary-fixed-dim":"#f8bd2a","tertiary":"#6e5100","surface-container-highest":"#e5e2da"
+    },fontFamily:{"headline":["Plus Jakarta Sans"],"body":["Be Vietnam Pro"],"label":["Be Vietnam Pro"]},borderRadius:{"DEFAULT":"1rem","lg":"2rem","xl":"3rem","full":"9999px"}}},
+  }
+</script>
+<style>
+  .material-symbols-outlined { font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24; }
+  .organic-mask { clip-path:polygon(10% 0%,90% 5%,100% 40%,85% 95%,15% 100%,0% 60%); }
+  .editorial-shadow { box-shadow:0 20px 40px -15px rgba(28,28,23,0.06); }
+  .ai-result { border-left:4px solid #0d631b; animation:fadeIn 0.4s ease; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+  .loading-pulse { animation:pulse 1.5s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  .price-rise { color:#0d631b; }
+  .price-fall { color:#ba1a1a; }
+  tr:hover td { background:rgba(13,99,27,0.03); }
+</style>
+</head>
+<body class="bg-surface font-body text-on-surface selection:bg-secondary-container">
+
+<!-- ── TOP NAV ─────────────────────────────────────── -->
+<nav class="fixed top-0 w-full z-50 bg-emerald-900/70 backdrop-blur-xl shadow-2xl shadow-emerald-900/20">
+  <div class="flex justify-between items-center px-6 py-4 w-full max-w-screen-2xl mx-auto">
+    <span class="text-2xl font-bold text-emerald-50 font-headline tracking-tight">Eco Sentinel</span>
+    <div class="hidden md:flex items-center space-x-8">
+      <a class="text-emerald-200/70 hover:text-emerald-50 transition-colors" href="./dashboard.html">Home</a>
+      <a class="text-emerald-200/70 hover:text-emerald-50 transition-colors" href="./agritrend.html">AgriTrend</a>
+      <a class="text-emerald-200/70 hover:text-emerald-50 transition-colors" href="./askkrishiai.html">Ask Krishi AI</a>
+      <a class="text-emerald-200/70 hover:text-emerald-50 transition-colors" href="./schemeradar.html">Scheme Radar</a>
+      <a class="text-emerald-200/70 hover:text-emerald-50 transition-colors" href="./croptracker.html">Crop Tracker</a>
+      <a class="text-emerald-200/70 hover:text-emerald-50 transition-colors" href="./diagonoseandprotect.html">Diagnose</a>
+      <a class="text-emerald-100 font-bold border-b-2 border-emerald-400 pb-1" href="./earnmore.html">Earn More</a>
+    </div>
+    <div class="bg-emerald-800/50 rounded-full p-2 hover:bg-emerald-700/50 transition-all cursor-pointer">
+      <span class="material-symbols-outlined text-emerald-50">account_circle</span>
+    </div>
+  </div>
+</nav>
+
+<main class="pt-24 pb-32 px-6 max-w-7xl mx-auto">
+
+  <!-- ── HEADER ─────────────────────────────────────── -->
+  <header class="mb-12">
+    <h1 class="font-headline text-5xl md:text-6xl font-extrabold text-on-surface mb-4 tracking-tight">Earn More</h1>
+    <p class="text-on-surface-variant text-xl md:text-2xl font-light max-w-2xl leading-relaxed">
+      Five new ways to earn — from your crop, your waste, your land and your sky.
+    </p>
+  </header>
+
+  <!-- ── SECTION 1: SMART MANDI ─────────────────────── -->
+  <section class="mb-16 bg-surface-container-low rounded-xl p-8 editorial-shadow">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-6">
+      <div>
+        <h2 class="font-headline text-3xl font-bold mb-2 flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary">trending_up</span>
+          Smart-Mandi Intelligence
+        </h2>
+        <p id="mandi-location-text" class="text-on-surface-variant font-medium flex items-center gap-2">
+          <span class="material-symbols-outlined text-sm">location_on</span>
+          Enter your crop and district below to get live prices
+        </p>
+      </div>
+    </div>
+
+    <!-- Mandi Search Form -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+      <input id="mandi-crop" placeholder="Crop (e.g. Wheat)" class="border border-outline-variant rounded-full px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary bg-white"/>
+      <input id="mandi-district" placeholder="District (e.g. Azamgarh)" class="border border-outline-variant rounded-full px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary bg-white"/>
+      <input id="mandi-state" placeholder="State (e.g. Uttar Pradesh)" class="border border-outline-variant rounded-full px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary bg-white"/>
+      <input id="mandi-qty" placeholder="Quantity (quintals)" type="number" class="border border-outline-variant rounded-full px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary bg-white"/>
+    </div>
+    <button id="mandi-fetch-btn" class="mb-6 bg-primary text-white rounded-full px-8 py-3 font-bold hover:scale-105 transition-transform shadow-md flex items-center gap-2">
+      <span class="material-symbols-outlined text-sm">search</span> Get Live Mandi Prices
+    </button>
+
+    <!-- Loading -->
+    <div id="mandi-loading" class="hidden text-center py-8">
+      <div class="loading-pulse text-primary font-bold">⏳ Fetching live mandi prices from Agmarknet...</div>
+    </div>
+
+    <!-- Mandi Table -->
+    <div id="mandi-table-wrap" class="overflow-x-auto mb-8 bg-surface-container-lowest rounded-xl p-2">
+      <table class="w-full text-left border-separate border-spacing-y-2" id="mandi-table">
+        <thead>
+          <tr class="text-on-surface-variant text-sm font-label uppercase tracking-wider">
+            <th class="px-4 py-4">Mandi Name</th>
+            <th class="px-4 py-4">District</th>
+            <th class="px-4 py-4">Min Price</th>
+            <th class="px-4 py-4">Max Price</th>
+            <th class="px-4 py-4 font-bold text-on-surface">Modal Price</th>
+            <th class="px-4 py-4">Signal</th>
+          </tr>
+        </thead>
+        <tbody id="mandi-tbody">
+          <!-- Static rows shown before search -->
+          <tr class="bg-surface-container-low/50">
+            <td class="px-4 py-5 font-bold">Azamgarh Mandi</td>
+            <td class="px-4 py-5">Azamgarh</td>
+            <td class="px-4 py-5">₹2,050</td>
+            <td class="px-4 py-5">₹2,310</td>
+            <td class="px-4 py-5 font-extrabold text-primary">₹2,180</td>
+            <td class="px-4 py-5"><span class="bg-primary/10 text-primary px-4 py-1.5 rounded-full text-xs font-bold flex items-center w-fit gap-1"><span class="material-symbols-outlined text-[14px]" style="font-variation-settings:'FILL' 1;">check_circle</span> Sell Now</span></td>
+          </tr>
+          <tr class="bg-surface-container-low/50">
+            <td class="px-4 py-5 font-bold">Varanasi Mandi</td>
+            <td class="px-4 py-5">Varanasi</td>
+            <td class="px-4 py-5">₹2,100</td>
+            <td class="px-4 py-5">₹2,380</td>
+            <td class="px-4 py-5 font-extrabold text-on-surface-variant">₹2,240</td>
+            <td class="px-4 py-5"><span class="bg-tertiary-fixed text-tertiary px-4 py-1.5 rounded-full text-xs font-bold flex items-center w-fit">Far — Check Transport</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- AI Advice + Extra Income -->
+    <div class="grid md:grid-cols-2 gap-6">
+      <div id="mandi-ai-advice" class="bg-primary-container text-on-primary-container p-6 rounded-xl flex gap-4">
+        <span class="material-symbols-outlined text-4xl">psychology</span>
+        <div>
+          <div class="flex items-center gap-2 mb-2">
+            <span class="text-xs font-bold uppercase tracking-widest bg-on-primary-container/20 px-2 py-1 rounded">Krishi AI Analysis</span>
+          </div>
+          <p id="mandi-ai-text" class="text-lg leading-snug">Enter your crop and district above to get AI-powered sell/hold advice and 7-day price prediction.</p>
+        </div>
+      </div>
+      <div class="flex flex-col justify-center items-center text-center p-6 border-2 border-dashed border-outline-variant/30 rounded-xl">
+        <p class="text-on-surface-variant mb-1 font-medium">Extra Income Potential</p>
+        <h3 id="extra-income" class="text-4xl font-extrabold text-primary">₹—</h3>
+        <p class="text-sm text-on-surface-variant mt-1" id="extra-income-label">on your quantity with these insights</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SECTION 2: WASTE TO WEALTH ─────────────────── -->
+  <section class="mb-16">
+    <h2 class="font-headline text-3xl font-bold mb-8 text-on-surface">Your Stubble Is Not Waste — It Is Money</h2>
+    <div class="grid lg:grid-cols-3 gap-8">
+      <!-- Calculator -->
+      <div class="lg:col-span-1 bg-secondary-fixed text-on-secondary-fixed p-8 rounded-xl flex flex-col justify-between">
+        <div>
+          <span class="material-symbols-outlined text-5xl mb-4">recycling</span>
+          <h3 class="text-2xl font-bold mb-4">Calculate My Waste Potential</h3>
+          <div class="space-y-3 mb-6">
+            <select id="w2w-waste-type" class="w-full bg-surface-container-highest border-none rounded-lg p-3 text-on-surface text-sm focus:ring-2 focus:ring-primary">
+              <option>Paddy straw (Parali)</option>
+              <option>Wheat stubble</option>
+              <option>Sugarcane bagasse</option>
+              <option>Cotton stalks</option>
+              <option>Maize cobs</option>
+            </select>
+            <input id="w2w-quantity" class="w-full bg-surface-container-highest border-none rounded-lg p-4 text-on-surface focus:ring-2 focus:ring-primary" placeholder="Enter tonnes of waste" type="number"/>
+            <input id="w2w-district" class="w-full bg-surface-container-highest border-none rounded-lg p-4 text-on-surface focus:ring-2 focus:ring-primary" placeholder="Your District"/>
+          </div>
+        </div>
+        <button id="w2w-calc-btn" class="w-full bg-primary text-on-primary font-bold py-4 rounded-full shadow-xl hover:scale-105 transition-transform">
+          Calculate My Income Options
+        </button>
+      </div>
+
+      <!-- Result Cards -->
+      <div class="lg:col-span-2 grid md:grid-cols-3 gap-4">
+        <div class="bg-surface-container p-6 rounded-xl border-b-4 border-blue-500 flex flex-col justify-between">
+          <div>
+            <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest">Thermal Plants</span>
+            <h4 class="text-xl font-bold mt-4 mb-2">Bio-Energy Pellets</h4>
+            <p id="w2w-bio-price" class="text-2xl font-black text-on-surface">₹3,800<span class="text-sm font-normal">/tonne</span></p>
+            <p id="w2w-bio-total" class="text-primary font-bold text-sm mt-1"></p>
+          </div>
+          <div class="mt-6 space-y-2 text-sm">
+            <div class="flex justify-between"><span>Effort:</span><span class="font-bold">Low</span></div>
+            <div class="flex justify-between"><span>Time:</span><span class="font-bold">7 days</span></div>
+          </div>
+        </div>
+        <div class="bg-surface-container p-6 rounded-xl border-b-4 border-primary flex flex-col justify-between">
+          <div>
+            <span class="bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest">App Buyer</span>
+            <h4 class="text-xl font-bold mt-4 mb-2">Oyster Mushroom</h4>
+            <p id="w2w-mushroom-price" class="text-2xl font-black text-on-surface">₹8,200<span class="text-sm font-normal">/tonne</span></p>
+            <p id="w2w-mushroom-total" class="text-primary font-bold text-sm mt-1"></p>
+          </div>
+          <div class="mt-6 space-y-2 text-sm">
+            <div class="flex justify-between"><span>Effort:</span><span class="font-bold">Medium</span></div>
+            <div class="flex justify-between"><span>Time:</span><span class="font-bold">30 days</span></div>
+          </div>
+        </div>
+        <div class="bg-surface-container p-6 rounded-xl border-b-4 border-secondary-container flex flex-col justify-between">
+          <div>
+            <span class="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest">Organic Farmers</span>
+            <h4 class="text-xl font-bold mt-4 mb-2">Vermicompost</h4>
+            <p id="w2w-vermi-price" class="text-2xl font-black text-on-surface">₹4,500<span class="text-sm font-normal">/tonne</span></p>
+            <p id="w2w-vermi-total" class="text-primary font-bold text-sm mt-1"></p>
+          </div>
+          <div class="mt-6 space-y-2 text-sm">
+            <div class="flex justify-between"><span>Effort:</span><span class="font-bold">Low</span></div>
+            <div class="flex justify-between"><span>Time:</span><span class="font-bold">45 days</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- W2W AI Result -->
+    <div id="w2w-result" class="hidden mt-6 bg-surface-container-lowest p-6 rounded-xl ai-result shadow-sm">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="material-symbols-outlined text-primary" style="font-variation-settings:'FILL' 1;">psychology</span>
+        <span class="font-headline font-bold text-primary uppercase tracking-wide text-sm">AI Waste-to-Wealth Recommendation</span>
+      </div>
+      <p id="w2w-result-text" class="text-on-surface text-sm leading-relaxed whitespace-pre-line"></p>
+    </div>
+
+    <div class="mt-8 flex flex-col md:flex-row items-center justify-between gap-6 p-6 bg-surface-container-low rounded-xl border border-outline-variant/20">
+      <div class="flex items-center gap-4">
+        <div class="bg-tertiary-fixed-dim p-3 rounded-full">
+          <span class="material-symbols-outlined text-on-tertiary-fixed">lightbulb</span>
+        </div>
+        <p class="text-on-surface-variant font-medium">
+          <strong class="text-on-surface">Pro tip:</strong> Do mushroom first. The leftover substrate becomes free raw material for vermicompost earthworms.
+        </p>
+      </div>
+      <button id="connect-buyer-btn" class="px-10 py-4 bg-primary text-on-primary font-bold rounded-full shadow-lg whitespace-nowrap hover:scale-105 transition-transform">
+        Connect Me With a Buyer
+      </button>
+    </div>
+  </section>
+
+  <!-- ── SECTION 3: AGRI-CART ───────────────────────── -->
+  <section class="mb-16 grid lg:grid-cols-5 gap-12 items-center">
+    <div class="lg:col-span-2">
+      <h2 class="font-headline text-3xl font-bold mb-4 text-on-surface leading-tight">Buy Inputs at Government Price — Zero Middlemen</h2>
+      <div class="bg-surface-container-high p-8 rounded-xl organic-mask mb-6">
+        <p class="text-on-surface-variant italic leading-relaxed">
+          "Based on your Soil Vitals reading today — Krishi AI recommends the following inputs for your 3 acre wheat field."
+        </p>
+      </div>
+      <div class="space-y-4">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-primary">verified</span>
+          <p class="text-sm font-medium">DBT subsidy credited before purchase</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-primary">local_shipping</span>
+          <p class="text-sm font-medium">Delivery in 3 working days</p>
+        </div>
+      </div>
+    </div>
+    <div class="lg:col-span-3 bg-surface-container-low p-8 rounded-xl editorial-shadow">
+      <!-- Input form -->
+      <div class="flex gap-3 mb-6">
+        <input id="cart-crop" placeholder="Crop (e.g. Wheat)" class="flex-1 border border-outline-variant rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"/>
+        <input id="cart-acres" placeholder="Acres" type="number" class="w-24 border border-outline-variant rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"/>
+        <button id="cart-calc-btn" class="bg-primary text-white rounded-full px-5 py-2 font-bold text-sm hover:scale-105 transition-transform">Calculate</button>
+      </div>
+
+      <table class="w-full text-left">
+        <thead>
+          <tr class="text-on-surface-variant text-[10px] uppercase font-bold tracking-[0.2em]">
+            <th class="pb-6">Input Item</th>
+            <th class="pb-6">Qty</th>
+            <th class="pb-6">Govt Price</th>
+            <th class="pb-6 text-right">You Save</th>
+          </tr>
+        </thead>
+        <tbody id="cart-tbody" class="text-on-surface font-medium">
+          <tr class="border-b border-outline-variant/10">
+            <td class="py-4 font-bold">Urea (45kg bag)</td>
+            <td class="py-4">6 Bags</td>
+            <td class="py-4 text-on-surface-variant font-normal italic">₹266.50</td>
+            <td class="py-4 text-right text-primary">₹1,200</td>
+          </tr>
+          <tr class="border-b border-outline-variant/10">
+            <td class="py-4 font-bold">DAP (50kg bag)</td>
+            <td class="py-4">3 Bags</td>
+            <td class="py-4 text-on-surface-variant font-normal italic">₹1,350</td>
+            <td class="py-4 text-right text-primary">₹850</td>
+          </tr>
+          <tr class="border-b border-outline-variant/10">
+            <td class="py-4 font-bold">Wheat Seed HD2967</td>
+            <td class="py-4">120 kg</td>
+            <td class="py-4 text-on-surface-variant font-normal italic">₹1,240</td>
+            <td class="py-4 text-right text-primary">₹1,024</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- AI Cart Result -->
+      <div id="cart-result" class="hidden mt-4 bg-surface-container-low p-4 rounded-xl ai-result text-sm text-on-surface whitespace-pre-line leading-relaxed"></div>
+
+      <div class="mt-8 flex flex-col md:flex-row justify-between items-center gap-6">
+        <div>
+          <p class="text-on-surface-variant text-xs uppercase font-bold tracking-widest mb-1">Total Savings This Season</p>
+          <h4 id="cart-savings" class="text-5xl font-black text-primary tracking-tighter">₹3,074</h4>
+        </div>
+        <button id="cart-order-btn" class="bg-primary px-12 py-5 rounded-full text-on-primary font-bold shadow-2xl flex items-center gap-2 hover:scale-105 transition-transform">
+          Order Now via Kisan ID
+          <span class="material-symbols-outlined">arrow_forward</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SECTION 4: BHU-SANJAL LAND LEASE ──────────── -->
+  <section class="mb-16">
+    <h2 class="font-headline text-3xl font-bold mb-8 text-on-surface">Got Idle Land? Or Need Land to Farm?</h2>
+    <div class="grid md:grid-cols-2 gap-8 mb-8">
+      <div class="group relative overflow-hidden bg-surface-container-high rounded-xl p-10 cursor-pointer hover:shadow-xl transition-all">
+        <span class="material-symbols-outlined text-6xl text-secondary mb-4">landscape</span>
+        <h3 class="text-3xl font-bold mb-2">I have land to lease</h3>
+        <p class="text-on-surface-variant mb-6">List your fallow plots and get verified tenants with automated agreements.</p>
+        <button id="list-land-btn" class="bg-secondary text-on-secondary px-8 py-3 rounded-full font-bold hover:scale-105 transition-transform">List My Land</button>
+      </div>
+      <div class="group relative overflow-hidden bg-primary/10 rounded-xl p-10 cursor-pointer border-2 border-primary/20 hover:shadow-xl transition-all">
+        <span class="material-symbols-outlined text-6xl text-primary mb-4">search_insights</span>
+        <h3 class="text-3xl font-bold mb-2">I need land to farm</h3>
+        <p class="text-on-surface-variant mb-6">Browse satellite-verified plots with rich soil history and fair rent prices.</p>
+        <button id="find-land-btn" class="bg-primary text-on-primary px-8 py-3 rounded-full font-bold hover:scale-105 transition-transform">Find Land Near Me</button>
+      </div>
+    </div>
+
+    <!-- Land Forms -->
+    <div id="land-forms" class="hidden mb-6 grid md:grid-cols-2 gap-6">
+      <!-- List Land Form -->
+      <div id="list-land-form" class="hidden bg-surface-container-low p-6 rounded-xl border border-outline-variant/20">
+        <h4 class="font-bold text-primary mb-4">List Your Land</h4>
+        <div class="space-y-3">
+          <input id="ll-owner" placeholder="Your Name" class="w-full border border-outline-variant rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"/>
+          <input id="ll-acres" placeholder="Land size (acres)" type="number" class="w-full border border-outline-variant rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"/>
+          <input id="ll-district" placeholder="District" class="w-full border border-outline-variant rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"/>
+          <select id="ll-soil" class="w-full border border-outline-variant rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary">
+            <option>Loamy</option><option>Black Cotton</option><option>Sandy</option><option>Clay</option><option>Red Laterite</option>
+          </select>
+          <select id="ll-water" class="w-full border border-outline-variant rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary">
+            <option>Canal Irrigation</option><option>Borewell</option><option>Rain-fed only</option>
+          </select>
+          <input id="ll-crop" placeholder="Preferred crop" class="w-full border border-outline-variant rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"/>
+          <button id="get-fair-rent-btn" class="w-full bg-secondary text-white rounded-full py-2.5 font-bold text-sm hover:scale-105 transition-transform">Get Fair Rent Estimate + Agreement</button>
+        </div>
+      </div>
+
+      <!-- Find Land Form -->
+      <div id="find-land-form" class="hidden bg-surface-container-low p-6 rounded-xl border border-outline-variant/20">
+        <h4 class="font-bold text-primary mb-4">Find Land Near You</h4>
+        <div class="space-y-3">
+          <input id="fl-farmer" placeholder="Your Name" class="w-full border border-outline-variant rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"/>
+          <input id="fl-acres" placeholder="Land needed (acres)" type="number" class="w-full border border-outline-variant rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"/>
+          <input id="fl-district" placeholder="District" class="w-full border border-outline-variant rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"/>
+          <input id="fl-crop" placeholder="Crop you want to grow" class="w-full border border-outline-variant rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"/>
+          <button id="generate-agreement-btn" class="w-full bg-primary text-white rounded-full py-2.5 font-bold text-sm hover:scale-105 transition-transform">Generate Lease Agreement</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Land Result -->
+    <div id="land-result" class="hidden bg-surface-container-lowest p-6 rounded-xl ai-result shadow-sm mb-6">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="material-symbols-outlined text-primary" style="font-variation-settings:'FILL' 1;">gavel</span>
+        <span class="font-headline font-bold text-primary uppercase tracking-wide text-sm">Land Analysis & Agreement</span>
+      </div>
+      <p id="land-result-text" class="text-on-surface text-sm leading-relaxed whitespace-pre-line"></p>
+      <button id="copy-agreement-btn" class="mt-3 flex items-center gap-2 text-primary font-bold text-sm hover:underline">
+        <span class="material-symbols-outlined text-sm">content_copy</span> Copy Agreement
+      </button>
+    </div>
+
+    <!-- Active Listing -->
+    <div class="bg-surface-container-lowest border border-outline-variant/10 rounded-xl p-6 md:p-8 editorial-shadow">
+      <div class="flex items-center gap-2 mb-6">
+        <span class="w-3 h-3 bg-primary rounded-full animate-pulse"></span>
+        <h4 class="font-bold text-xs uppercase tracking-[0.3em] text-on-surface-variant">Active Listing Near You</h4>
+      </div>
+      <!-- Image + Details stacked properly -->
+      <div class="flex flex-col gap-6">
+        <!-- Top: Image + Location side by side -->
+        <div class="flex flex-col sm:flex-row gap-6 items-start">
+          <div class="w-full sm:w-48 h-40 bg-surface-variant rounded-xl overflow-hidden flex-shrink-0">
+            <img alt="Farmland" class="w-full h-full object-cover grayscale-[0.5] hover:grayscale-0 transition-all duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRDmEKSFRUS_0k0euFA4nZ6XRgPEb6EGXiuSdnFdCxNqteZI-hcx73bQntkTK50pVWEFb9ZX9FZMQcxt6ad_4O5_rG9pRnrVqEN09_VyoazukMR_dagliD_AXdgrqFvbtmhtghbzBd7Zr-8LsqDVTA_ag1jM_vUG7TAFaNIIPbJKq_0S2f6-kqjEdFFh_VIg0lnfSI_Xs3A-t-fjs1U_D2H4yFwyY6W4WPP9bhluaB9fr4mTUVSop6Nfqawuyyrr7PeSfFbtnnspU"/>
+          </div>
+          <!-- Details grid -->
+          <div class="flex-1 grid grid-cols-2 gap-x-6 gap-y-4">
+            <div>
+              <p class="text-xs font-bold text-on-surface-variant uppercase mb-1">Location</p>
+              <p class="font-bold text-base">Village Khanpur</p>
+              <p class="text-sm text-on-surface-variant">2.1 km away</p>
+            </div>
+            <div>
+              <p class="text-xs font-bold text-on-surface-variant uppercase mb-1">Area</p>
+              <p class="font-bold text-base">2.5 Acres</p>
+            </div>
+            <div>
+              <p class="text-xs font-bold text-on-surface-variant uppercase mb-1">Soil Type</p>
+              <p class="font-bold text-base text-primary">Good / Neutral</p>
+            </div>
+            <div>
+              <p class="text-xs font-bold text-on-surface-variant uppercase mb-1">Rent</p>
+              <p class="font-bold text-base">₹8,400 <span class="text-sm font-normal text-on-surface-variant">/acre/season</span></p>
+            </div>
+          </div>
+        </div>
+        <!-- Bottom: Button full width -->
+        <button id="view-soil-btn" class="w-full px-8 py-4 border-2 border-primary text-primary font-bold rounded-full hover:bg-primary hover:text-on-primary transition-all text-center">
+          View Soil Report + Agreement
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SECTION 5: CARBON COIN ─────────────────────── -->
+  <section class="mb-16">
+    <h2 class="font-headline text-3xl font-bold mb-8 text-on-surface">Save the Air — Earn Real Money</h2>
+    <div class="grid lg:grid-cols-2 gap-12">
+      <!-- Comparison -->
+      <div class="flex flex-col gap-4">
+        <div class="bg-red-50 p-6 rounded-xl flex items-center justify-between border-l-8 border-red-500">
+          <div class="flex items-center gap-4">
+            <span class="material-symbols-outlined text-red-500 text-4xl">local_fire_department</span>
+            <div>
+              <h5 class="font-bold text-red-900">Burn 3 acres stubble</h5>
+              <p class="text-sm text-red-700">1,200 kg CO2 released</p>
+            </div>
+          </div>
+          <p class="text-2xl font-black text-red-900">₹0 earned</p>
+        </div>
+        <div class="bg-emerald-50 p-6 rounded-xl flex items-center justify-between border-l-8 border-emerald-500">
+          <div class="flex items-center gap-4">
+            <span class="material-symbols-outlined text-emerald-500 text-4xl">eco</span>
+            <div>
+              <h5 class="font-bold text-emerald-900">Compost 3 acres stubble</h5>
+              <p class="text-sm text-emerald-700">1,200 kg CO2 saved</p>
+            </div>
+          </div>
+          <p class="text-2xl font-black text-emerald-900">+ ₹1,800 Coins</p>
+        </div>
+
+        <!-- Carbon Calculator -->
+        <div class="bg-surface-container-low p-6 rounded-xl border border-outline-variant/20">
+          <h4 class="font-bold text-on-surface mb-4">Calculate Your Carbon Coins</h4>
+          <div class="flex gap-3 mb-4">
+            <select id="carbon-waste-type" class="flex-1 border border-outline-variant rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary">
+              <option>Paddy straw (Parali)</option>
+              <option>Wheat stubble</option>
+              <option>Sugarcane bagasse</option>
+              <option>Cotton stalks</option>
+              <option>Maize cobs</option>
+            </select>
+            <input id="carbon-weight" placeholder="Tonnes" type="number" class="w-24 border border-outline-variant rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"/>
+            <button id="carbon-calc-btn" class="bg-primary text-white rounded-full px-5 py-2 font-bold text-sm hover:scale-105 transition-transform">Calculate</button>
+          </div>
+          <!-- Carbon Result -->
+          <div id="carbon-result" class="hidden grid grid-cols-3 gap-4 text-center">
+            <div class="bg-surface-container-lowest p-3 rounded-xl">
+              <p class="text-xs font-bold text-on-surface-variant uppercase mb-1">CO2 Saved</p>
+              <p id="carbon-co2" class="text-xl font-black text-primary">—</p>
+            </div>
+            <div class="bg-surface-container-lowest p-3 rounded-xl">
+              <p class="text-xs font-bold text-on-surface-variant uppercase mb-1">Coins Earned</p>
+              <p id="carbon-coins" class="text-xl font-black text-primary">—</p>
+            </div>
+            <div class="bg-surface-container-lowest p-3 rounded-xl">
+              <p class="text-xs font-bold text-on-surface-variant uppercase mb-1">Cash Value</p>
+              <p id="carbon-cash" class="text-xl font-black text-primary">—</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Carbon Wallet Widget -->
+      <div class="bg-emerald-900 text-on-primary p-8 rounded-xl shadow-2xl relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-emerald-800 rounded-full blur-3xl opacity-50 -mr-32 -mt-32"></div>
+        <div class="relative z-10">
+          <div class="flex justify-between items-center mb-10">
+            <div>
+              <p class="text-emerald-300 text-xs font-bold uppercase tracking-widest mb-1">Your Live Environmental Impact</p>
+              <h4 class="text-3xl font-bold">Carbon Coin Wallet</h4>
+            </div>
+            <span class="material-symbols-outlined text-tertiary-fixed-dim text-4xl" style="font-variation-settings:'FILL' 1;">generating_tokens</span>
+          </div>
+          <div class="grid grid-cols-3 gap-4 mb-10">
+            <div class="text-center">
+              <p class="text-emerald-300 text-[10px] font-bold uppercase mb-1">CO2 Saved</p>
+              <p id="wallet-co2" class="text-2xl font-black">847 <span class="text-xs font-normal">kg</span></p>
+            </div>
+            <div class="text-center border-x border-emerald-700">
+              <p class="text-emerald-300 text-[10px] font-bold uppercase mb-1">Coins Earned</p>
+              <p id="wallet-coins" class="text-2xl font-black">1,271 <span class="text-xs font-normal">pts</span></p>
+            </div>
+            <div class="text-center">
+              <p class="text-emerald-300 text-[10px] font-bold uppercase mb-1">Cash Value</p>
+              <p id="wallet-cash" class="text-2xl font-black">₹1,271</p>
+            </div>
+          </div>
+          <div class="flex gap-4">
+            <button id="redeem-cash-btn" class="flex-1 bg-white text-emerald-900 font-bold py-3 rounded-full text-sm hover:bg-emerald-50 transition-colors">Redeem as Cash — UPI</button>
+            <button id="redeem-inputs-btn" class="flex-1 bg-emerald-700/50 text-white border border-emerald-500 font-bold py-3 rounded-full text-sm hover:bg-emerald-700 transition-colors">Redeem as Inputs</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ── MOBILE BOTTOM NAV ───────────────────────────── -->
+<nav class="fixed bottom-0 left-0 w-full z-50 rounded-t-[2.5rem] bg-emerald-900/80 backdrop-blur-2xl shadow-[0_-10px_40px_rgba(0,0,0,0.3)] md:hidden">
+  <div class="flex justify-around items-center px-4 pb-6 pt-3">
+    <a class="flex flex-col items-center justify-center text-emerald-300/60 px-4 py-2" href="./dashboard.html">
+      <span class="material-symbols-outlined text-2xl">home</span>
+      <span class="text-[10px] uppercase tracking-widest mt-1">Home</span>
+    </a>
+    <a class="flex flex-col items-center justify-center text-emerald-300/60 px-4 py-2" href="./agritrend.html">
+      <span class="material-symbols-outlined text-2xl">trending_up</span>
+      <span class="text-[10px] uppercase tracking-widest mt-1">AgriTrend</span>
+    </a>
+    <a class="flex flex-col items-center justify-center bg-emerald-700/50 text-white rounded-2xl px-4 py-2 scale-110" href="./earnmore.html">
+      <span class="material-symbols-outlined text-2xl">smart_toy</span>
+      <span class="text-[10px] uppercase tracking-widest mt-1">Earn More</span>
+    </a>
+    <a class="flex flex-col items-center justify-center text-emerald-300/60 px-4 py-2" href="./schemeradar.html">
+      <span class="material-symbols-outlined text-2xl">radar</span>
+      <span class="text-[10px] uppercase tracking-widest mt-1">Schemes</span>
+    </a>
+    <a class="flex flex-col items-center justify-center text-emerald-300/60 px-4 py-2" href="./askkrishiai.html">
+      <span class="material-symbols-outlined text-2xl">psychology</span>
+      <span class="text-[10px] uppercase tracking-widest mt-1">AI</span>
+    </a>
+  </div>
+</nav>
+
+<!-- ── MIC FAB ─────────────────────────────────────── -->
+<div class="fixed bottom-24 right-6 md:bottom-12 md:right-12 z-40">
+  <button id="mic-fab" class="w-16 h-16 rounded-full bg-secondary text-on-secondary shadow-2xl flex items-center justify-center hover:scale-110 transition-transform relative">
+    <span id="mic-icon" class="material-symbols-outlined text-3xl relative z-10" style="font-variation-settings:'FILL' 1;">mic</span>
+  </button>
+</div>
+
+<!-- ── JAVASCRIPT ─────────────────────────────────── -->
+<script>
+// ── CONFIG ────────────────────────────────────────────
+const API_BASE = 'http://localhost:3000';
+function getLanguage() { return localStorage.getItem('cropwise_language') || 'Hindi'; }
+
+async function apiCall(endpoint, body) {
+  const res = await fetch(`${API_BASE}${endpoint}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ ...body, language: getLanguage() })
+  });
+  if (!res.ok) throw new Error(`API error: ${res.status}`);
+  return res.json();
+}
+
+// ── SECTION 1: REAL MANDI PRICES ─────────────────────
+// Uses data.gov.in Agmarknet API — FREE, no key needed
+document.getElementById('mandi-fetch-btn').addEventListener('click', async () => {
+  const crop     = document.getElementById('mandi-crop').value.trim();
+  const district = document.getElementById('mandi-district').value.trim();
+  const state    = document.getElementById('mandi-state').value.trim();
+  const qty      = document.getElementById('mandi-qty').value.trim() || '20';
+
+  if (!crop || !state) { alert('Please enter crop and state'); return; }
+
+  document.getElementById('mandi-loading').classList.remove('hidden');
+  document.getElementById('mandi-table-wrap').classList.add('opacity-40');
+
+  try {
+    // ── REAL MANDI API (data.gov.in — FREE) ──────────
+    // This is the official Indian government Agmarknet API
+    // No API key needed for public access
+    const agmarknetUrl = `https://api.data.gov.in/resource/9ef84268-d588-465a-a308-a864a43d0070?api-key=579b464db66ec23bdd000001cdd3946e44ce4aab0d1f2e7c30e2db1e&format=json&filters[commodity]=${encodeURIComponent(crop)}&filters[state]=${encodeURIComponent(state)}&limit=15&offset=0`;
+
+    let records = [];
+    try {
+      const apiRes = await fetch(agmarknetUrl);
+      const apiData = await apiRes.json();
+      records = apiData.records || [];
+    } catch(e) {
+      console.log('Agmarknet API unavailable, using backend');
+    }
+
+    // If live API works, render real data
+    if (records.length > 0) {
+      renderMandiTable(records, true);
+      document.getElementById('mandi-location-text').textContent = `📍 Live prices for ${crop} in ${state} — Updated just now`;
+    } else {
+      // Fallback to backend which has mock data
+      const data = await apiCall('/api/mandi', { crop, district, state, quantity: qty });
+      renderMandiTable(data.markets, false);
+      document.getElementById('mandi-location-text').textContent = `📍 Estimated prices for ${crop} near ${district}`;
+
+      // Show AI advice
+      if (data.advice) {
+        document.getElementById('mandi-ai-text').textContent = data.advice;
+      }
+      if (data.holdOrSell) {
+        const extra = data.holdOrSell.extraPer20Qtl;
+        document.getElementById('extra-income').textContent = `₹${extra?.toLocaleString('en-IN') || '—'}`;
+        document.getElementById('extra-income-label').textContent = `extra on ${qty} quintals by choosing best mandi`;
+      }
+    }
+
+    // Get AI advice from backend
+    const aiData = await apiCall('/api/mandi', { crop, district: district || state, state, quantity: qty });
+    if (aiData.advice) document.getElementById('mandi-ai-text').textContent = aiData.advice;
+    if (aiData.holdOrSell?.extraPer20Qtl) {
+      document.getElementById('extra-income').textContent = `₹${aiData.holdOrSell.extraPer20Qtl.toLocaleString('en-IN')}`;
+      document.getElementById('extra-income-label').textContent = `extra on ${qty} quintals by choosing best mandi`;
+    }
+
+  } catch(e) {
+    document.getElementById('mandi-ai-text').textContent = '❌ Failed to fetch prices. Make sure backend is running on port 3000.';
+  }
+
+  document.getElementById('mandi-loading').classList.add('hidden');
+  document.getElementById('mandi-table-wrap').classList.remove('opacity-40');
+});
+
+function renderMandiTable(markets, isLive) {
+  const tbody = document.getElementById('mandi-tbody');
+  if (!markets || markets.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" class="px-4 py-8 text-center text-on-surface-variant">No data found for this crop/state combination.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = markets.map(m => {
+    // Handle both live API format and backend format
+    const name     = m.market || m.Market || 'Unknown Mandi';
+    const minPrice = m.min_price || m.price - 100 || 0;
+    const maxPrice = m.max_price || m.price + 100 || 0;
+    const modal    = m.modal_price || m.price || 0;
+    const dist     = m.distance || '—';
+    const trend    = m.trend || 'stable';
+
+    const signal = modal >= 2200
+      ? `<span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-bold flex items-center w-fit gap-1"><span class="material-symbols-outlined text-[14px]" style="font-variation-settings:'FILL' 1;">check_circle</span> Sell Now</span>`
+      : modal >= 2000
+      ? `<span class="bg-tertiary-fixed text-tertiary px-3 py-1 rounded-full text-xs font-bold flex items-center w-fit">Check Transport</span>`
+      : `<span class="bg-surface-variant text-on-surface-variant px-3 py-1 rounded-full text-xs font-bold flex items-center w-fit">Low Profit</span>`;
+
+    return `<tr class="bg-surface-container-low/50 hover:bg-surface-container transition-colors">
+      <td class="px-4 py-4 font-bold">${name}</td>
+      <td class="px-4 py-4">${dist} ${isLive ? '' : 'km'}</td>
+      <td class="px-4 py-4">₹${parseInt(minPrice).toLocaleString('en-IN')}</td>
+      <td class="px-4 py-4">₹${parseInt(maxPrice).toLocaleString('en-IN')}</td>
+      <td class="px-4 py-4 font-extrabold text-primary">₹${parseInt(modal).toLocaleString('en-IN')}</td>
+      <td class="px-4 py-4">${signal}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ── SECTION 2: WASTE TO WEALTH ────────────────────────
+const W2W_RATES = {
+  'Paddy straw (Parali)':  { bio: 3800, mushroom: 8200, vermi: 4500 },
+  'Wheat stubble':          { bio: 3200, mushroom: 5500, vermi: 2800 },
+  'Sugarcane bagasse':      { bio: 6000, mushroom: 7200, vermi: 4000 },
+  'Cotton stalks':          { bio: 2500, mushroom: 3800, vermi: 2200 },
+  'Maize cobs':             { bio: 4500, mushroom: 8500, vermi: 5000 }
+};
+
+document.getElementById('w2w-calc-btn').addEventListener('click', async () => {
+  const wasteType = document.getElementById('w2w-waste-type').value;
+  const qty       = parseFloat(document.getElementById('w2w-quantity').value) || 0;
+  const district  = document.getElementById('w2w-district').value || 'your area';
+
+  if (qty <= 0) { alert('Please enter quantity in tonnes'); return; }
+
+  const rates = W2W_RATES[wasteType] || W2W_RATES['Paddy straw (Parali)'];
+
+  // Update card totals
+  document.getElementById('w2w-bio-total').textContent      = `Total: ₹${(rates.bio * qty).toLocaleString('en-IN')}`;
+  document.getElementById('w2w-mushroom-total').textContent = `Total: ₹${(rates.mushroom * qty).toLocaleString('en-IN')}`;
+  document.getElementById('w2w-vermi-total').textContent    = `Total: ₹${(rates.vermi * qty).toLocaleString('en-IN')}`;
+
+  // Get AI recommendation
+  const result = document.getElementById('w2w-result');
+  const text   = document.getElementById('w2w-result-text');
+  result.classList.remove('hidden');
+  text.textContent = '⏳ Getting AI recommendation...';
+  text.className = 'loading-pulse text-primary text-sm font-medium';
+
+  try {
+    const data = await apiCall('/api/w2w', { wasteType, quantity: qty, district });
+    text.className = 'text-on-surface text-sm leading-relaxed whitespace-pre-line';
+    text.textContent = data.recommendations;
+  } catch(e) {
+    text.className = 'text-error text-sm';
+    text.textContent = `Best option: Mushroom cultivation gives ₹${(rates.mushroom * qty).toLocaleString('en-IN')} total income from ${qty} tonnes of ${wasteType}.`;
+  }
+});
+
+document.getElementById('connect-buyer-btn').addEventListener('click', async () => {
+  const wasteType = document.getElementById('w2w-waste-type').value;
+  const district  = document.getElementById('w2w-district').value || 'India';
+  const result    = document.getElementById('w2w-result');
+  const text      = document.getElementById('w2w-result-text');
+  result.classList.remove('hidden');
+  text.textContent = '⏳ Finding buyers...';
+  text.className = 'loading-pulse text-primary text-sm font-medium';
+  try {
+    const data = await apiCall('/api/chat', {
+      message: `Find buyers for ${wasteType} in ${district}. Give: 3 types of buyers, how to contact them, current market rate, and best platform to sell online.`
+    });
+    text.className = 'text-on-surface text-sm leading-relaxed whitespace-pre-line';
+    text.textContent = data.response;
+  } catch(e) {
+    text.className = 'text-error text-sm';
+    text.textContent = '❌ Failed. Make sure backend is running.';
+  }
+});
+
+// ── SECTION 3: AGRI-CART ─────────────────────────────
+document.getElementById('cart-calc-btn').addEventListener('click', async () => {
+  const crop  = document.getElementById('cart-crop').value || 'Wheat';
+  const acres = document.getElementById('cart-acres').value || '3';
+  const result = document.getElementById('cart-result');
+  result.classList.remove('hidden');
+  result.textContent = '⏳ Calculating input list...';
+  result.className = 'mt-4 bg-surface-container-low p-4 rounded-xl ai-result loading-pulse text-primary text-sm font-medium';
+  try {
+    const data = await apiCall('/api/agricart/calculate', { crop, acres, soilData: {} });
+    result.className = 'mt-4 bg-surface-container-low p-4 rounded-xl ai-result text-sm text-on-surface whitespace-pre-line leading-relaxed';
+    result.textContent = data.inputList;
+  } catch(e) {
+    result.className = 'mt-4 bg-surface-container-low p-4 rounded-xl ai-result text-sm text-error';
+    result.textContent = '❌ Failed. Make sure backend is running on port 3000.';
+  }
+});
+
+document.getElementById('cart-order-btn').addEventListener('click', () => {
+  alert('Redirecting to PM-KISAN portal for Kisan ID based ordering...\n\nVisit: https://pmkisan.gov.in or your nearest PMKSK (Primary Market Service Kendra)');
+});
+
+// ── SECTION 4: LAND LEASE ─────────────────────────────
+document.getElementById('list-land-btn').addEventListener('click', () => {
+  document.getElementById('land-forms').classList.remove('hidden');
+  document.getElementById('list-land-form').classList.remove('hidden');
+  document.getElementById('find-land-form').classList.add('hidden');
+});
+
+document.getElementById('find-land-btn').addEventListener('click', () => {
+  document.getElementById('land-forms').classList.remove('hidden');
+  document.getElementById('find-land-form').classList.remove('hidden');
+  document.getElementById('list-land-form').classList.add('hidden');
+});
+
+document.getElementById('get-fair-rent-btn').addEventListener('click', async () => {
+  const acres    = document.getElementById('ll-acres').value || '2';
+  const district = document.getElementById('ll-district').value || 'India';
+  const soil     = document.getElementById('ll-soil').value;
+  const water    = document.getElementById('ll-water').value;
+  const crop     = document.getElementById('ll-crop').value || 'Wheat';
+  const result   = document.getElementById('land-result');
+  const text     = document.getElementById('land-result-text');
+  result.classList.remove('hidden');
+  text.textContent = '⏳ Calculating fair rent...';
+  text.className = 'loading-pulse text-primary text-sm font-medium';
+  try {
+    const data = await apiCall('/api/bhusanjal/fair-rent', { acres, district, soilType: soil, waterAccess: water, crop });
+    text.className = 'text-on-surface text-sm leading-relaxed whitespace-pre-line';
+    text.textContent = data.rentAnalysis;
+  } catch(e) {
+    text.className = 'text-error text-sm';
+    text.textContent = '❌ Failed. Make sure backend is running.';
+  }
+});
+
+document.getElementById('generate-agreement-btn').addEventListener('click', async () => {
+  const farmer   = document.getElementById('fl-farmer').value || 'Farmer';
+  const acres    = document.getElementById('fl-acres').value || '2';
+  const district = document.getElementById('fl-district').value || 'India';
+  const crop     = document.getElementById('fl-crop').value || 'Wheat';
+  const result   = document.getElementById('land-result');
+  const text     = document.getElementById('land-result-text');
+  result.classList.remove('hidden');
+  text.textContent = '⏳ Generating lease agreement...';
+  text.className = 'loading-pulse text-primary text-sm font-medium';
+  try {
+    const data = await apiCall('/api/bhusanjal/generate-agreement', {
+      ownerName: 'Land Owner', farmerName: farmer, acres, district, crop,
+      rentAmount: 8400, duration: '1 season'
+    });
+    text.className = 'text-on-surface text-sm leading-relaxed whitespace-pre-line';
+    text.textContent = data.agreement;
+  } catch(e) {
+    text.className = 'text-error text-sm';
+    text.textContent = '❌ Failed. Make sure backend is running.';
+  }
+});
+
+document.getElementById('view-soil-btn').addEventListener('click', async () => {
+  const result = document.getElementById('land-result');
+  const text   = document.getElementById('land-result-text');
+  document.getElementById('land-forms').classList.remove('hidden');
+  result.classList.remove('hidden');
+  text.textContent = '⏳ Fetching soil report...';
+  text.className = 'loading-pulse text-primary text-sm font-medium';
+  try {
+    const data = await apiCall('/api/chat', {
+      message: 'Give soil report for Village Khanpur land: 2.5 acres, Loamy soil, Canal irrigation, Good/Neutral pH. Include: soil health rating, best crops, expected yield per acre, fair rent range, and land lease agreement key points.'
+    });
+    text.className = 'text-on-surface text-sm leading-relaxed whitespace-pre-line';
+    text.textContent = data.response;
+  } catch(e) {
+    text.className = 'text-error text-sm';
+    text.textContent = '❌ Failed. Make sure backend is running.';
+  }
+});
+
+document.getElementById('copy-agreement-btn').addEventListener('click', () => {
+  navigator.clipboard.writeText(document.getElementById('land-result-text').textContent)
+    .then(() => { document.getElementById('copy-agreement-btn').textContent = '✅ Copied!'; setTimeout(() => { document.getElementById('copy-agreement-btn').innerHTML = '<span class="material-symbols-outlined text-sm">content_copy</span> Copy Agreement'; }, 2000); });
+});
+
+// ── SECTION 5: CARBON COIN CALCULATOR ────────────────
+const CO2_FACTORS = { 'Paddy straw (Parali)':1.47,'Wheat stubble':1.30,'Sugarcane bagasse':0.90,'Cotton stalks':1.20,'Maize cobs':1.10 };
+
+document.getElementById('carbon-calc-btn').addEventListener('click', () => {
+  const wasteType = document.getElementById('carbon-waste-type').value;
+  const weight    = parseFloat(document.getElementById('carbon-weight').value) || 0;
+  if (weight <= 0) { alert('Enter weight in tonnes'); return; }
+
+  const co2Factor    = CO2_FACTORS[wasteType] || 1.2;
+  const co2Emitted   = weight * co2Factor * 1000;
+  const co2Saved     = co2Emitted * 0.85;
+  const coinsEarned  = Math.round(co2Saved);
+  const cashValue    = coinsEarned;
+
+  document.getElementById('carbon-result').classList.remove('hidden');
+  document.getElementById('carbon-co2').textContent   = `${Math.round(co2Saved)} kg`;
+  document.getElementById('carbon-coins').textContent = `${coinsEarned.toLocaleString('en-IN')} pts`;
+  document.getElementById('carbon-cash').textContent  = `₹${cashValue.toLocaleString('en-IN')}`;
+
+  // Update wallet
+  document.getElementById('wallet-co2').innerHTML   = `${Math.round(co2Saved)} <span class="text-xs font-normal">kg</span>`;
+  document.getElementById('wallet-coins').innerHTML = `${coinsEarned.toLocaleString('en-IN')} <span class="text-xs font-normal">pts</span>`;
+  document.getElementById('wallet-cash').textContent = `₹${cashValue.toLocaleString('en-IN')}`;
+});
+
+document.getElementById('redeem-cash-btn').addEventListener('click', () => {
+  alert('UPI Redemption:\n\nSend your Carbon Coin balance to:\nUPI ID: carboncoin@ecosentinel\n\nOr visit your nearest CSC centre with your Aadhaar + Farmer ID to redeem.');
+});
+
+document.getElementById('redeem-inputs-btn').addEventListener('click', async () => {
+  try {
+    const data = await apiCall('/api/chat', { message: 'How can I redeem Carbon Coins as agricultural inputs like fertilizers and seeds? Give 3 practical options available in India.' });
+    alert(data.response);
+  } catch(e) {
+    alert('Visit your nearest IFFCO or PMKSK centre to redeem Carbon Coins as subsidized agricultural inputs.');
+  }
+});
+
+// ── MIC FAB ───────────────────────────────────────────
+const micFab  = document.getElementById('mic-fab');
+const micIcon = document.getElementById('mic-icon');
+let isListening = false;
+
+micFab.addEventListener('click', () => {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { alert('Voice not supported. Try Chrome.'); return; }
+  if (isListening) return;
+  const r = new SR();
+  r.lang = getLanguage() === 'Hindi' ? 'hi-IN' : 'en-IN';
+  r.start();
+  isListening = true;
+  micIcon.textContent = 'mic_off';
+  micFab.style.background = '#ba1a1a';
+  r.onresult = async (e) => {
+    const spoken = e.results[0][0].transcript;
+    isListening = false; micIcon.textContent = 'mic'; micFab.style.background = '';
+    // Fill mandi crop field and auto search
+    document.getElementById('mandi-crop').value = spoken;
+    document.getElementById('mandi-fetch-btn').click();
+  };
+  r.onerror = () => { isListening = false; micIcon.textContent = 'mic'; micFab.style.background = ''; };
+});
+</script>
+
+
+<!-- ── AUTH MODAL ─────────────────────────────────── -->
+<div id="auth-modal" class="hidden fixed inset-0 z-[999] flex items-center justify-center p-4" style="background:rgba(0,0,0,0.5);backdrop-filter:blur(6px);">
+  <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-sm relative">
+    <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+    <!-- Tabs -->
+    <div class="flex mb-6 bg-gray-100 rounded-full p-1">
+      <button id="tab-signin" onclick="switchTab('signin')" class="flex-1 py-2 rounded-full text-sm font-bold transition-all bg-white shadow text-green-800">Sign In</button>
+      <button id="tab-signup" onclick="switchTab('signup')" class="flex-1 py-2 rounded-full text-sm font-bold transition-all text-gray-500">Sign Up</button>
+    </div>
+    <!-- Sign In Form -->
+    <div id="form-signin">
+      <h2 class="text-xl font-black text-green-900 mb-1">Welcome back 🌱</h2>
+      <p class="text-gray-500 text-sm mb-5">Sign in to your Eco Sentinel account</p>
+      <input id="si-phone" placeholder="Mobile Number / Kisan ID" class="w-full border border-gray-200 rounded-full px-4 py-3 text-sm mb-3 focus:outline-none focus:ring-2 focus:ring-green-600"/>
+      <input id="si-pass" type="password" placeholder="Password" class="w-full border border-gray-200 rounded-full px-4 py-3 text-sm mb-4 focus:outline-none focus:ring-2 focus:ring-green-600"/>
+      <button onclick="handleSignIn()" class="w-full bg-green-800 text-white rounded-full py-3 font-bold text-sm hover:bg-green-700 transition-colors">Sign In</button>
+      <p id="si-error" class="text-red-500 text-xs mt-2 hidden text-center"></p>
+      <p class="text-center text-xs text-gray-400 mt-4">Don't have an account? <span onclick="switchTab('signup')" class="text-green-700 font-bold cursor-pointer">Sign Up</span></p>
+    </div>
+    <!-- Sign Up Form -->
+    <div id="form-signup" class="hidden">
+      <h2 class="text-xl font-black text-green-900 mb-1">Join Eco Sentinel 🌿</h2>
+      <p class="text-gray-500 text-sm mb-5">Create your free farmer account</p>
+      <input id="su-name" placeholder="Full Name" class="w-full border border-gray-200 rounded-full px-4 py-3 text-sm mb-3 focus:outline-none focus:ring-2 focus:ring-green-600"/>
+      <input id="su-phone" placeholder="Mobile Number" class="w-full border border-gray-200 rounded-full px-4 py-3 text-sm mb-3 focus:outline-none focus:ring-2 focus:ring-green-600"/>
+      <input id="su-state" placeholder="Your State (e.g. Punjab)" class="w-full border border-gray-200 rounded-full px-4 py-3 text-sm mb-3 focus:outline-none focus:ring-2 focus:ring-green-600"/>
+      <input id="su-pass" type="password" placeholder="Create Password" class="w-full border border-gray-200 rounded-full px-4 py-3 text-sm mb-4 focus:outline-none focus:ring-2 focus:ring-green-600"/>
+      <button onclick="handleSignUp()" class="w-full bg-green-800 text-white rounded-full py-3 font-bold text-sm hover:bg-green-700 transition-colors">Create Account</button>
+      <p id="su-error" class="text-red-500 text-xs mt-2 hidden text-center"></p>
+      <p class="text-center text-xs text-gray-400 mt-4">Already have an account? <span onclick="switchTab('signin')" class="text-green-700 font-bold cursor-pointer">Sign In</span></p>
+    </div>
+    <!-- Success State -->
+    <div id="form-success" class="hidden text-center py-4">
+      <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+        <span class="material-symbols-outlined text-green-700 text-4xl" style="font-variation-settings:'FILL' 1;">check_circle</span>
+      </div>
+      <h3 class="font-black text-green-900 text-lg mb-2" id="success-title">Welcome!</h3>
+      <p class="text-gray-500 text-sm" id="success-msg">You are now signed in.</p>
+      <button onclick="closeAuthModal()" class="mt-4 w-full bg-green-800 text-white rounded-full py-3 font-bold text-sm">Continue</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── AUTH FUNCTIONS ────────────────────────────────────
+function openAuthModal(tab) {
+  document.getElementById('auth-modal').classList.remove('hidden');
+  switchTab(tab || 'signin');
+}
+function closeAuthModal() {
+  document.getElementById('auth-modal').classList.add('hidden');
+}
+function switchTab(tab) {
+  document.getElementById('form-signin').classList.toggle('hidden', tab !== 'signin');
+  document.getElementById('form-signup').classList.toggle('hidden', tab !== 'signup');
+  document.getElementById('form-success').classList.add('hidden');
+  document.getElementById('tab-signin').className = `flex-1 py-2 rounded-full text-sm font-bold transition-all ${tab==='signin'?'bg-white shadow text-green-800':'text-gray-500'}`;
+  document.getElementById('tab-signup').className = `flex-1 py-2 rounded-full text-sm font-bold transition-all ${tab==='signup'?'bg-white shadow text-green-800':'text-gray-500'}`;
+}
+
+function handleSignIn() {
+  const phone = document.getElementById('si-phone').value.trim();
+  const pass  = document.getElementById('si-pass').value.trim();
+  const err   = document.getElementById('si-error');
+  if (!phone || !pass) { err.textContent = 'Please fill all fields'; err.classList.remove('hidden'); return; }
+
+  // Save to localStorage (simple auth — no backend needed)
+  const users = JSON.parse(localStorage.getItem('eco_users') || '[]');
+  const user  = users.find(u => u.phone === phone && u.pass === pass);
+
+  if (user) {
+    localStorage.setItem('eco_user', JSON.stringify(user));
+    showSuccess(`Welcome back, ${user.name}! 🌱`, 'You are signed in successfully.');
+    updateNavForUser(user);
+  } else {
+    err.textContent = 'Invalid credentials. Try signing up first.';
+    err.classList.remove('hidden');
+  }
+}
+
+function handleSignUp() {
+  const name  = document.getElementById('su-name').value.trim();
+  const phone = document.getElementById('su-phone').value.trim();
+  const state = document.getElementById('su-state').value.trim();
+  const pass  = document.getElementById('su-pass').value.trim();
+  const err   = document.getElementById('su-error');
+
+  if (!name || !phone || !state || !pass) { err.textContent = 'Please fill all fields'; err.classList.remove('hidden'); return; }
+
+  // Save new user
+  const users = JSON.parse(localStorage.getItem('eco_users') || '[]');
+  if (users.find(u => u.phone === phone)) { err.textContent = 'Account already exists. Sign in instead.'; err.classList.remove('hidden'); return; }
+
+  const kisanId = `KP-2026-${state.substring(0,2).toUpperCase()}-${Math.floor(Math.random()*90000+10000)}`;
+  const user = { name, phone, state, pass, kisanId, joinedAt: new Date().toISOString() };
+  users.push(user);
+  localStorage.setItem('eco_users', JSON.stringify(users));
+  localStorage.setItem('eco_user', JSON.stringify(user));
+
+  showSuccess(`Welcome, ${name}! 🌿`, `Your Kisan ID: ${kisanId}`);
+  updateNavForUser(user);
+}
+
+function showSuccess(title, msg) {
+  document.getElementById('form-signin').classList.add('hidden');
+  document.getElementById('form-signup').classList.add('hidden');
+  document.getElementById('form-success').classList.remove('hidden');
+  document.getElementById('success-title').textContent = title;
+  document.getElementById('success-msg').textContent = msg;
+}
+
+function updateNavForUser(user) {
+  // Update signup button to show user name
+  document.querySelectorAll('[data-auth-btn]').forEach(btn => {
+    btn.textContent = user.name.split(' ')[0];
+    btn.onclick = () => openAuthModal('signin');
+  });
+}
+
+function checkAuthOnLoad() {
+  const user = JSON.parse(localStorage.getItem('eco_user') || 'null');
+  if (user) updateNavForUser(user);
+}
+
+// Close modal on background click
+document.getElementById('auth-modal').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('auth-modal')) closeAuthModal();
+});
+
+checkAuthOnLoad();
+</script>
+
+</body></html>

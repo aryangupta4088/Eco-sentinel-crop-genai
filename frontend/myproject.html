@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>My Profile & Trust | Eco Sentinel</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+tailwind.config = {
+  darkMode:"class",
+  theme:{extend:{
+    colors:{
+      "on-secondary-fixed":"#351000","secondary-container":"#ffa67a","on-error-container":"#93000a",
+      "on-tertiary-fixed":"#261a00","primary-fixed":"#a3f69c","inverse-on-surface":"#f4f0e8",
+      "on-tertiary-container":"#ffefd7","on-secondary":"#ffffff","primary":"#0d631b",
+      "tertiary-fixed":"#ffdfa0","surface-container":"#f1eee6","on-error":"#ffffff",
+      "surface-bright":"#fcf9f1","on-primary":"#ffffff","on-surface":"#1c1c17",
+      "inverse-surface":"#31312b","on-tertiary-fixed-variant":"#5c4300","secondary":"#904c27",
+      "on-surface-variant":"#40493d","primary-container":"#2e7d32","on-primary-container":"#cbffc2",
+      "on-tertiary":"#ffffff","error-container":"#ffdad6","surface-dim":"#dddad2",
+      "outline-variant":"#bfcaba","on-primary-fixed-variant":"#005312","on-primary-fixed":"#002204",
+      "surface-container-highest":"#e5e2da","on-secondary-fixed-variant":"#733512",
+      "inverse-primary":"#88d982","tertiary-container":"#8c6800","surface-variant":"#e5e2da",
+      "on-background":"#1c1c17","surface":"#fcf9f1","outline":"#707a6c",
+      "on-secondary-container":"#783916","surface-container-high":"#ebe8e0",
+      "secondary-fixed":"#ffdbcc","surface-tint":"#1b6d24","background":"#fcf9f1",
+      "primary-fixed-dim":"#88d982","tertiary-fixed-dim":"#f8bd2a","tertiary":"#6e5100",
+      "surface-container-low":"#f7f3eb","secondary-fixed-dim":"#ffb693","error":"#ba1a1a",
+      "surface-container-lowest":"#ffffff"
+    },
+    fontFamily:{"headline":["Plus Jakarta Sans"],"body":["Be Vietnam Pro"],"label":["Be Vietnam Pro"]},
+    borderRadius:{"DEFAULT":"1rem","lg":"2rem","xl":"3rem","full":"9999px"},
+  }},
+}
+</script>
+<style>
+  .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;}
+  .bg-mesh{background-image:radial-gradient(at 0% 0%,rgba(13,99,27,0.05) 0px,transparent 50%),radial-gradient(at 100% 100%,rgba(144,76,39,0.05) 0px,transparent 50%);}
+
+  /* ── Animations ── */
+  @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes slideRight{from{opacity:0;transform:translateX(-20px)}to{opacity:1;transform:translateX(0)}}
+  @keyframes popIn{from{opacity:0;transform:scale(0.85)}to{opacity:1;transform:scale(1)}}
+  @keyframes scoreRing{from{stroke-dashoffset:628}to{stroke-dashoffset:96}}
+  @keyframes shimmer{0%{background-position:-200% center}100%{background-position:200% center}}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+  @keyframes badgePop{0%{transform:scale(0) rotate(-10deg)}60%{transform:scale(1.1) rotate(2deg)}100%{transform:scale(1) rotate(0)}}
+
+  .fade-up{animation:fadeUp 0.55s cubic-bezier(.22,1,.36,1) both;}
+  .slide-right{animation:slideRight 0.45s cubic-bezier(.22,1,.36,1) both;}
+  .pop-in{animation:popIn 0.4s cubic-bezier(.34,1.56,.64,1) both;}
+  .score-ring{animation:scoreRing 1.8s cubic-bezier(.22,1,.36,1) 0.5s both;}
+  .blink-pulse{animation:pulse 2s ease-in-out infinite;}
+  .badge-pop{animation:badgePop 0.5s cubic-bezier(.34,1.56,.64,1) both;}
+
+  /* ── Score ring ── */
+  .score-circle{transition:stroke-dashoffset 1.8s cubic-bezier(.22,1,.36,1);}
+
+  /* ── ID card shimmer ── */
+  .id-shimmer{
+    background:linear-gradient(90deg,#0d631b 25%,#1b8a2a 50%,#0d631b 75%);
+    background-size:200% auto;
+    animation:shimmer 3s linear infinite;
+  }
+
+  /* ── Timeline dot pulse ── */
+  .timeline-dot{transition:transform 0.2s;}
+  .timeline-dot:hover{transform:scale(1.3);}
+
+  /* ── Badge hover ── */
+  .badge-card{transition:transform 0.2s,box-shadow 0.2s;}
+  .badge-card:hover{transform:translateY(-4px);box-shadow:0 12px 28px rgba(13,99,27,0.15);}
+  .badge-card.locked{filter:grayscale(1);opacity:0.4;}
+  .badge-card.locked:hover{transform:none;box-shadow:none;}
+
+  /* ── Bank report typing ── */
+  @keyframes typeIn{from{width:0}to{width:100%}}
+  @keyframes bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-5px)}}
+  .typing-dot{animation:bounce 1.2s ease-in-out infinite;}
+  .typing-dot:nth-child(2){animation-delay:0.15s;}
+  .typing-dot:nth-child(3){animation-delay:0.3s;}
+
+  /* ── Score components ── */
+  .score-bar{transition:width 1.2s cubic-bezier(.22,1,.36,1);}
+
+  /* ── Profile dropdown ── */
+  .profile-dropdown{
+    display:none;position:absolute;top:calc(100% + 8px);right:0;
+    width:200px;background:rgba(15,40,20,0.97);
+    backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.1);
+    border-radius:16px;padding:8px;
+    box-shadow:0 24px 60px rgba(0,0,0,0.3);z-index:100;
+  }
+  .profile-dropdown.open{display:block;animation:fadeUp 0.2s cubic-bezier(.22,1,.36,1);}
+  .dd-item{
+    display:flex;align-items:center;gap:8px;padding:8px 12px;
+    border-radius:10px;color:rgba(255,255,255,0.8);
+    font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:600;
+    cursor:pointer;transition:background 0.15s;text-decoration:none;
+  }
+  .dd-item:hover{background:rgba(255,255,255,0.1);color:#fff;}
+  .dd-item.danger{color:#fca5a5;}
+  .dd-item.danger:hover{background:rgba(220,38,38,0.15);}
+  .dd-div{height:1px;background:rgba(255,255,255,0.08);margin:4px 0;}
+
+  /* ── Report panel ── */
+  .report-panel{display:none;animation:fadeUp 0.4s cubic-bezier(.22,1,.36,1) both;}
+  .report-panel.open{display:block;}
+
+  /* ── Notification dot ── */
+  .notif-dot{width:8px;height:8px;background:#ba1a1a;border-radius:50%;position:absolute;top:4px;right:4px;}
+</style>
+</head>
+
+<body class="bg-surface-container-low text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container">
+
+<!-- ── NAVBAR ── -->
+<nav class="fixed top-0 w-full z-50 bg-emerald-900/75 backdrop-blur-xl border-b border-emerald-800/20 shadow-2xl shadow-emerald-950/20">
+  <div class="flex justify-between items-center w-full px-8 py-4 max-w-screen-2xl mx-auto">
+    <div class="flex items-center gap-2">
+      <div class="w-9 h-9 bg-emerald-500 rounded-xl flex items-center justify-center">
+        <span class="material-symbols-outlined text-white text-lg" style="font-variation-settings:'FILL' 1;">eco</span>
+      </div>
+      <a href="../farmer_dashboard_synced_navbar/code.html" class="text-2xl font-bold text-emerald-50 tracking-tighter font-headline">Eco Sentinel</a>
+    </div>
+    <div class="hidden md:flex items-center gap-7 font-headline tracking-tight font-semibold">
+      <a class="text-emerald-100/70 hover:text-emerald-50 transition-colors text-sm" href="../farmer_dashboard_synced_navbar/code.html">Home</a>
+      <a class="text-emerald-100/70 hover:text-emerald-50 transition-colors text-sm" href="../eco_sentinel_agritrend/code.html">AgriTrend</a>
+      <a class="text-emerald-100/70 hover:text-emerald-50 transition-colors text-sm" href="../ask_krishi_ai_chat_enhanced/code.html">Ask Krishi AI</a>
+      <a class="text-emerald-100/70 hover:text-emerald-50 transition-colors text-sm" href="../scheme_radar_final_synced_layout/code.html">Scheme Radar</a>
+      <a class="text-emerald-100/70 hover:text-emerald-50 transition-colors text-sm" href="../crop_tracker_final_synced_navbar/code.html">Crop Tracker</a>
+    </div>
+    <div class="flex items-center gap-3">
+      <button class="p-2 hover:bg-emerald-800/40 rounded-full transition-all text-emerald-50 relative">
+        <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">notifications</span>
+        <span class="notif-dot blink-pulse"></span>
+      </button>
+      <!-- Profile dropdown -->
+      <div class="relative" id="profileWrapper">
+        <button onclick="toggleDropdown()" class="p-1.5 hover:bg-emerald-800/40 rounded-full transition-all text-emerald-200 border-b-2 border-emerald-400 flex items-center gap-1">
+          <span class="material-symbols-outlined text-2xl" style="font-variation-settings:'FILL' 1;">account_circle</span>
+          <span class="material-symbols-outlined text-sm">expand_more</span>
+        </button>
+        <div class="profile-dropdown" id="profileDropdown">
+          <div class="px-3 py-2 mb-1">
+            <p class="text-white font-bold text-sm">Ramesh Kumar Singh</p>
+            <p class="text-emerald-400 text-xs">KP-2026-UP-AZM-00847</p>
+          </div>
+          <div class="dd-div"></div>
+          <a href="#" class="dd-item" style="background:rgba(255,255,255,0.08);">
+            <span class="material-symbols-outlined text-emerald-400 text-sm" style="font-variation-settings:'FILL' 1;">person</span>My Profile
+          </a>
+          <a href="../diagnose_protect/code.html" class="dd-item">
+            <span class="material-symbols-outlined text-emerald-400 text-sm" style="font-variation-settings:'FILL' 1;">dashboard</span>Dashboard
+          </a>
+          <a href="../grow_smart_dynamic_crop_intelligence/code.html" class="dd-item">
+            <span class="material-symbols-outlined text-emerald-400 text-sm" style="font-variation-settings:'FILL' 1;">eco</span>Grow Smart
+          </a>
+          <div class="dd-div"></div>
+          <a href="../eco_sentinel_language_entry_final_synced/code.html" class="dd-item danger">
+            <span class="material-symbols-outlined text-red-400 text-sm">logout</span>Sign Out
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ── MAIN ── -->
+<main class="pt-28 pb-24 px-6 max-w-7xl mx-auto space-y-16 bg-mesh">
+
+  <!-- Header -->
+  <header class="space-y-2 fade-up">
+    <h1 class="text-5xl md:text-6xl font-extrabold font-headline tracking-tight text-on-surface">My Profile & Trust</h1>
+    <p class="text-xl text-on-surface-variant max-w-2xl">Your digital farming identity — visible, verified, bankable.</p>
+  </header>
+
+  <!-- ══════════════════════════════════════
+       SECTION 1+2: Identity + Scorecard
+  ══════════════════════════════════════ -->
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+
+    <!-- Farmer Identity Card -->
+    <section class="lg:col-span-5 fade-up" style="animation-delay:0.1s">
+      <div class="bg-surface-container-lowest rounded-2xl shadow-sm border border-outline-variant/10 overflow-hidden">
+        <!-- Card header -->
+        <div class="id-shimmer px-8 py-5 flex justify-between items-center">
+          <span class="text-on-primary font-headline font-bold text-base tracking-widest uppercase">Kisan Digital Identity</span>
+          <span class="material-symbols-outlined text-on-primary/70">contactless</span>
+        </div>
+        <div class="p-8">
+          <!-- Photo + name -->
+          <div class="flex gap-5 items-center mb-8">
+            <div class="relative flex-shrink-0">
+              <div class="w-28 h-28 rounded-full border-4 border-primary p-1 bg-surface" style="box-shadow:0 0 0 0 rgba(13,99,27,0.3);animation:scoreRing 0s">
+                <img id="farmerPhoto" alt="Ramesh Kumar Singh"
+                  class="w-full h-full rounded-full object-cover"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjW7_RaBuCr70VKb-nSP101t_e90tEygLJ2rlSBpK7DMrhQWC0lRceQwKIR8g4IAwOuy8G-42Gw_r6IojlTtFjyHvMO8_zQ1jxC9rHgkTyF5rjT7uhs2BX3GIsXMIwR9eQFQ6KoYXbwcv-OTF-gP0YVH_mUbBGZjKZm5SWDGF-76ic4j_e4Efo8X9G_4CY0E8Wx7Xov-xz08RrV83Cvq19f3NU_vKR5Wke4sOpaRbNUKH2v7gzFED4J-rGKp1J2rusg-xRqOvjKmg"/>
+              </div>
+              <div class="absolute bottom-0 right-0 bg-primary text-on-primary p-1.5 rounded-full border-2 border-surface-container-lowest">
+                <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">verified</span>
+              </div>
+            </div>
+            <div class="space-y-1.5">
+              <h3 class="text-2xl font-bold font-headline" id="farmerName">Ramesh Kumar Singh</h3>
+              <p class="text-primary font-mono font-bold tracking-wider text-sm" id="kisanId">KP-2026-UP-AZM-00847</p>
+              <div class="flex gap-2 pt-1">
+                <span class="px-2 py-1 bg-surface-container-highest rounded text-[10px] font-bold text-on-surface-variant flex items-center gap-1">
+                  <span class="material-symbols-outlined text-xs" style="font-variation-settings:'FILL' 1;">lock</span>DigiLocker
+                </span>
+                <span class="px-2 py-1 bg-surface-container-highest rounded text-[10px] font-bold text-on-surface-variant flex items-center gap-1">
+                  <span class="material-symbols-outlined text-xs" style="font-variation-settings:'FILL' 1;">fingerprint</span>Aadhaar
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Farm details grid -->
+          <div class="grid grid-cols-2 gap-5 border-t border-outline-variant/15 pt-7">
+            <div>
+              <p class="text-xs text-on-surface-variant uppercase font-bold tracking-widest mb-1">Village</p>
+              <p class="text-base font-semibold" id="farmerVillage">Khanpur, Azamgarh</p>
+            </div>
+            <div>
+              <p class="text-xs text-on-surface-variant uppercase font-bold tracking-widest mb-1">Land Holding</p>
+              <p class="text-base font-semibold" id="farmerAcres">6.2 Acres</p>
+            </div>
+            <div>
+              <p class="text-xs text-on-surface-variant uppercase font-bold tracking-widest mb-1">Member Since</p>
+              <p class="text-base font-semibold">March 2024</p>
+            </div>
+            <div>
+              <p class="text-xs text-on-surface-variant uppercase font-bold tracking-widest mb-1">Carbon Coins</p>
+              <p class="text-base font-semibold text-primary">₹1,271</p>
+            </div>
+            <div class="col-span-2">
+              <p class="text-xs text-on-surface-variant uppercase font-bold tracking-widest mb-2">Active Crops</p>
+              <div class="flex flex-wrap gap-2">
+                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-bold">Wheat</span>
+                <span class="bg-secondary/10 text-secondary px-3 py-1 rounded-full text-sm font-bold">Mustard</span>
+                <span class="bg-error/10 text-error px-3 py-1 rounded-full text-sm font-bold">Potato</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action buttons -->
+          <div class="flex gap-3 mt-7">
+            <button onclick="downloadID()" class="flex-1 bg-primary text-on-primary py-3.5 rounded-full font-bold flex justify-center items-center gap-2 hover:brightness-110 transition-all active:scale-95 text-sm">
+              <span class="material-symbols-outlined text-lg">download</span>Download ID
+            </button>
+            <button onclick="shareWithBank()" class="px-4 py-3.5 rounded-full bg-secondary text-on-secondary font-bold flex items-center justify-center hover:brightness-110 transition-all active:scale-95">
+              <span class="material-symbols-outlined">account_balance</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Agri-Credit Scorecard -->
+    <section class="lg:col-span-7 bg-surface-container-high rounded-2xl p-8 flex flex-col md:flex-row gap-8 items-center fade-up" style="animation-delay:0.15s">
+      <!-- Score ring -->
+      <div class="flex-shrink-0 relative">
+        <svg class="w-52 h-52 transform -rotate-90" viewBox="0 0 224 224">
+          <circle cx="112" cy="112" fill="transparent" r="100" stroke="#e5e2da" stroke-width="16"/>
+          <circle class="score-circle" cx="112" cy="112" fill="transparent" r="100"
+            stroke="#0d631b" stroke-dasharray="628" stroke-dashoffset="628" stroke-width="16"
+            stroke-linecap="round" id="scoreCircle"/>
+        </svg>
+        <div class="absolute inset-0 flex flex-col items-center justify-center">
+          <span class="text-5xl font-black font-headline text-on-surface" id="scoreNum">0</span>
+          <span class="text-sm font-bold text-on-surface-variant tracking-widest">/ 1000</span>
+          <div class="mt-2 bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-bold uppercase" id="scoreLabel">Excellent</div>
+        </div>
+      </div>
+
+      <!-- Score breakdown -->
+      <div class="flex-grow w-full space-y-3">
+        <h3 class="font-headline font-bold text-lg mb-4">Farm Trust Score</h3>
+        <div id="scoreComponents" class="space-y-2.5">
+          <!-- Populated by JS -->
+        </div>
+        <p class="text-xs text-on-surface-variant italic px-1 pt-2">Score updated Nov 12, 2025 · Powered by Agri-Data Ledger</p>
+        <button onclick="openReportPanel()" class="w-full mt-3 bg-primary text-white py-3 rounded-full font-bold text-sm flex items-center justify-center gap-2 hover:brightness-110 transition-all active:scale-95">
+          <span class="material-symbols-outlined text-lg" style="font-variation-settings:'FILL' 1;">description</span>
+          Generate Bank Report
+        </button>
+      </div>
+    </section>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SECTION 3: BANK REPORT GENERATOR (AI)
+  ══════════════════════════════════════════ -->
+  <section class="fade-up" style="animation-delay:0.2s">
+    <div class="bg-surface-container-highest/50 rounded-2xl p-10 border-l-8 border-primary relative overflow-hidden">
+      <div class="absolute -right-20 -top-20 w-80 h-80 bg-primary/5 rounded-full blur-3xl"></div>
+
+      <div class="relative z-10 flex flex-col md:flex-row gap-10">
+        <!-- Report preview -->
+        <div class="md:w-1/2 space-y-5">
+          <h2 class="text-3xl font-bold font-headline flex items-center gap-3">
+            <span class="material-symbols-outlined text-primary" style="font-variation-settings:'FILL' 1;">description</span>
+            Credit Assessment Report
+          </h2>
+
+          <!-- Static preview -->
+          <div id="reportPreview" class="bg-surface-container-lowest/90 backdrop-blur p-7 rounded-xl border border-outline-variant/20 font-mono text-sm leading-relaxed shadow-inner">
+            <p class="mb-3 text-on-surface-variant font-bold text-xs">[STRICTLY CONFIDENTIAL]</p>
+            <p>Farmer <span class="font-bold text-on-surface">Ramesh Kumar Singh</span> has maintained a <span class="text-primary font-bold">95% advisory compliance rate</span> over the last 18 months.</p>
+            <p class="mt-3">Based on historical harvest data and soil health trends, the subject is <span class="text-primary font-bold underline decoration-2">Recommended for collateral-free Kisan Credit Card up to ₹2,40,000</span> for the upcoming Rabi season.</p>
+            <div class="mt-6 flex items-center gap-2 opacity-30 text-xs">
+              <div class="h-px w-16 bg-on-surface"></div>
+              Sentinel Risk Algorithm v4.2
+            </div>
+          </div>
+
+          <!-- AI generated report (hidden initially) -->
+          <div id="aiReportBox" class="report-panel bg-surface-container-lowest/90 p-7 rounded-xl border-2 border-primary/30 font-mono text-sm leading-relaxed shadow-inner">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="px-2 py-1 bg-primary text-white text-[10px] font-bold rounded-full uppercase">AI Generated</span>
+              <span class="text-xs text-on-surface-variant" id="reportTimestamp"></span>
+            </div>
+            <p id="aiReportText" class="text-on-surface leading-relaxed"></p>
+            <div id="reportTyping" class="hidden flex gap-1.5 items-center h-5 mt-3">
+              <div class="typing-dot w-2 h-2 bg-primary/40 rounded-full"></div>
+              <div class="typing-dot w-2 h-2 bg-primary/40 rounded-full"></div>
+              <div class="typing-dot w-2 h-2 bg-primary/40 rounded-full"></div>
+              <span class="text-xs text-on-surface-variant ml-1">Generating report...</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bank transmission -->
+        <div class="md:w-1/2 flex flex-col justify-center gap-6">
+          <div class="space-y-3">
+            <h3 class="text-xl font-bold">Secure Bank Transmission</h3>
+            <p class="text-on-surface-variant text-sm">Your trust score allows for instant digital application to 14 partner banks including SBI, PNB and Bank of Baroda.</p>
+          </div>
+
+          <!-- Partner banks -->
+          <div class="flex flex-wrap gap-2">
+            <span class="px-3 py-1.5 bg-surface-container rounded-full text-xs font-bold text-on-surface-variant">SBI</span>
+            <span class="px-3 py-1.5 bg-surface-container rounded-full text-xs font-bold text-on-surface-variant">PNB</span>
+            <span class="px-3 py-1.5 bg-surface-container rounded-full text-xs font-bold text-on-surface-variant">Bank of Baroda</span>
+            <span class="px-3 py-1.5 bg-surface-container rounded-full text-xs font-bold text-on-surface-variant">NABARD</span>
+            <span class="px-3 py-1.5 bg-primary/10 text-primary rounded-full text-xs font-bold">+10 more</span>
+          </div>
+
+          <div class="flex flex-col sm:flex-row gap-3">
+            <button onclick="generateAIReport()" class="bg-on-surface text-surface py-4 px-7 rounded-full font-bold flex items-center justify-center gap-2 hover:bg-black transition-colors text-sm active:scale-95">
+              <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">picture_as_pdf</span>Generate Signed PDF
+            </button>
+            <button onclick="sendToBank()" class="bg-primary-container text-on-primary-container py-4 px-7 rounded-full font-bold flex items-center justify-center gap-2 hover:brightness-110 transition-all text-sm active:scale-95">
+              <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">send</span>Send to Bank Portal
+            </button>
+          </div>
+
+          <!-- Success state -->
+          <div id="bankSuccess" class="hidden bg-primary/10 border border-primary/20 rounded-xl p-4">
+            <p class="text-primary font-bold text-sm flex items-center gap-2">
+              <span class="material-symbols-outlined text-lg" style="font-variation-settings:'FILL' 1;">check_circle</span>
+              Report sent to SBI Kisan Portal successfully! Reference: KCC-2026-<span id="refNum"></span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       SECTION 4: FARMING HISTORY TIMELINE
+  ══════════════════════════════════════ -->
+  <section class="space-y-10 fade-up" style="animation-delay:0.25s">
+    <h2 class="text-4xl font-black font-headline tracking-tighter">Your Growth Timeline</h2>
+    <div class="relative pl-12 space-y-10 before:absolute before:left-6 before:top-2 before:bottom-2 before:w-0.5 before:bg-outline-variant/30" id="timeline">
+      <!-- Populated by JS -->
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       SECTION 5: ACHIEVEMENT BADGES
+  ══════════════════════════════════════ -->
+  <section class="space-y-8 fade-up" style="animation-delay:0.3s">
+    <div class="flex justify-between items-end">
+      <div>
+        <h2 class="text-3xl font-bold font-headline">Achievement Vault</h2>
+        <p class="text-on-surface-variant text-sm mt-1">Real-world milestones converted to digital assets.</p>
+      </div>
+      <div class="text-sm text-on-surface-variant">
+        <span class="font-bold text-primary" id="badgeCount">3</span> / 6 badges earned
+      </div>
+    </div>
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-5" id="badgesGrid">
+      <!-- Populated by JS -->
+    </div>
+    <!-- Progress to Platinum -->
+    <div class="bg-surface-container p-5 rounded-2xl border border-outline-variant/20">
+      <div class="flex items-center justify-between mb-3">
+        <p class="font-bold text-sm">Progress to Platinum Kisan Status</p>
+        <span class="text-xs font-bold text-primary">2 badges away</span>
+      </div>
+      <div class="h-2 bg-surface-container-high rounded-full overflow-hidden">
+        <div class="h-full bg-primary rounded-full" style="width:66%"></div>
+      </div>
+      <p class="text-xs text-on-surface-variant mt-2">Platinum unlocks higher loan limits and priority scheme access.</p>
+    </div>
+  </section>
+
+</main>
+
+<!-- FAB -->
+<button onclick="window.location.href='../ask_krishi_ai_chat_enhanced/code.html'" class="fixed bottom-8 right-8 z-50 bg-secondary text-white w-16 h-16 rounded-full shadow-2xl flex items-center justify-center ring-4 ring-tertiary-fixed-dim/30 hover:scale-110 transition-transform active:scale-95">
+  <span class="material-symbols-outlined text-3xl" style="font-variation-settings:'FILL' 1;">mic</span>
+  <div class="absolute inset-0 rounded-full bg-tertiary-fixed-dim/20 animate-ping"></div>
+</button>
+
+<script>
+// ── SCORE DATA ──
+const SCORE_COMPONENTS = [
+  { label: 'Advisory Compliance', value: 95, color: 'bg-primary' },
+  { label: 'Weekly Checkups',     value: 88, color: 'bg-primary' },
+  { label: 'Scheme Compliance',   value: 92, color: 'bg-primary' },
+  { label: 'Sustainable Practices', value: 78, color: 'bg-tertiary-fixed-dim' },
+  { label: 'Repayment History',   value: 100, color: 'bg-primary', icon: 'security' },
+];
+
+// ── BADGES DATA ──
+const BADGES = [
+  { name: 'Early Adopter',    icon: 'rocket_launch', status: 'verified', color: 'bg-primary', delay: 0.1 },
+  { name: 'Disease Fighter',  icon: 'health_and_safety', status: 'verified', color: 'bg-primary', delay: 0.15 },
+  { name: 'Zero Burn Hero',   icon: 'eco', status: 'verified', color: 'bg-primary', delay: 0.2 },
+  { name: 'Carbon Champion',  icon: 'compost', status: 'progress', color: 'bg-tertiary-fixed-dim text-on-tertiary-fixed', delay: 0.25 },
+  { name: 'Drone Pioneer',    icon: 'precision_manufacturing', status: 'locked', delay: 0.3 },
+  { name: 'Land Lord',        icon: 'landscape', status: 'locked', delay: 0.35 },
+];
+
+// ── TIMELINE DATA ──
+const TIMELINE = [
+  { date: 'Nov 2025', label: 'Current Status', color: 'bg-primary', borderColor: 'border-primary',
+    title: 'Maximum Trust Achieved', desc: 'Achieved top 2% trust score in Azamgarh district. Eligibility for new carbon credit program unlocked.', income: null },
+  { date: 'Aug 2025', label: 'Governance', color: 'bg-primary', borderColor: 'border-primary/40',
+    title: 'Zero Stubble Burning Verified', desc: 'Satellite validation confirmed 100% soil-mix strategy. Bonus trust points (+45) added to sustainability pillar.', income: '₹840 carbon coins earned' },
+  { date: 'Jan 2025', label: 'Finance', color: 'bg-primary', borderColor: 'border-primary/40',
+    title: 'First Collateral-Free Loan Approved', desc: 'Trust Score crossed 800. SBI approved ₹1,20,000 Kisan Credit Card without any land collateral.', income: '₹1,20,000 credit approved' },
+  { date: 'Feb 2025', label: 'Crisis Alert', color: 'bg-tertiary', borderColor: 'border-tertiary/60',
+    title: 'Yellow Rust Detection', desc: 'Identified wheat fungus early via AI scan. Compliance with Rescue Advisory saved 92% of yield.', income: '₹28,000 loss avoided' },
+  { date: 'Mar 2024', label: 'Genesis', color: 'bg-outline', borderColor: 'border-outline/20',
+    title: 'Joined Eco Sentinel', desc: 'Initial profile verification and soil mapping completed for 6.2 acres in Khanpur village.', income: null },
+];
+
+// ── RENDER SCORE COMPONENTS ──
+function renderScoreComponents() {
+  const el = document.getElementById('scoreComponents');
+  el.innerHTML = SCORE_COMPONENTS.map(c => `
+    <div class="bg-surface-container-lowest p-3.5 rounded-xl">
+      <div class="flex justify-between items-center mb-1.5">
+        <div class="flex items-center gap-2">
+          ${c.icon ? `<span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings:'FILL' 1;">${c.icon}</span>` : ''}
+          <span class="text-sm font-medium text-on-surface-variant">${c.label}</span>
+        </div>
+        <span class="font-bold text-sm ${c.value === 100 ? 'text-primary' : c.value >= 90 ? 'text-primary' : 'text-tertiary'}">${c.value}%</span>
+      </div>
+      <div class="h-1.5 bg-surface-container-high rounded-full overflow-hidden">
+        <div class="score-bar h-full ${c.color} rounded-full" style="width:0%" data-target="${c.value}"></div>
+      </div>
+    </div>
+  `).join('');
+
+  // animate bars after render
+  setTimeout(() => {
+    document.querySelectorAll('.score-bar').forEach(bar => {
+      bar.style.width = bar.dataset.target + '%';
+    });
+  }, 600);
+}
+
+// ── ANIMATE SCORE RING ──
+function animateScore(target = 847) {
+  const circle = document.getElementById('scoreCircle');
+  const numEl  = document.getElementById('scoreNum');
+  const circumference = 628;
+  const offset = circumference - (target / 1000) * circumference;
+
+  // animate number
+  let current = 0;
+  const step = target / 80;
+  const interval = setInterval(() => {
+    current = Math.min(current + step, target);
+    numEl.textContent = Math.round(current);
+    if (current >= target) clearInterval(interval);
+  }, 18);
+
+  // animate ring
+  setTimeout(() => {
+    circle.style.transition = 'stroke-dashoffset 1.8s cubic-bezier(.22,1,.36,1)';
+    circle.style.strokeDashoffset = offset;
+  }, 400);
+}
+
+// ── RENDER TIMELINE ──
+function renderTimeline() {
+  const el = document.getElementById('timeline');
+  el.innerHTML = TIMELINE.map(item => `
+    <div class="relative slide-right">
+      <div class="timeline-dot absolute -left-12 mt-1.5 w-6 h-6 rounded-full ${item.color} ring-4 ring-surface-container-low flex items-center justify-center">
+        <span class="material-symbols-outlined text-white text-xs" style="font-variation-settings:'FILL' 1;">circle</span>
+      </div>
+      <div class="grid md:grid-cols-4 gap-5">
+        <div class="col-span-1">
+          <p class="text-sm font-black ${item.color === 'bg-primary' ? 'text-primary' : item.color === 'bg-tertiary' ? 'text-tertiary' : 'text-outline'} uppercase tracking-widest">${item.date}</p>
+          <p class="text-on-surface-variant font-medium text-sm">${item.label}</p>
+        </div>
+        <div class="col-span-3 bg-surface-container-lowest p-6 rounded-xl border-b-4 ${item.borderColor} hover:bg-white transition-colors">
+          <h4 class="text-xl font-bold mb-2">${item.title}</h4>
+          <p class="text-on-surface-variant text-sm">${item.desc}</p>
+          ${item.income ? `<p class="mt-3 text-primary font-bold text-sm flex items-center gap-1"><span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">payments</span>${item.income}</p>` : ''}
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ── RENDER BADGES ──
+function renderBadges() {
+  const grid = document.getElementById('badgesGrid');
+  let earned = 0;
+  grid.innerHTML = BADGES.map((b, i) => {
+    if (b.status === 'verified') earned++;
+    const isLocked = b.status === 'locked';
+    const isProgress = b.status === 'progress';
+    return `
+      <div class="badge-card ${isLocked ? 'locked' : ''} p-5 rounded-2xl flex flex-col items-center text-center gap-3 border
+        ${isLocked ? 'bg-surface-container border-outline-variant/10' : isProgress ? 'bg-tertiary/5 border-tertiary/15' : 'bg-primary/5 border-primary/10'}
+        badge-pop" style="animation-delay:${b.delay}s">
+        <div class="w-14 h-14 ${isLocked ? 'bg-outline' : isProgress ? 'bg-tertiary-fixed-dim' : 'bg-primary'} rounded-full flex items-center justify-center ${isLocked ? 'text-surface' : 'text-white'}">
+          <span class="material-symbols-outlined text-2xl" style="font-variation-settings:'FILL' 1;">${b.icon}</span>
+        </div>
+        <div>
+          <p class="font-bold text-sm">${b.name}</p>
+          <p class="text-[10px] uppercase font-black ${isLocked ? 'text-on-surface-variant' : isProgress ? 'text-tertiary opacity-70' : 'text-primary opacity-70'}">
+            ${isLocked ? 'Locked' : isProgress ? 'In Progress' : 'Verified'}
+          </p>
+        </div>
+      </div>`;
+  }).join('');
+  document.getElementById('badgeCount').textContent = earned;
+}
+
+// ── GENERATE AI BANK REPORT ──
+async function generateAIReport() {
+  const reportBox = document.getElementById('aiReportBox');
+  const reportText = document.getElementById('aiReportText');
+  const reportTyping = document.getElementById('reportTyping');
+  const timestamp = document.getElementById('reportTimestamp');
+
+  reportBox.classList.add('open');
+  reportTyping.classList.remove('hidden');
+  reportText.textContent = '';
+  timestamp.textContent = new Date().toLocaleString('en-IN');
+
+  reportBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+  try {
+    const res = await fetch('/api/chat/ask', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: `Generate a formal bank credit assessment report for farmer Ramesh Kumar Singh. Kisan ID: KP-2026-UP-AZM-00847. Advisory compliance: 95%. Trust score: 847/1000. Land: 6.2 acres. Crops: Wheat, Mustard, Potato. Repayment history: 100%. Recommend loan amount.`,
+        language: 'English',
+        history: []
+      })
+    });
+    const data = await res.json();
+    reportTyping.classList.add('hidden');
+    reportText.textContent = data.reply || getDemoReport();
+  } catch(e) {
+    reportTyping.classList.add('hidden');
+    reportText.textContent = getDemoReport();
+  }
+}
+
+function getDemoReport() {
+  return `CREDIT ASSESSMENT REPORT — Eco Sentinel Platform\n\nFarmer: Ramesh Kumar Singh | ID: KP-2026-UP-AZM-00847\nDate: ${new Date().toLocaleDateString('en-IN')}\n\nThis farmer has demonstrated exceptional compliance (95%) with AI-generated agronomic advisories over 18 months. Soil health metrics show consistent improvement — nitrogen levels restored from 68% to 88% following prescribed interventions.\n\nRisk Assessment: LOW\nRecommended Credit Limit: ₹2,40,000 (Collateral-free KCC)\nRepayment Probability: 96.3%\n\nBased on Eco Sentinel Agri-Credit Scorecard v2.0. Accepted by 14 partner banks.`;
+}
+
+function openReportPanel() {
+  document.getElementById('aiReportBox').classList.add('open');
+  document.getElementById('aiReportBox').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  generateAIReport();
+}
+
+// ── SEND TO BANK ──
+async function sendToBank() {
+  try {
+    const res = await fetch('/api/dashboard/farmer');
+    await res.json();
+  } catch(e) {}
+  const ref = Math.floor(Math.random() * 900000 + 100000);
+  document.getElementById('refNum').textContent = ref;
+  document.getElementById('bankSuccess').classList.remove('hidden');
+  document.getElementById('bankSuccess').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function downloadID() {
+  alert('Kisan Digital ID card downloaded as PDF.\n\nID: KP-2026-UP-AZM-00847\nFarmer: Ramesh Kumar Singh\nVerified by: DigiLocker + Aadhaar');
+}
+
+function shareWithBank() {
+  openReportPanel();
+}
+
+// ── LOAD DATA FROM BACKEND ──
+async function loadProfileData() {
+  try {
+    const res = await fetch('/api/dashboard/farmer');
+    if (!res.ok) return;
+    const data = await res.json();
+    if (data.farmer) {
+      if (data.farmer.name) document.getElementById('farmerName').textContent = data.farmer.name;
+      if (data.farmer.kisanId) document.getElementById('kisanId').textContent = data.farmer.kisanId;
+      if (data.farmer.village) document.getElementById('farmerVillage').textContent = `${data.farmer.village}, Azamgarh`;
+      if (data.farmer.acres) document.getElementById('farmerAcres').textContent = `${data.farmer.acres} Acres`;
+    }
+  } catch(e) { /* use demo data */ }
+}
+
+// ── PROFILE DROPDOWN ──
+function toggleDropdown() {
+  document.getElementById('profileDropdown').classList.toggle('open');
+}
+document.addEventListener('click', (e) => {
+  if (!document.getElementById('profileWrapper')?.contains(e.target)) {
+    document.getElementById('profileDropdown')?.classList.remove('open');
+  }
+});
+
+// ── INIT ──
+renderScoreComponents();
+renderTimeline();
+renderBadges();
+loadProfileData();
+setTimeout(() => animateScore(847), 300);
+</script>
+</body>
+</html>

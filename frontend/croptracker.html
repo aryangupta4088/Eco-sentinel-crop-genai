@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Crop Tracker | Eco Sentinel</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+tailwind.config = {
+  darkMode:"class",
+  theme:{extend:{
+    colors:{
+      "primary":"#0d631b","on-surface":"#1c1c17","on-tertiary-fixed-variant":"#5c4300",
+      "on-background":"#1c1c17","inverse-primary":"#88d982","on-tertiary":"#ffffff",
+      "error":"#ba1a1a","on-tertiary-fixed":"#261a00","surface-variant":"#e5e2da",
+      "surface":"#fcf9f1","on-primary":"#ffffff","surface-dim":"#dddad2",
+      "on-secondary-container":"#783916","surface-bright":"#fcf9f1",
+      "inverse-on-surface":"#f4f0e8","on-surface-variant":"#40493d",
+      "on-primary-fixed-variant":"#005312","secondary-fixed":"#ffdbcc",
+      "background":"#fcf9f1","surface-container-high":"#ebe8e0",
+      "secondary-container":"#ffa67a","surface-container-lowest":"#ffffff",
+      "on-secondary-fixed-variant":"#733512","surface-container-low":"#f7f3eb",
+      "inverse-surface":"#31312b","surface-tint":"#1b6d24","primary-fixed":"#a3f69c",
+      "tertiary-container":"#8c6800","secondary-fixed-dim":"#ffb693",
+      "primary-container":"#2e7d32","on-secondary-fixed":"#351000",
+      "on-tertiary-container":"#ffefd7","tertiary-fixed-dim":"#f8bd2a",
+      "primary-fixed-dim":"#88d982","on-error":"#ffffff","outline-variant":"#bfcaba",
+      "on-primary-container":"#cbffc2","on-secondary":"#ffffff",
+      "surface-container":"#f1eee6","on-primary-fixed":"#002204",
+      "error-container":"#ffdad6","on-error-container":"#93000a",
+      "tertiary":"#6e5100","secondary":"#904c27","tertiary-fixed":"#ffdfa0",
+      "outline":"#707a6c","surface-container-highest":"#e5e2da"
+    },
+    fontFamily:{"headline":["Plus Jakarta Sans"],"body":["Be Vietnam Pro"],"label":["Be Vietnam Pro"]},
+    borderRadius:{"DEFAULT":"1rem","lg":"2rem","xl":"3rem","full":"9999px"},
+  }},
+}
+</script>
+<style>
+  .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;display:inline-block;line-height:1;}
+  body{background-color:#fcf9f1;}
+  .no-scrollbar::-webkit-scrollbar{display:none;}
+  .no-scrollbar{-ms-overflow-style:none;scrollbar-width:none;}
+
+  /* ── Entrance animations ── */
+  @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes slideRight{from{opacity:0;transform:translateX(-20px)}to{opacity:1;transform:translateX(0)}}
+  @keyframes popIn{from{opacity:0;transform:scale(0.9)}to{opacity:1;transform:scale(1)}}
+  @keyframes barGrow{from{width:0}}
+  .fade-up{animation:fadeUp 0.5s cubic-bezier(.22,1,.36,1) both;}
+  .slide-right{animation:slideRight 0.4s cubic-bezier(.22,1,.36,1) both;}
+  .pop-in{animation:popIn 0.35s cubic-bezier(.34,1.56,.64,1) both;}
+  .bar-fill{animation:barGrow 1s cubic-bezier(.22,1,.36,1) 0.3s both;}
+
+  /* ── Crop card ── */
+  .crop-card{
+    transition:transform 0.25s,box-shadow 0.25s,border-color 0.2s;
+    cursor:pointer;
+    border:2px solid transparent;
+  }
+  .crop-card:hover{transform:translateY(-6px);box-shadow:0 20px 40px rgba(28,28,23,0.1);}
+  .crop-card.selected-wheat{border-color:#0d631b;box-shadow:0 20px 50px rgba(13,99,27,0.2);transform:scale(1.02);}
+  .crop-card.selected-mustard{border-color:#f8bd2a;box-shadow:0 20px 50px rgba(248,189,42,0.2);transform:scale(1.02);}
+  .crop-card.selected-potato{border-color:#ba1a1a;box-shadow:0 20px 50px rgba(186,26,26,0.2);transform:scale(1.02);}
+
+  /* ── Selected badge ── */
+  .selected-badge{
+    position:absolute;top:-1px;left:-1px;
+    padding:4px 10px 4px 6px;border-radius:0 0 12px 0;
+    display:none;align-items:center;gap:4px;
+    font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;
+  }
+  .crop-card.selected-wheat .selected-badge,
+  .crop-card.selected-mustard .selected-badge,
+  .crop-card.selected-potato .selected-badge{display:flex;}
+
+  /* ── AI panel slide up ── */
+  @keyframes panelUp{from{opacity:0;transform:translateY(32px)}to{opacity:1;transform:translateY(0)}}
+  .ai-panel{animation:panelUp 0.4s cubic-bezier(.22,1,.36,1) both;}
+  .detail-section{animation:fadeUp 0.45s cubic-bezier(.22,1,.36,1) both;}
+
+  /* ── Typing dots ── */
+  @keyframes bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-6px)}}
+  .typing-dot{animation:bounce 1.2s ease-in-out infinite;}
+  .typing-dot:nth-child(2){animation-delay:0.15s;}
+  .typing-dot:nth-child(3){animation-delay:0.3s;}
+
+  /* ── Mic pulse ── */
+  @keyframes micPulse{0%{box-shadow:0 0 0 0 rgba(144,76,39,0.4)}70%{box-shadow:0 0 0 14px rgba(144,76,39,0)}100%{box-shadow:0 0 0 0 rgba(144,76,39,0)}}
+  .mic-pulse{animation:micPulse 1.8s ease-out infinite;}
+
+  /* ── Critical pulse ── */
+  @keyframes criticalPulse{0%,100%{opacity:1}50%{opacity:0.5}}
+  .critical-pulse{animation:criticalPulse 1.5s ease-in-out infinite;}
+
+  /* ── Checkbox done ── */
+  .task-done label{text-decoration:line-through;opacity:0.5;}
+
+  /* ── Photo upload hover ── */
+  .upload-zone{transition:all 0.2s;border:2px dashed #bfcaba;}
+  .upload-zone:hover{border-color:#0d631b;background:rgba(13,99,27,0.04);}
+</style>
+</head>
+<body class="font-body text-on-surface">
+
+<!-- ── NAVBAR ── -->
+<nav class="fixed top-0 w-full z-50 bg-emerald-950/80 backdrop-blur-xl border-b border-white/10 shadow-2xl shadow-emerald-950/20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-20">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center">
+          <span class="material-symbols-outlined text-white" style="font-variation-settings:'FILL' 1;">eco</span>
+        </div>
+        <a href="../farmer_dashboard_synced_navbar/code.html" class="text-2xl font-black text-white tracking-tighter">Eco Sentinel</a>
+      </div>
+      <div class="hidden md:flex items-center gap-8">
+        <a class="text-emerald-100/80 hover:text-white transition-colors font-medium" href="../farmer_dashboard_synced_navbar/code.html">Home</a>
+        <a class="text-emerald-100/80 hover:text-white transition-colors font-medium" href="../eco_sentinel_agritrend/code.html">AgriTrend</a>
+        <a class="text-emerald-100/80 hover:text-white transition-colors font-medium" href="../ask_krishi_ai_chat_enhanced/code.html">Ask Krishi AI</a>
+        <a class="text-emerald-100/80 hover:text-white transition-colors font-medium" href="../scheme_radar_final_synced_layout/code.html">Scheme Radar</a>
+        <a class="text-emerald-400 font-bold relative" href="#">
+          Crop Tracker
+          <span class="absolute -bottom-1 left-0 w-full h-0.5 bg-emerald-400 rounded-full"></span>
+        </a>
+      </div>
+      <div class="flex items-center gap-3">
+        <button class="hidden md:block bg-white text-emerald-950 px-6 py-2.5 rounded-full font-bold text-sm hover:bg-emerald-50 transition-colors shadow-lg">Sign Up</button>
+        <!-- Profile dropdown -->
+        <div class="relative" id="profileWrapper">
+          <button onclick="toggleProfileMenu()" class="w-10 h-10 rounded-full bg-emerald-800 flex items-center justify-center text-emerald-100 hover:bg-emerald-700 transition-colors overflow-hidden">
+            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAaTyXjKV0ZcLt7PfEPFdA-IKtVkRwKUHb3wQZFu3SjmCubq4iMLIi1PYS4VOgaTgj30gzK6muEpsXUouh40Dt9Ufhzt-FHxPTnGfLUYEU0zGXL2rzoFl2UM7N-Wi_ly8EYJpwulY5Y4MhlX0BZagv9HRCz2lictQav_UXGQ24TGISh3xxAgwvnG1lH6Icjk-zy26OEZ--UVgCTW7JHMd8oo_5uubeAxQBRnCG0wdzecM0OETCarmaSihij1Fy5DWp5G9Txr6fcfcQ" class="w-full h-full object-cover" alt=""/>
+          </button>
+          <div id="profileMenu" class="hidden absolute right-0 top-14 w-48 bg-emerald-950 rounded-2xl shadow-2xl border border-white/10 p-2 z-50">
+            <a href="./my_profile_trust.html" class="flex items-center gap-2 px-3 py-2.5 rounded-xl text-emerald-100/80 hover:bg-white/10 text-sm font-medium transition-colors">
+              <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">person</span>My Profile
+            </a>
+            <a href="./diagonoseandprotect.html" class="flex items-center gap-2 px-3 py-2.5 rounded-xl text-emerald-100/80 hover:bg-white/10 text-sm font-medium transition-colors">
+              <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">dashboard</span>Dashboard
+            </a>
+            <a href="./growpage.html" class="flex items-center gap-2 px-3 py-2.5 rounded-xl text-emerald-100/80 hover:bg-white/10 text-sm font-medium transition-colors">
+              <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">eco</span>Grow Smart
+            </a>
+            <div class="h-px bg-white/10 my-1"></div>
+            <a href="./language.html" class="flex items-center gap-2 px-3 py-2.5 rounded-xl text-red-400 hover:bg-red-500/10 text-sm font-medium transition-colors">
+              <span class="material-symbols-outlined text-sm">logout</span>Sign Out
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ── MAIN ── -->
+<main class="pt-28 pb-32 px-6 md:px-12 max-w-7xl mx-auto">
+
+  <!-- Header -->
+  <header class="mb-12 fade-up">
+    <h1 class="font-headline text-5xl md:text-6xl font-black text-on-surface mb-2 tracking-tight">Crop Tracker</h1>
+    <p class="font-body text-xl text-secondary italic">Your crops, your calendar, your proof.</p>
+    <p class="text-sm text-on-surface-variant mt-2 font-medium">
+      <span class="material-symbols-outlined text-sm align-middle text-primary" style="font-variation-settings:'FILL' 1;">touch_app</span>
+      Click any crop card to see detailed insights and consult Krishi AI
+    </p>
+  </header>
+
+  <!-- ── CROP CARDS ── -->
+  <section class="mb-12">
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="font-headline text-2xl font-bold">My Active Crops</h2>
+      <span class="text-primary font-semibold text-sm bg-primary/10 px-3 py-1 rounded-full">3 Fields Active</span>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="cropGrid">
+
+      <!-- WHEAT CARD -->
+      <div class="crop-card bg-surface-container-lowest rounded-xl p-7 relative overflow-hidden fade-up" style="animation-delay:0.1s" onclick="selectCrop('wheat')" id="card-wheat">
+        <div class="selected-badge bg-primary text-white">
+          <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">check_circle</span>Selected
+        </div>
+        <div class="absolute top-0 left-0 w-2 h-full bg-primary"></div>
+        <div class="flex justify-between items-start mb-5">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-widest text-secondary/70 mb-1 block">Cereal</span>
+            <h3 class="text-3xl font-headline font-bold">Wheat</h3>
+            <p class="text-on-surface-variant font-medium text-sm">HD-2967 variety · 3 acres</p>
+          </div>
+          <span class="bg-primary/10 text-primary px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-primary"></span>Healthy
+          </span>
+        </div>
+        <div class="space-y-3 mb-6">
+          <div class="flex items-center gap-3 text-sm font-medium">
+            <span class="material-symbols-outlined text-outline-variant text-base">location_on</span>Field A
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div><p class="text-xs text-outline font-bold uppercase mb-0.5">Sowed</p><p class="text-sm font-bold">15 Nov 2025</p></div>
+            <div><p class="text-xs text-outline font-bold uppercase mb-0.5">Harvest</p><p class="text-sm font-bold">15 Apr 2026</p></div>
+          </div>
+        </div>
+        <div>
+          <div class="flex justify-between items-end mb-1.5">
+            <span class="text-sm font-bold text-on-surface-variant">Flowering Stage</span>
+            <span class="text-lg font-headline font-black text-primary">68%</span>
+          </div>
+          <div class="w-full bg-surface-container-high h-2.5 rounded-full overflow-hidden">
+            <div class="bar-fill bg-primary h-full rounded-full" style="width:68%"></div>
+          </div>
+        </div>
+        <p class="text-xs text-primary font-bold mt-4 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity" id="wheat-tap-hint">
+          <span class="material-symbols-outlined text-xs">touch_app</span>Tap to view details
+        </p>
+      </div>
+
+      <!-- MUSTARD CARD -->
+      <div class="crop-card bg-surface-container-lowest rounded-xl p-7 relative overflow-hidden fade-up" style="animation-delay:0.2s" onclick="selectCrop('mustard')" id="card-mustard">
+        <div class="selected-badge bg-tertiary-fixed-dim text-on-tertiary-fixed">
+          <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">check_circle</span>Selected
+        </div>
+        <div class="absolute top-0 left-0 w-2 h-full bg-tertiary-fixed-dim"></div>
+        <div class="flex justify-between items-start mb-5">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-widest text-secondary/70 mb-1 block">Oilseed</span>
+            <h3 class="text-3xl font-headline font-bold">Mustard</h3>
+            <p class="text-on-surface-variant font-medium text-sm">Pusa Bold variety · 2 acres</p>
+          </div>
+          <span class="bg-tertiary-fixed-dim/20 text-tertiary px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-tertiary-fixed-dim"></span>Watch
+          </span>
+        </div>
+        <div class="space-y-3 mb-6">
+          <div class="flex items-center gap-3 text-sm font-medium">
+            <span class="material-symbols-outlined text-outline-variant text-base">location_on</span>Field B
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div><p class="text-xs text-outline font-bold uppercase mb-0.5">Sowed</p><p class="text-sm font-bold">20 Oct 2025</p></div>
+            <div><p class="text-xs text-outline font-bold uppercase mb-0.5">Harvest</p><p class="text-sm font-bold">10 Mar 2026</p></div>
+          </div>
+        </div>
+        <div>
+          <div class="flex justify-between items-end mb-1.5">
+            <span class="text-sm font-bold text-on-surface-variant">Maturity Stage</span>
+            <span class="text-lg font-headline font-black text-tertiary">89%</span>
+          </div>
+          <div class="w-full bg-surface-container-high h-2.5 rounded-full overflow-hidden">
+            <div class="bar-fill bg-tertiary-fixed-dim h-full rounded-full" style="width:89%"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- POTATO CARD -->
+      <div class="crop-card bg-surface-container-lowest rounded-xl p-7 relative overflow-hidden fade-up" style="animation-delay:0.3s" onclick="selectCrop('potato')" id="card-potato">
+        <div class="selected-badge bg-error text-white">
+          <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">check_circle</span>Selected
+        </div>
+        <div class="absolute top-0 left-0 w-2 h-full bg-error"></div>
+        <div class="flex justify-between items-start mb-5">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-widest text-secondary/70 mb-1 block">Tuber</span>
+            <h3 class="text-3xl font-headline font-bold">Potato</h3>
+            <p class="text-on-surface-variant font-medium text-sm">Kufri Jyoti variety · 1 acre</p>
+          </div>
+          <span class="bg-error/10 text-error px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 critical-pulse">
+            <span class="w-2 h-2 rounded-full bg-error"></span>Critical
+          </span>
+        </div>
+        <div class="p-3 bg-error-container/30 border-l-4 border-error rounded-r-lg mb-4">
+          <p class="text-xs font-bold text-on-error-container flex items-center gap-1">
+            <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">warning</span>
+            Possible late blight detected
+          </p>
+        </div>
+        <div class="space-y-3 mb-6">
+          <div class="flex items-center gap-3 text-sm font-medium">
+            <span class="material-symbols-outlined text-outline-variant text-base">location_on</span>Field C
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div><p class="text-xs text-outline font-bold uppercase mb-0.5">Sowed</p><p class="text-sm font-bold">1 Dec 2025</p></div>
+            <div><p class="text-xs text-outline font-bold uppercase mb-0.5">Harvest</p><p class="text-sm font-bold">28 Feb 2026</p></div>
+          </div>
+        </div>
+        <div>
+          <div class="flex justify-between items-end mb-1.5">
+            <span class="text-sm font-bold text-on-surface-variant">Vegetative Stage</span>
+            <span class="text-lg font-headline font-black text-error">45%</span>
+          </div>
+          <div class="w-full bg-surface-container-high h-2.5 rounded-full overflow-hidden">
+            <div class="bar-fill bg-error h-full rounded-full" style="width:45%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── DETAIL SECTIONS (shown after crop selection) ── -->
+  <div id="detailPanel" class="hidden space-y-12">
+
+    <!-- Section 2: Checkup + AI Insights -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-8 detail-section">
+      <!-- Photo Upload -->
+      <div class="bg-surface-container-high p-8 rounded-xl flex flex-col items-center justify-center text-center space-y-5">
+        <div>
+          <h3 class="font-headline text-2xl font-bold mb-1">This Week's Checkup</h3>
+          <p class="text-on-surface-variant text-sm" id="checkupSubtitle">Time for your weekly crop photo</p>
+        </div>
+        <input type="file" id="photoInput" accept="image/*" class="hidden" onchange="handlePhotoUpload(event)"/>
+        <div id="photoPreview" class="hidden w-full">
+          <img id="previewImg" class="w-full h-48 object-cover rounded-xl mb-3" src="" alt=""/>
+          <button onclick="clearPhoto()" class="text-xs text-error font-bold">Remove photo</button>
+        </div>
+        <button onclick="document.getElementById('photoInput').click()" id="uploadBtn" class="upload-zone w-24 h-24 rounded-full bg-primary text-white flex items-center justify-center shadow-lg shadow-primary/30 active:scale-90 transition-transform">
+          <span class="material-symbols-outlined text-4xl" style="font-variation-settings:'FILL' 1;">photo_camera</span>
+        </button>
+        <p class="text-xs font-bold text-primary uppercase tracking-widest">Tap to Upload Photo</p>
+        <div id="uploadedCount" class="flex items-center gap-2 bg-primary/10 px-4 py-2 rounded-full">
+          <span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings:'FILL' 1;">photo_library</span>
+          <span class="text-xs font-bold text-primary" id="weekCount">8 weeks of photos stored</span>
+        </div>
+      </div>
+
+      <!-- AI Insights -->
+      <div class="bg-tertiary-fixed p-8 rounded-xl relative overflow-hidden flex flex-col justify-between">
+        <div class="absolute -right-8 -bottom-8 w-40 h-40 bg-on-tertiary-fixed-variant/10 rounded-full blur-2xl"></div>
+        <div class="flex items-center gap-3 text-on-tertiary-fixed mb-4">
+          <div class="bg-on-tertiary-fixed text-tertiary-fixed p-2 rounded-lg">
+            <span class="material-symbols-outlined text-xl" style="font-variation-settings:'FILL' 1;">psychology</span>
+          </div>
+          <span class="font-headline font-bold uppercase tracking-tight">Krishi AI Insights</span>
+        </div>
+        <div class="space-y-4 relative z-10">
+          <h4 class="text-xl font-bold text-on-tertiary-fixed leading-tight" id="aiInsightTitle">Loading AI insights...</h4>
+          <p class="text-sm text-on-tertiary-fixed-variant font-medium" id="aiInsightBody"></p>
+          <button onclick="openAIPanel()" class="bg-on-tertiary-fixed text-white px-6 py-3 rounded-full text-sm font-bold shadow-md hover:scale-105 transition-transform active:scale-95">
+            Get Treatment Plan
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Growth Timeline -->
+    <section class="space-y-5 detail-section">
+      <h2 class="font-headline text-2xl font-bold" id="timelineTitle">Growth Timeline</h2>
+      <div class="flex gap-4 overflow-x-auto pb-4 no-scrollbar" id="timelineStrip">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+
+    <!-- Section 4: This Week's Actions -->
+    <section class="space-y-5 detail-section">
+      <h2 class="font-headline text-2xl font-bold">This Week's Actions</h2>
+      <div class="space-y-3" id="actionsList">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+
+    <!-- ── INLINE AI CONSULTATION PANEL ── -->
+    <section class="detail-section" id="aiConsultPanel">
+      <div class="bg-emerald-950 rounded-3xl overflow-hidden">
+        <!-- Panel header -->
+        <div class="flex items-center justify-between px-8 py-5 border-b border-white/10">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
+              <span class="material-symbols-outlined text-white" style="font-variation-settings:'FILL' 1;">psychology</span>
+            </div>
+            <div>
+              <p class="font-headline font-bold text-white text-base">Krishi AI Consultation</p>
+              <p class="text-emerald-400 text-xs" id="aiPanelSubtitle">Ask about your selected crop</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+            <span class="text-xs text-emerald-400 font-bold">Live AI</span>
+          </div>
+        </div>
+
+        <!-- Chat area -->
+        <div class="px-8 py-6 space-y-4 max-h-80 overflow-y-auto no-scrollbar" id="aiChatArea">
+          <!-- Welcome message -->
+          <div class="flex gap-3 ai-panel" id="aiWelcomeMsg">
+            <div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center flex-shrink-0">
+              <span class="material-symbols-outlined text-white text-sm" style="font-variation-settings:'FILL' 1;">psychology</span>
+            </div>
+            <div class="bg-white/10 text-white/90 px-4 py-3 rounded-tr-xl rounded-b-xl text-sm max-w-lg" id="aiWelcomeText">
+              Select a crop above to get personalized AI advice.
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick prompts -->
+        <div class="px-8 py-3 flex gap-2 flex-wrap border-t border-white/10" id="quickPrompts">
+          <!-- Populated by JS per crop -->
+        </div>
+
+        <!-- Input bar -->
+        <div class="px-8 pb-6 pt-3">
+          <div class="flex items-center gap-3 bg-white/10 rounded-2xl px-4 py-3 border border-white/10">
+            <input id="aiInput" type="text" placeholder="Ask about this crop..."
+              class="flex-1 bg-transparent text-white placeholder-white/40 text-sm border-none outline-none focus:ring-0"
+              onkeydown="if(event.key==='Enter'){sendAIMessage();}"/>
+            <button onclick="sendAIMessage()" class="bg-primary text-white rounded-full w-9 h-9 flex items-center justify-center hover:brightness-110 transition-all active:scale-95 flex-shrink-0">
+              <span class="material-symbols-outlined text-lg" style="font-variation-settings:'FILL' 1;">send</span>
+            </button>
+            <button onclick="toggleVoiceInput()" id="aiMicBtn" class="mic-pulse bg-secondary text-white rounded-full w-9 h-9 flex items-center justify-center flex-shrink-0">
+              <span class="material-symbols-outlined text-lg" style="font-variation-settings:'FILL' 1;">mic</span>
+            </button>
+          </div>
+          <p class="text-center text-xs text-white/30 mt-2">Powered by Gemini AI · Responds in your language</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: Insurance Proof -->
+    <section class="detail-section">
+      <div class="bg-primary p-8 md:p-12 rounded-3xl text-white flex flex-col md:flex-row items-center justify-between gap-8 overflow-hidden relative">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-20 -mt-20 blur-3xl"></div>
+        <div class="space-y-4 max-w-xl relative z-10">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-emerald-400" style="font-variation-settings:'FILL' 1;">verified</span>
+            <span class="uppercase tracking-widest text-xs font-bold text-emerald-300">Verified Compliance</span>
+          </div>
+          <h2 class="font-headline text-3xl md:text-4xl font-bold leading-tight" id="insuranceTitle">Your crop has 8 weeks of photo proof stored</h2>
+          <p class="text-emerald-100/80 font-medium">All data is timestamped and geotagged. Ready for your PMFBY insurance claim submission.</p>
+        </div>
+        <button onclick="generateClaim()" class="bg-white text-primary px-8 py-5 rounded-full font-headline font-extrabold shadow-2xl hover:scale-105 active:scale-95 transition-all w-full md:w-auto flex items-center gap-2 justify-center">
+          <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">description</span>
+          Generate Insurance Claim
+        </button>
+      </div>
+    </section>
+
+    <!-- Proof of Cultivation -->
+    <section class="space-y-5 detail-section">
+      <div class="flex items-center justify-between">
+        <h2 class="font-headline text-2xl font-bold">Proof of Cultivation</h2>
+        <button class="bg-primary text-on-primary font-bold px-6 py-3 rounded-full flex items-center gap-2 hover:brightness-110 transition-all text-sm">
+          <span class="material-symbols-outlined text-lg">add_circle</span>Generate New Proof
+        </button>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div class="bg-surface-container-low rounded-xl p-5 flex items-center gap-5 hover:bg-surface-container-high transition-colors">
+          <div class="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center text-primary flex-shrink-0">
+            <span class="material-symbols-outlined text-3xl" style="font-variation-settings:'FILL' 1;">verified_user</span>
+          </div>
+          <div class="flex-1">
+            <h4 class="font-headline font-bold text-base" id="proofTitle1">Wheat Certification 2025</h4>
+            <p class="text-on-surface-variant text-xs">Verified by Block Officer, 12 Jan 2026</p>
+          </div>
+          <button class="material-symbols-outlined text-outline hover:text-primary transition-colors">download</button>
+        </div>
+        <div class="bg-surface-container-low rounded-xl p-5 flex items-center gap-5 hover:bg-surface-container-high transition-colors">
+          <div class="w-14 h-14 bg-secondary/10 rounded-xl flex items-center justify-center text-secondary flex-shrink-0">
+            <span class="material-symbols-outlined text-3xl" style="font-variation-settings:'FILL' 1;">satellite_alt</span>
+          </div>
+          <div class="flex-1">
+            <h4 class="font-headline font-bold text-base" id="proofTitle2">Field A Geo-Tagged Log</h4>
+            <p class="text-on-surface-variant text-xs">5 Photos · Verified via Satellite</p>
+          </div>
+          <button class="material-symbols-outlined text-outline hover:text-primary transition-colors">visibility</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ── NO CROP SELECTED STATE ── -->
+  <div id="noCropState" class="fade-up">
+    <!-- Maximize Yield Banner -->
+    <section class="relative rounded-3xl overflow-hidden min-h-[280px] flex items-center">
+      <div class="absolute inset-0 z-0">
+        <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCuobhFk8zEyrI8X-mT6A_4tSWZ_53hSdGfmnjix9DBnO-WgeG5LA53AIvCcr4_rQLJA653Tk6K_YzrIyAdK1rgqevyRvRuUn5xwIZusMeXifLZxOhGhJ0t9E2bHrJr0oLrwSCl1UuL75uKkaFNWtHJNP5qhhCz4OJBUIoHJRAyX4dGUn__exPANBErB0blf20Flsi9GwGOklHEQx9LlrDj3Bo0A4FsSwnm20Ka_w3PIeMj42JbGwVyh6jiWPeorkzq8zsoUk-wmCU" alt=""/>
+        <div class="absolute inset-0 bg-emerald-950/60 backdrop-blur-[2px]"></div>
+      </div>
+      <div class="relative z-10 px-12 py-12 flex flex-col md:flex-row justify-between items-center w-full gap-8">
+        <div>
+          <h2 class="font-headline text-4xl font-black text-emerald-50 mb-3 tracking-tight">Select a Crop to Begin</h2>
+          <p class="text-emerald-100/80 max-w-lg text-lg">Click on Wheat, Mustard, or Potato above to see detailed insights, AI analysis, growth timeline and consult Krishi AI.</p>
+        </div>
+        <button onclick="selectCrop('wheat')" class="bg-white text-emerald-900 font-black px-10 py-5 rounded-full flex items-center gap-3 hover:scale-105 transition-transform shadow-xl font-headline">
+          <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">grass</span>
+          View Wheat Details
+        </button>
+      </div>
+    </section>
+  </div>
+
+</main>
+
+<!-- ── MOBILE BOTTOM NAV ── -->
+<nav class="md:hidden bg-[#fcf9f1]/90 backdrop-blur-md fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-6 pb-6 pt-3 shadow-[0_-4px_40px_rgba(28,28,23,0.06)] rounded-t-[2.5rem]">
+  <a href="./dashboard.html" class="flex flex-col items-center text-stone-500 p-2 text-[10px] font-medium">
+    <span class="material-symbols-outlined mb-1">home</span>Home
+  </a>
+  <a href=".agritrend.html" class="flex flex-col items-center text-stone-500 p-2 text-[10px] font-medium">
+    <span class="material-symbols-outlined mb-1">trending_up</span>Trends
+  </a>
+  <a href="./askkrishiai.html" class="flex flex-col items-center text-stone-500 p-2 text-[10px] font-medium">
+    <span class="material-symbols-outlined mb-1">psychology</span>AI Help
+  </a>
+  <a href="./schemeradar.html" class="flex flex-col items-center text-stone-500 p-2 text-[10px] font-medium">
+    <span class="material-symbols-outlined mb-1">radar</span>Schemes
+  </a>
+  <a href="#" class="flex flex-col items-center bg-primary text-white rounded-full p-3 scale-110 -translate-y-2 text-[10px] font-medium">
+    <span class="material-symbols-outlined mb-1" style="font-variation-settings:'FILL' 1;">psychiatry</span>Crops
+  </a>
+</nav>
+
+<!-- FAB mic -->
+<button onclick="toggleVoiceInput()" class="fixed bottom-24 right-6 md:bottom-12 md:right-12 w-16 h-16 bg-secondary rounded-full flex items-center justify-center shadow-2xl z-40 mic-pulse">
+  <span class="material-symbols-outlined text-white text-3xl relative z-10" style="font-variation-settings:'FILL' 1;">mic</span>
+</button>
+
+<script>
+// ── CROP DATA ──
+const CROPS = {
+  wheat: {
+    name: 'Wheat', variety: 'HD-2967', field: 'Field A', acres: 3,
+    status: 'Healthy', statusColor: 'primary',
+    stage: 'Flowering', progress: 68,
+    harvest: '15 Apr 2026', sowed: '15 Nov 2025',
+    aiInsight: 'Early yellowing spotted on leaf edges — possible nitrogen deficiency.',
+    aiInsightBody: 'Comparison with last week shows 12% increase in discoloration on Wheat (Field A). Apply urea at 2kg/acre before Thursday.',
+    actions: [
+      { text: 'Apply second dose of urea by Thursday', sub: 'Necessary for flowering stage', urgent: false, prompt: 'How do I apply urea correctly for wheat in flowering stage?' },
+      { text: 'Irrigate for 30 minutes on Wednesday', sub: 'Based on local humidity forecasts', urgent: false, prompt: 'What is the best time to irrigate wheat this week?' },
+      { text: 'Monitor for rust spots on upper leaves', sub: 'Yellow rust season is active in your district', urgent: false, prompt: 'How do I identify and treat yellow rust on wheat?' },
+    ],
+    timeline: ['12 Jan 2026','05 Jan 2026','29 Dec 2025','22 Dec 2025'],
+    timelineLabels: ['Week 8 (Today)','Week 7','Week 6','Week 5'],
+    insuranceWeeks: 8,
+    proofTitle1: 'Wheat Certification 2025', proofTitle2: 'Field A Geo-Tagged Log',
+    quickPrompts: ['Why are wheat leaves turning yellow?','Best fertilizer for flowering stage?','When should I harvest?'],
+    welcomeMsg: "Namaste! I'm analysing your Wheat crop (Field A). Nitrogen levels appear slightly low. What would you like to know?"
+  },
+  mustard: {
+    name: 'Mustard', variety: 'Pusa Bold', field: 'Field B', acres: 2,
+    status: 'Watch', statusColor: 'tertiary',
+    stage: 'Maturity', progress: 89,
+    harvest: '10 Mar 2026', sowed: '20 Oct 2025',
+    aiInsight: 'Mustard approaching harvest — watch for pod shattering.',
+    aiInsightBody: 'Your mustard is at 89% maturity. Harvest within 12-15 days when 75% pods turn golden. Delay risks pod shatter and 20-30% yield loss.',
+    actions: [
+      { text: 'Harvest within next 12-15 days', sub: 'Pods are turning golden — optimal window approaching', urgent: false, prompt: 'How do I know the right time to harvest mustard?' },
+      { text: 'Stop irrigation immediately', sub: 'Water at this stage causes pod shattering', urgent: true, prompt: 'Why should I stop watering mustard before harvest?' },
+      { text: 'Arrange harvesting equipment', sub: 'Book harvester 5 days in advance via Kisan-Setu', urgent: false, prompt: 'How do I find harvesting workers near me?' },
+    ],
+    timeline: ['12 Jan 2026','05 Jan 2026','29 Dec 2025','22 Dec 2025'],
+    timelineLabels: ['Week 12 (Today)','Week 11','Week 10','Week 9'],
+    insuranceWeeks: 12,
+    proofTitle1: 'Mustard Certification 2025', proofTitle2: 'Field B Geo-Tagged Log',
+    quickPrompts: ['When to harvest mustard?','How to prevent pod shattering?','Best storage method for mustard?'],
+    welcomeMsg: "Your Mustard crop (Field B) is at 89% maturity — nearly ready! Harvest window opens in about 12 days. What do you need help with?"
+  },
+  potato: {
+    name: 'Potato', variety: 'Kufri Jyoti', field: 'Field C', acres: 1,
+    status: 'Critical', statusColor: 'error',
+    stage: 'Vegetative', progress: 45,
+    harvest: '28 Feb 2026', sowed: '1 Dec 2025',
+    aiInsight: '⚠️ Late blight confirmed — urgent action required within 24 hours.',
+    aiInsightBody: 'Humidity levels are optimal for fungal spread. Apply Mancozeb 75% WP at 2.5g/litre immediately. Delay beyond 24 hours risks 60-80% yield loss.',
+    actions: [
+      { text: '🚨 Spray Mancozeb fungicide TODAY', sub: 'Late blight confirmed — do not delay', urgent: true, prompt: 'How do I apply Mancozeb fungicide for potato late blight?' },
+      { text: 'Improve field drainage immediately', sub: 'Waterlogging accelerates blight spread', urgent: true, prompt: 'How to improve drainage for potato field?' },
+      { text: 'Remove and destroy infected leaves', sub: 'Prevents spread to neighboring plants', urgent: false, prompt: 'How do I manage infected potato plants?' },
+    ],
+    timeline: ['12 Jan 2026','05 Jan 2026','29 Dec 2025','22 Dec 2025'],
+    timelineLabels: ['Week 6 (Today)','Week 5','Week 4','Week 3'],
+    insuranceWeeks: 6,
+    proofTitle1: 'Potato Certification 2025', proofTitle2: 'Field C Geo-Tagged Log',
+    quickPrompts: ['How to treat late blight fast?','Is my potato crop still saveable?','Best fungicide for blight?'],
+    welcomeMsg: "🚨 URGENT: Late blight detected on your Potato crop (Field C). Immediate action needed. I can guide you through the emergency treatment plan."
+  }
+};
+
+let selectedCrop = null;
+let isAITyping = false;
+let isListening = false;
+
+// ── SELECT CROP ──
+function selectCrop(cropKey) {
+  const crop = CROPS[cropKey];
+  selectedCrop = cropKey;
+
+  // update card styles
+  ['wheat','mustard','potato'].forEach(k => {
+    const card = document.getElementById('card-' + k);
+    card.classList.remove('selected-wheat','selected-mustard','selected-potato');
+  });
+  document.getElementById('card-' + cropKey).classList.add('selected-' + cropKey);
+
+  // show detail panel, hide no-crop state
+  document.getElementById('detailPanel').classList.remove('hidden');
+  document.getElementById('noCropState').classList.add('hidden');
+
+  // update AI insights
+  document.getElementById('aiInsightTitle').textContent = crop.aiInsight;
+  document.getElementById('aiInsightBody').textContent = crop.aiInsightBody;
+
+  // update timeline
+  document.getElementById('timelineTitle').textContent = `Growth Timeline: ${crop.name}`;
+  renderTimeline(crop);
+
+  // update actions
+  renderActions(crop);
+
+  // update insurance
+  document.getElementById('insuranceTitle').textContent = `Your ${crop.name} crop has ${crop.insuranceWeeks} weeks of photo proof stored`;
+  document.getElementById('weekCount').textContent = `${crop.insuranceWeeks} weeks of photos stored`;
+
+  // update proof titles
+  document.getElementById('proofTitle1').textContent = crop.proofTitle1;
+  document.getElementById('proofTitle2').textContent = crop.proofTitle2;
+
+  // update AI panel
+  document.getElementById('aiPanelSubtitle').textContent = `Consulting about ${crop.name} — ${crop.field}`;
+  document.getElementById('aiWelcomeText').textContent = crop.welcomeMsg;
+  renderQuickPrompts(crop);
+
+  // clear chat
+  const chatArea = document.getElementById('aiChatArea');
+  chatArea.innerHTML = `
+    <div class="flex gap-3 ai-panel">
+      <div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center flex-shrink-0">
+        <span class="material-symbols-outlined text-white text-sm" style="font-variation-settings:'FILL' 1;">psychology</span>
+      </div>
+      <div class="bg-white/10 text-white/90 px-4 py-3 rounded-tr-xl rounded-b-xl text-sm max-w-lg">${crop.welcomeMsg}</div>
+    </div>`;
+
+  // scroll to detail panel
+  setTimeout(() => {
+    document.getElementById('detailPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 150);
+
+  // backend call
+  loadCropData(cropKey);
+}
+
+function renderTimeline(crop) {
+  const strip = document.getElementById('timelineStrip');
+  strip.innerHTML = crop.timeline.map((date, i) => `
+    <div class="flex-shrink-0 ${i === 0 ? 'w-32' : 'w-28'} space-y-2 ${i > 0 ? `opacity-${100 - i*15}` : ''}">
+      <div class="h-44 w-full rounded-xl bg-surface-container-highest overflow-hidden relative ${i === 0 ? 'border-2 border-primary' : ''}">
+        <div class="w-full h-full bg-gradient-to-br from-surface-container to-surface-container-high flex items-center justify-center">
+          <span class="material-symbols-outlined text-outline-variant text-3xl" style="font-variation-settings:'FILL' 1;">grass</span>
+        </div>
+        ${i === 0 ? `<div class="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/60 to-transparent"><span class="text-[10px] text-white font-bold">${crop.timelineLabels[i]}</span></div>` : ''}
+      </div>
+      <p class="text-[10px] font-bold text-center text-on-surface-variant">${date}</p>
+    </div>
+  `).join('') + `
+    <div class="flex-shrink-0 w-28 h-44 border-2 border-dashed border-outline-variant rounded-xl flex items-center justify-center">
+      <span class="text-on-surface-variant font-bold text-xs">+ 4 more</span>
+    </div>`;
+}
+
+function renderActions(crop) {
+  const list = document.getElementById('actionsList');
+  list.innerHTML = crop.actions.map((action, i) => `
+    <div class="flex items-center gap-4 bg-surface-container-lowest p-5 rounded-xl transition-all hover:bg-surface-container ${action.urgent ? 'border-l-4 border-error bg-error-container/10' : ''}">
+      <input type="checkbox" class="w-6 h-6 rounded-md border-primary text-primary focus:ring-primary" onchange="toggleTask(this)"/>
+      <div class="flex-grow">
+        <p class="font-bold text-base leading-tight ${action.urgent ? 'text-error' : ''}">${action.text}</p>
+        <p class="text-sm text-on-surface-variant">${action.sub}</p>
+      </div>
+      <button onclick="askAboutTask('${action.prompt.replace(/'/g,"\\'")}', this)" class="px-4 py-2 bg-secondary/10 text-secondary rounded-full text-xs font-bold flex items-center gap-1 hover:bg-secondary/20 transition-colors flex-shrink-0">
+        <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">psychology</span>Ask AI
+      </button>
+    </div>
+  `).join('');
+}
+
+function renderQuickPrompts(crop) {
+  const el = document.getElementById('quickPrompts');
+  el.innerHTML = crop.quickPrompts.map(p => `
+    <button onclick="sendAIMessage('${p.replace(/'/g,"\\'")}', this)" class="px-3 py-1.5 bg-white/10 text-white/80 rounded-full text-xs font-medium hover:bg-white/20 transition-colors border border-white/10">
+      ${p}
+    </button>
+  `).join('');
+}
+
+// ── AI CHAT ──
+function openAIPanel() {
+  document.getElementById('aiConsultPanel').scrollIntoView({ behavior:'smooth', block:'center' });
+  document.getElementById('aiInput').focus();
+}
+
+function askAboutTask(prompt, btn) {
+  openAIPanel();
+  setTimeout(() => sendAIMessage(prompt), 300);
+}
+
+async function sendAIMessage(text, btn) {
+  const input = document.getElementById('aiInput');
+  const message = text || input.value.trim();
+  if (!message || isAITyping) return;
+  input.value = '';
+
+  const chatArea = document.getElementById('aiChatArea');
+
+  // user bubble
+  chatArea.innerHTML += `
+    <div class="flex gap-3 flex-row-reverse ai-panel">
+      <div class="w-8 h-8 rounded-lg bg-secondary flex items-center justify-center flex-shrink-0">
+        <span class="material-symbols-outlined text-white text-sm" style="font-variation-settings:'FILL' 1;">person</span>
+      </div>
+      <div class="bg-primary/30 text-white px-4 py-3 rounded-tl-xl rounded-b-xl text-sm max-w-sm">${message}</div>
+    </div>`;
+
+  // typing indicator
+  const typingId = 'typing_' + Date.now();
+  chatArea.innerHTML += `
+    <div id="${typingId}" class="flex gap-3 ai-panel">
+      <div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center flex-shrink-0">
+        <span class="material-symbols-outlined text-white text-sm" style="font-variation-settings:'FILL' 1;">psychology</span>
+      </div>
+      <div class="bg-white/10 px-4 py-3 rounded-tr-xl rounded-b-xl">
+        <div class="flex gap-1.5 items-center h-4">
+          <div class="typing-dot w-2 h-2 bg-white/40 rounded-full"></div>
+          <div class="typing-dot w-2 h-2 bg-white/40 rounded-full"></div>
+          <div class="typing-dot w-2 h-2 bg-white/40 rounded-full"></div>
+        </div>
+      </div>
+    </div>`;
+
+  chatArea.scrollTop = chatArea.scrollHeight;
+  isAITyping = true;
+
+  try {
+    // ── BACKEND CALL ──
+    const res = await fetch('/api/chat/ask', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: `I am asking about my ${CROPS[selectedCrop]?.name || 'crop'}: ${message}`,
+        language: 'Hindi',
+        history: []
+      })
+    });
+    const data = await res.json();
+    const reply = data.reply || getDemoReply(message);
+
+    document.getElementById(typingId)?.remove();
+    chatArea.innerHTML += `
+      <div class="flex gap-3 ai-panel">
+        <div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center flex-shrink-0">
+          <span class="material-symbols-outlined text-white text-sm" style="font-variation-settings:'FILL' 1;">psychology</span>
+        </div>
+        <div class="bg-white/10 text-white/90 px-4 py-3 rounded-tr-xl rounded-b-xl text-sm max-w-lg">${reply}</div>
+      </div>`;
+  } catch(e) {
+    document.getElementById(typingId)?.remove();
+    const fallback = getDemoReply(message);
+    chatArea.innerHTML += `
+      <div class="flex gap-3 ai-panel">
+        <div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center flex-shrink-0">
+          <span class="material-symbols-outlined text-white text-sm" style="font-variation-settings:'FILL' 1;">psychology</span>
+        </div>
+        <div class="bg-white/10 text-white/90 px-4 py-3 rounded-tr-xl rounded-b-xl text-sm max-w-lg">${fallback}</div>
+      </div>`;
+  }
+
+  isAITyping = false;
+  chatArea.scrollTop = chatArea.scrollHeight;
+}
+
+function getDemoReply(msg) {
+  const m = msg.toLowerCase();
+  if (m.includes('urea') || m.includes('fertilizer') || m.includes('fertiliser'))
+    return 'Apply urea at 2kg per acre in the morning before 9AM. Mix with soil using a weeder. Avoid applying before heavy rain as it causes nitrogen runoff. Your Soil Vitals show nitrogen at 68% — one dose should bring it to optimal level.';
+  if (m.includes('blight') || m.includes('fungicide') || m.includes('mancozeb'))
+    return '🚨 For late blight: Mix Mancozeb 75% WP at 2.5g per litre of water. Spray on both sides of leaves. Apply in early morning. Repeat after 7 days. Do NOT wait — every hour of delay increases spread by 8-12%.';
+  if (m.includes('harvest') || m.includes('maturity'))
+    return 'For mustard — harvest when 75-80% pods turn golden yellow. Test by pressing a pod — seeds should not crush easily. Early morning harvesting prevents pod shattering. Yield loss from delay can be 20-30%.';
+  if (m.includes('irrigat') || m.includes('water'))
+    return 'For wheat at flowering stage — irrigate lightly for 25-30 minutes. Avoid over-watering which causes lodging. Best time is early morning or late evening. Skip irrigation if rain is forecast in 24 hours.';
+  return 'I understand your concern. Based on your crop data and current field conditions, I recommend consulting the treatment guide in Diagnose & Protect for a detailed action plan. Would you like me to explain any specific aspect in more detail?';
+}
+
+// ── VOICE INPUT ──
+function toggleVoiceInput() {
+  if (isListening) stopVoice();
+  else startVoice();
+}
+
+function startVoice() {
+  if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+    alert('Voice not supported. Please use Chrome.'); return;
+  }
+  isListening = true;
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const r = new SR();
+  r.lang = 'hi-IN';
+  r.onresult = (e) => {
+    document.getElementById('aiInput').value = e.results[0][0].transcript;
+    stopVoice();
+    setTimeout(sendAIMessage, 300);
+  };
+  r.onerror = stopVoice;
+  r.onend = stopVoice;
+  r.start();
+}
+
+function stopVoice() { isListening = false; }
+
+// ── TASK CHECKBOX ──
+function toggleTask(checkbox) {
+  const item = checkbox.closest('div');
+  if (checkbox.checked) {
+    item.style.opacity = '0.5';
+    item.style.textDecoration = 'line-through';
+  } else {
+    item.style.opacity = '1';
+    item.style.textDecoration = 'none';
+  }
+}
+
+// ── PHOTO UPLOAD ──
+function handlePhotoUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    document.getElementById('previewImg').src = e.target.result;
+    document.getElementById('photoPreview').classList.remove('hidden');
+    document.getElementById('uploadBtn').classList.add('hidden');
+    document.getElementById('checkupSubtitle').textContent = 'Photo uploaded successfully — AI is analysing...';
+    // auto send to AI
+    setTimeout(() => {
+      sendAIMessage(`I just uploaded a photo of my ${CROPS[selectedCrop]?.name || 'crop'} — please analyse it for diseases`);
+    }, 1000);
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearPhoto() {
+  document.getElementById('photoPreview').classList.add('hidden');
+  document.getElementById('uploadBtn').classList.remove('hidden');
+  document.getElementById('photoInput').value = '';
+  document.getElementById('checkupSubtitle').textContent = 'Time for your weekly crop photo';
+}
+
+// ── GENERATE CLAIM ──
+function generateClaim() {
+  const crop = CROPS[selectedCrop];
+  if (!crop) return;
+  fetch('/api/chronicles/claim', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ crop: crop.name, weeks: crop.insuranceWeeks, field: crop.field })
+  })
+  .then(r => r.json())
+  .then(d => alert(`Insurance claim document generated for ${crop.name}! Claim ID: PMFBY-2026-${Math.floor(Math.random()*90000+10000)}`))
+  .catch(() => alert(`Insurance claim document generated for ${crop.name}!\n\nClaim ID: PMFBY-2026-${Math.floor(Math.random()*90000+10000)}\n\n${crop.insuranceWeeks} weeks of timestamped photo proof submitted to PMFBY portal.`));
+}
+
+// ── LOAD CROP DATA FROM BACKEND ──
+async function loadCropData(cropKey) {
+  try {
+    const res = await fetch(`/api/chronicles/crop/${cropKey}`);
+    if (!res.ok) return;
+    const data = await res.json();
+    if (data.weekCount) document.getElementById('weekCount').textContent = `${data.weekCount} weeks of photos stored`;
+  } catch(e) { /* use demo data */ }
+}
+
+// ── PROFILE DROPDOWN ──
+function toggleProfileMenu() {
+  document.getElementById('profileMenu').classList.toggle('hidden');
+}
+document.addEventListener('click', (e) => {
+  if (!document.getElementById('profileWrapper')?.contains(e.target)) {
+    document.getElementById('profileMenu')?.classList.add('hidden');
+  }
+});
+
+// ── DEFAULT: show wheat on load ──
+window.addEventListener('load', () => {
+  setTimeout(() => selectCrop('wheat'), 400);
+});
+</script>
+</body>
+</html>

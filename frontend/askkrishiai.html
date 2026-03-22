@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Ask Krishi AI | Eco Sentinel</title>
+
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+tailwind.config = {
+  darkMode:"class",
+  theme:{extend:{colors:{"surface-container":"#f1eee6","on-surface":"#1c1c17","on-error-container":"#93000a","tertiary-fixed-dim":"#f8bd2a","on-surface-variant":"#40493d","on-tertiary":"#ffffff","on-secondary-container":"#783916","secondary-fixed":"#ffdbcc","surface-container-low":"#f7f3eb","inverse-primary":"#88d982","secondary-fixed-dim":"#ffb693","outline":"#707a6c","on-secondary-fixed":"#351000","primary-fixed-dim":"#88d982","tertiary-fixed":"#ffdfa0","surface-variant":"#e5e2da","on-error":"#ffffff","on-tertiary-fixed":"#261a00","secondary":"#904c27","error":"#ba1a1a","primary-fixed":"#a3f69c","surface-container-lowest":"#ffffff","tertiary":"#6e5100","background":"#fcf9f1","on-primary":"#ffffff","primary":"#0d631b","on-secondary-fixed-variant":"#733512","on-primary-fixed-variant":"#005312","tertiary-container":"#8c6800","secondary-container":"#ffa67a","on-tertiary-fixed-variant":"#5c4300","on-secondary":"#ffffff","inverse-surface":"#31312b","surface-container-highest":"#e5e2da","surface-container-high":"#ebe8e0","outline-variant":"#bfcaba","on-primary-container":"#cbffc2","surface-bright":"#fcf9f1","on-background":"#1c1c17","error-container":"#ffdad6","on-tertiary-container":"#ffefd7","primary-container":"#2e7d32","inverse-on-surface":"#f4f0e8","surface-tint":"#1b6d24","on-primary-fixed":"#002204","surface":"#fcf9f1","surface-dim":"#dddad2"},fontFamily:{"headline":["Plus Jakarta Sans"],"body":["Be Vietnam Pro"],"label":["Be Vietnam Pro"]},borderRadius:{"DEFAULT":"1rem","lg":"2rem","xl":"3rem","full":"9999px"}}}
+}
+</script>
+<style>
+.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;}
+::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:#bfcaba;border-radius:10px;}
+.glass-panel{background:rgba(252,249,241,0.75);backdrop-filter:blur(20px);}
+.sidebar-gradient{background:linear-gradient(180deg,#062f11 0%,#031e0b 100%);}
+@keyframes msgIn{from{opacity:0;transform:translateY(14px) scale(0.97);}to{opacity:1;transform:translateY(0) scale(1);}}
+.msg-in{animation:msgIn 0.35s cubic-bezier(.22,1,.36,1) both;}
+@keyframes bounce{0%,80%,100%{transform:translateY(0);}40%{transform:translateY(-6px);}}
+.typing-dot{width:7px;height:7px;border-radius:50%;background:#0d631b;opacity:.7;animation:bounce 1.2s ease-in-out infinite;}
+@keyframes micPulse{0%,100%{box-shadow:0 0 0 0 rgba(220,38,38,0.4);}50%{box-shadow:0 0 0 16px rgba(220,38,38,0);}}
+.mic-listening{animation:micPulse 1s ease-out infinite!important;background:#dc2626!important;}
+@keyframes waveBar{0%,100%{height:4px;}50%{height:18px;}}
+.wave-bar{width:3px;border-radius:3px;background:#0d631b;animation:waveBar 0.7s ease-in-out infinite;}
+.history-item{transition:background .15s,transform .15s;cursor:pointer;}
+.history-item:hover{background:rgba(255,255,255,.1);transform:translateX(3px);}
+.history-item.active{background:rgba(255,255,255,.15);}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+.fade-up{animation:fadeUp .5s cubic-bezier(.22,1,.36,1) both;}
+.chip{transition:transform .15s,box-shadow .15s;cursor:pointer;}
+.chip:hover{transform:scale(1.05);box-shadow:0 4px 12px rgba(13,99,27,.15);}
+.img-preview{max-width:200px;border-radius:12px;border:2px solid rgba(13,99,27,.2);}
+</style>
+</head>
+<body class="bg-surface-container-low font-body text-on-surface antialiased h-screen flex flex-col overflow-hidden">
+
+<!-- ── TOP NAV ── -->
+<nav class="fixed top-0 w-full z-50 bg-emerald-950/75 backdrop-blur-xl shadow-2xl shadow-emerald-950/20">
+  <div class="flex justify-between items-center w-full px-6 py-4 max-w-screen-2xl mx-auto">
+    <div class="flex items-center gap-8">
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-emerald-400 text-2xl" style="font-variation-settings:'FILL' 1;">psychiatry</span>
+        <a href="./dashboard.html" class="text-2xl font-black tracking-tighter text-emerald-50 font-headline">Eco Sentinel</a>
+      </div>
+      <div class="hidden lg:flex items-center gap-6">
+        <a class="font-headline text-sm tracking-wide uppercase font-bold text-emerald-100/70 hover:text-emerald-50 transition-colors" href="./dashboard.html">Home</a>
+        <a class="font-headline text-sm tracking-wide uppercase font-bold text-emerald-100/70 hover:text-emerald-50 transition-colors" href="./agritrend.html">AgriTrend</a>
+        <a class="font-headline text-sm tracking-wide uppercase font-bold text-emerald-400 border-b-2 border-emerald-400 pb-1" href="./askkrishiai.html">Ask Krishi AI</a>
+        <a class="font-headline text-sm tracking-wide uppercase font-bold text-emerald-100/70 hover:text-emerald-50 transition-colors" href="./schemeradar.html">Scheme Radar</a>
+        <a class="font-headline text-sm tracking-wide uppercase font-bold text-emerald-100/70 hover:text-emerald-50 transition-colors" href="./croptracker.html">Crop Tracker</a>
+        <a class="font-headline text-sm tracking-wide uppercase font-bold text-emerald-100/70 hover:text-emerald-50 transition-colors" href="./diagonoseandprotect.html">Diagnose</a>
+        <a class="font-headline text-sm tracking-wide uppercase font-bold text-emerald-100/70 hover:text-emerald-50 transition-colors" href="./earnmore.html">Earn More</a>
+      </div>
+    </div>
+    <div class="flex items-center gap-3">
+      <a href="./dashboard.html" class="hidden md:flex items-center gap-2 px-4 py-2 rounded-full font-headline text-xs font-bold uppercase tracking-wider text-emerald-50 hover:bg-emerald-800/50 transition-all">Dashboard</a>
+      <a href="./language.html" class="px-6 py-2.5 bg-gradient-to-r from-primary to-primary-container text-on-primary rounded-full font-headline text-xs font-black uppercase tracking-widest shadow-lg hover:scale-105 active:scale-95 transition-all">Sign Up</a>
+      <div class="relative" id="profileWrapper">
+        <button onclick="toggleProfileDropdown()" class="flex items-center gap-1 p-1 rounded-full hover:bg-emerald-800/40 transition-all">
+          <div class="w-9 h-9 rounded-full bg-primary/30 border-2 border-emerald-400/60 flex items-center justify-center">
+            <span class="material-symbols-outlined text-emerald-200 text-xl">person</span>
+          </div>
+          <span class="material-symbols-outlined text-emerald-200 text-sm">expand_more</span>
+        </button>
+        <div class="hidden absolute top-full right-0 mt-3 w-52 bg-emerald-950/97 backdrop-blur-xl border border-white/10 rounded-2xl p-2 shadow-2xl z-50" id="profileDropdown">
+          <div class="px-3 py-2 mb-1"><p class="text-white font-bold text-sm">Arjun Singh</p><p class="text-emerald-400 text-xs">KP-2026-UP-AZM-00847</p></div>
+          <div class="h-px bg-white/10 my-1"></div>
+          <a href="./myproject.html"           class="flex items-center gap-2 px-3 py-2 rounded-xl text-white/80 hover:bg-white/10 text-sm font-semibold transition-colors"><span class="material-symbols-outlined text-emerald-400 text-base" style="font-variation-settings:'FILL' 1;">person</span>My Profile</a>
+          <a href="./diagonoseandprotect.html"  class="flex items-center gap-2 px-3 py-2 rounded-xl text-white/80 hover:bg-white/10 text-sm font-semibold transition-colors"><span class="material-symbols-outlined text-emerald-400 text-base" style="font-variation-settings:'FILL' 1;">dashboard</span>Dashboard</a>
+          <a href="./growpage.html"             class="flex items-center gap-2 px-3 py-2 rounded-xl text-white/80 hover:bg-white/10 text-sm font-semibold transition-colors"><span class="material-symbols-outlined text-emerald-400 text-base" style="font-variation-settings:'FILL' 1;">eco</span>Grow Smart</a>
+          <div class="h-px bg-white/10 my-1"></div>
+          <a href="./language.html" class="flex items-center gap-2 px-3 py-2 rounded-xl text-red-400 hover:bg-red-500/15 text-sm font-semibold transition-colors"><span class="material-symbols-outlined text-red-400 text-base">logout</span>Sign Out</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="flex flex-1 pt-16 overflow-hidden">
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="hidden lg:flex flex-col h-full pt-4 pb-6 sidebar-gradient w-72 fixed left-0 top-16 z-40 font-body text-sm text-emerald-50">
+    <div class="px-6 mb-5 flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center flex-shrink-0">
+        <span class="material-symbols-outlined text-white text-xl" style="font-variation-settings:'FILL' 1;">psychology</span>
+      </div>
+      <div>
+        <p class="text-base font-bold text-white font-headline">Krishi Assistant</p>
+        <p class="text-xs text-emerald-200/60">Gemini + Groq powered</p>
+      </div>
+    </div>
+    <div class="px-4 mb-4">
+      <button onclick="newSession()" class="w-full bg-primary text-white rounded-full py-3 px-6 font-bold flex items-center justify-center gap-2 shadow-lg hover:brightness-110 transition-all active:scale-95 font-headline text-sm">
+        <span class="material-symbols-outlined text-base">add</span>New Consultation
+      </button>
+    </div>
+    <div class="px-4 mb-4">
+      <select id="langSelect" onchange="changeLanguage(this.value)" class="w-full bg-emerald-900/60 text-emerald-100 border border-emerald-700/40 rounded-full py-2.5 px-4 text-xs font-bold font-headline focus:ring-1 focus:ring-emerald-400 outline-none">
+        <option value="Hindi" selected>हिन्दी — Hindi</option>
+        <option value="English">English</option>
+        <option value="Marathi">मराठी — Marathi</option>
+        <option value="Punjabi">ਪੰਜਾਬੀ — Punjabi</option>
+        <option value="Tamil">தமிழ் — Tamil</option>
+        <option value="Telugu">తెలుగు — Telugu</option>
+        <option value="Bengali">বাংলা — Bengali</option>
+        <option value="Gujarati">ગુજરાતી — Gujarati</option>
+        <option value="Kannada">ಕನ್ನಡ — Kannada</option>
+      </select>
+    </div>
+    <nav class="flex-1 overflow-y-auto px-2 space-y-1">
+      <p class="px-4 text-[10px] uppercase tracking-widest font-bold text-emerald-200/40 mb-2">Sessions</p>
+      <div id="historyList" class="space-y-1"></div>
+      <p class="px-4 text-[10px] uppercase tracking-widest font-bold text-emerald-200/30 mt-5 mb-2">Quick Topics</p>
+      <div class="mx-4 text-xs space-y-2.5 text-emerald-100/70">
+        <div onclick="quickAsk('How to control wheat rust disease?')" class="flex items-center gap-2 hover:text-emerald-50 cursor-pointer transition-colors"><span class="w-1.5 h-1.5 rounded-full bg-secondary flex-shrink-0"></span>Wheat Pest Control</div>
+        <div onclick="quickAsk('What is my soil health showing?')" class="flex items-center gap-2 hover:text-emerald-50 cursor-pointer transition-colors"><span class="w-1.5 h-1.5 rounded-full bg-tertiary-fixed-dim flex-shrink-0"></span>Soil Health Report</div>
+        <div onclick="quickAsk('Correct urea dosage during monsoon?')" class="flex items-center gap-2 hover:text-emerald-50 cursor-pointer transition-colors"><span class="w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0"></span>Monsoon Urea Dosage</div>
+        <div onclick="quickAsk('Which government schemes am I eligible for?')" class="flex items-center gap-2 hover:text-emerald-50 cursor-pointer transition-colors"><span class="w-1.5 h-1.5 rounded-full bg-tertiary flex-shrink-0"></span>Government Schemes</div>
+        <div onclick="quickAsk('Best crop for next season based on my soil?')" class="flex items-center gap-2 hover:text-emerald-50 cursor-pointer transition-colors"><span class="w-1.5 h-1.5 rounded-full bg-primary-fixed-dim flex-shrink-0"></span>Next Season Crop</div>
+      </div>
+    </nav>
+    <div class="mt-auto px-2 space-y-1 border-t border-emerald-900/60 pt-4">
+      <div class="text-emerald-100/70 hover:bg-emerald-800/30 rounded-full mx-2 flex items-center gap-3 px-4 py-2 cursor-pointer transition-colors"><span class="material-symbols-outlined text-base">settings</span><span>Settings</span></div>
+      <div onclick="clearAllHistory()" class="text-red-400/70 hover:bg-red-900/20 rounded-full mx-2 flex items-center gap-3 px-4 py-2 cursor-pointer transition-colors"><span class="material-symbols-outlined text-base">delete_sweep</span><span>Clear History</span></div>
+    </div>
+  </aside>
+
+  <!-- ── CHAT AREA ── -->
+  <main class="flex-1 ml-0 lg:ml-72 flex flex-col relative bg-surface-container-low min-h-0">
+    <div class="px-6 py-3 border-b border-outline-variant/20 bg-surface-container-lowest/60 backdrop-blur flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <div class="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
+        <span class="font-headline font-bold text-sm text-on-surface" id="sessionTitle">New Consultation</span>
+      </div>
+      <div class="flex items-center gap-3">
+        <div id="voiceWaveBar" class="hidden items-center gap-0.5" style="height:20px;">
+          <div class="wave-bar" style="animation-delay:0s;"></div>
+          <div class="wave-bar" style="animation-delay:0.1s;"></div>
+          <div class="wave-bar" style="animation-delay:0.2s;"></div>
+          <div class="wave-bar" style="animation-delay:0.15s;"></div>
+          <div class="wave-bar" style="animation-delay:0.05s;"></div>
+        </div>
+        <span class="text-xs text-outline font-medium" id="sessionMeta">0 messages</span>
+      </div>
+    </div>
+
+    <div class="flex-1 overflow-y-auto px-4 md:px-10 py-6 space-y-6" id="chatMessages"></div>
+
+    <!-- Input -->
+    <div class="p-4 md:p-6 bg-gradient-to-t from-surface-container-low via-surface-container-low/95 to-transparent">
+      <div id="imagePreviewWrap" class="hidden mb-3 px-2">
+        <div class="relative inline-block">
+          <img id="imagePreview" class="img-preview" src="" alt="Crop photo"/>
+          <button onclick="removeImage()" class="absolute -top-2 -right-2 w-6 h-6 bg-error text-white rounded-full flex items-center justify-center hover:scale-110 transition-transform">
+            <span class="material-symbols-outlined text-sm">close</span>
+          </button>
+        </div>
+        <p class="text-xs text-outline mt-1 ml-1">Photo attached — Krishi AI will diagnose it</p>
+      </div>
+      <div class="max-w-3xl mx-auto relative group">
+        <div class="glass-panel rounded-full p-2 pl-5 flex items-center gap-2 shadow-[0_8px_32px_rgba(28,28,23,0.08)] border border-white/50">
+          <input id="chatInput" class="flex-1 bg-transparent border-none focus:ring-0 text-on-surface placeholder-on-surface-variant/50 font-medium py-3 text-sm outline-none" placeholder="Ask about crops, pests, soil, schemes..." type="text" onkeydown="handleKeyDown(event)"/>
+          <label class="flex items-center justify-center bg-surface-container-highest text-primary rounded-full w-11 h-11 cursor-pointer hover:bg-surface-container-high transition-colors active:scale-95 flex-shrink-0">
+            <span class="material-symbols-outlined text-xl">photo_camera</span>
+            <input type="file" accept="image/*" class="hidden" id="imageInput" onchange="handleImageSelect(event)"/>
+          </label>
+          <button onclick="sendMessage()" class="flex items-center justify-center bg-surface-container-high text-primary rounded-full w-11 h-11 hover:bg-primary hover:text-white transition-all active:scale-95 flex-shrink-0">
+            <span class="material-symbols-outlined text-xl">send</span>
+          </button>
+          <button id="micBtn" onclick="toggleVoice()" class="flex items-center justify-center bg-gradient-to-br from-primary to-primary-container text-white rounded-full w-12 h-12 shadow-[0_0_20px_rgba(13,99,27,0.3)] hover:scale-105 transition-transform active:scale-90 flex-shrink-0">
+            <span class="material-symbols-outlined text-xl" style="font-variation-settings:'FILL' 1;" id="micIcon">mic</span>
+          </button>
+        </div>
+        <div class="absolute -top-10 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+          <div class="bg-inverse-surface text-inverse-on-surface text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-widest whitespace-nowrap">Speak in Hindi, Marathi, Punjabi or English</div>
+        </div>
+      </div>
+      <p class="text-center text-[10px] text-outline/60 mt-3 font-label uppercase tracking-widest">Krishi AI · Gemini + Groq · Advice is for guidance only</p>
+    </div>
+  </main>
+</div>
+
+<!-- ── MOBILE BOTTOM NAV ── -->
+<footer class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 bg-surface-container-low/90 backdrop-blur-xl border-t border-outline-variant/20 rounded-t-3xl">
+  <a href="./dashboard.html"          class="flex flex-col items-center text-outline p-2 rounded-full"><span class="material-symbols-outlined text-xl">home</span><span class="text-[9px] font-bold">Home</span></a>
+  <a href="./agritrend.html"          class="flex flex-col items-center text-outline p-2 rounded-full"><span class="material-symbols-outlined text-xl">trending_up</span><span class="text-[9px] font-bold">AgriTrend</span></a>
+  <a href="./askkrishiai.html"        class="flex flex-col items-center bg-primary text-white rounded-full px-4 py-2"><span class="material-symbols-outlined text-xl" style="font-variation-settings:'FILL' 1;">psychology</span><span class="text-[9px] font-bold">Krishi AI</span></a>
+  <a href="./schemeradar.html"        class="flex flex-col items-center text-outline p-2 rounded-full"><span class="material-symbols-outlined text-xl">policy</span><span class="text-[9px] font-bold">Schemes</span></a>
+  <a href="./croptracker.html"        class="flex flex-col items-center text-outline p-2 rounded-full"><span class="material-symbols-outlined text-xl">grass</span><span class="text-[9px] font-bold">Crops</span></a>
+</footer>
+
+<script>
+// ── CONFIG ────────────────────────────────────────────
+const API_BASE = 'http://localhost:3000';
+const STORAGE_KEY = 'krishiAI_sessions';
+const S = {sessions:[],currentId:null,messages:[],isListening:false,isLoading:false,image:null,language:'Hindi'};
+
+function getLanguage() {
+  return localStorage.getItem('cropwise_language') || localStorage.getItem('krishiAI_language') || 'Hindi';
+}
+
+function init() {
+  S.language = getLanguage();
+  document.getElementById('langSelect').value = S.language;
+  try { const d = localStorage.getItem(STORAGE_KEY); if(d) S.sessions = JSON.parse(d); } catch(e) {}
+  newSession();
+}
+
+function newSession() {
+  const id = 's_' + Date.now();
+  S.sessions.unshift({id, title:'New Consultation', messages:[], createdAt:new Date().toISOString()});
+  S.currentId = id; S.messages = [];
+  document.getElementById('chatMessages').innerHTML = '';
+  renderWelcome(); updateMeta(); renderSidebar(); save();
+}
+
+function renderWelcome() {
+  document.getElementById('chatMessages').innerHTML = `
+  <div class="flex gap-3 max-w-3xl msg-in">
+    <div class="w-9 h-9 rounded-xl bg-primary flex items-center justify-center flex-shrink-0 shadow-md mt-1">
+      <span class="material-symbols-outlined text-white text-lg" style="font-variation-settings:'FILL' 1;">psychology</span>
+    </div>
+    <div class="space-y-3 flex-1">
+      <div class="bg-surface-container-lowest p-5 rounded-tr-2xl rounded-b-2xl shadow-sm border border-outline-variant/10">
+        <p class="text-on-surface leading-relaxed font-medium text-sm">🌱 <strong>Namaste!</strong> I am Krishi AI — your personal agricultural assistant powered by Gemini + Groq.<br><br>Ask me anything about crops, soil, pests, government schemes, or mandi prices — in any language!</p>
+      </div>
+      <div class="flex flex-wrap gap-2">
+        <span onclick="quickAsk('What pests should I watch for in wheat this season?')" class="chip px-3 py-1.5 bg-secondary-container text-on-secondary-container rounded-full text-xs font-bold">Wheat pests</span>
+        <span onclick="quickAsk('Check my soil health')" class="chip px-3 py-1.5 bg-surface-container-high text-on-surface-variant rounded-full text-xs font-bold">Soil health</span>
+        <span onclick="quickAsk('Which government schemes am I eligible for?')" class="chip px-3 py-1.5 bg-surface-container-high text-on-surface-variant rounded-full text-xs font-bold">My schemes</span>
+        <span onclick="quickAsk('What is the mandi price for wheat today?')" class="chip px-3 py-1.5 bg-surface-container-high text-on-surface-variant rounded-full text-xs font-bold">Mandi prices</span>
+      </div>
+    </div>
+  </div>`;
+}
+
+async function sendMessage(text=null) {
+  const input = document.getElementById('chatInput');
+  const msg = text || input.value.trim();
+  if (!msg && !S.image) return;
+  if (S.isLoading) return;
+  const txt = msg || 'Please analyze this crop image';
+  input.value = '';
+  appendUser(txt, S.image);
+  S.messages.push({role:'user', content:txt, image:S.image, ts:new Date().toISOString()});
+  if (S.messages.filter(m=>m.role==='user').length === 1) setTitle(txt);
+  const img = S.image; removeImage();
+  showTyping(); S.isLoading = true;
+
+  try {
+    // ── CALLS /api/chat with correct format ──
+    const body = { message: txt, language: S.language };
+    const res = await fetch(`${API_BASE}/api/chat`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(body)
+    });
+    const data = await res.json();
+    hideTyping();
+    // Backend returns 'response' field
+    const reply = data.response || data.reply || data.message || 'Sorry, please try again.';
+    S.messages.push({role:'assistant', content:reply, ts:new Date().toISOString()});
+    appendAI(reply, []);
+  } catch(e) {
+    hideTyping();
+    const fb = fallback(txt);
+    S.messages.push({role:'assistant', content:fb.reply, suggestions:fb.suggestions, ts:new Date().toISOString()});
+    appendAI(fb.reply, fb.suggestions);
+  }
+  S.isLoading = false; saveSession(); updateMeta(); renderSidebar();
+}
+
+function quickAsk(t) { document.getElementById('chatInput').value = t; sendMessage(t); }
+
+function appendUser(text, img=null) {
+  const el = document.getElementById('chatMessages');
+  const d = document.createElement('div');
+  d.className = 'flex gap-3 max-w-3xl ml-auto flex-row-reverse msg-in';
+  d.innerHTML = `
+    <div class="w-9 h-9 rounded-xl bg-secondary flex items-center justify-center flex-shrink-0 shadow-md mt-1"><span class="material-symbols-outlined text-white text-lg">person</span></div>
+    <div class="space-y-1">
+      ${img ? `<img src="data:image/jpeg;base64,${img}" class="img-preview mb-2" alt="crop"/>` : ''}
+      <div class="bg-primary-container text-on-primary-container p-4 rounded-tl-2xl rounded-b-2xl shadow-sm"><p class="leading-relaxed font-semibold text-sm">${esc(text)}</p></div>
+      <p class="text-xs text-outline text-right">${ftime(new Date())}</p>
+    </div>`;
+  el.appendChild(d); scroll();
+}
+
+function appendAI(text, sugg=[]) {
+  const el = document.getElementById('chatMessages');
+  const d = document.createElement('div');
+  d.className = 'flex gap-3 max-w-3xl msg-in';
+  const chips = sugg.length ? `<div class="flex flex-wrap gap-2 mt-2">${sugg.map(s=>`<span onclick="quickAsk('${esc(s)}')" class="chip px-3 py-1.5 bg-surface-container-high text-on-surface-variant rounded-full text-xs font-bold cursor-pointer">${esc(s)}</span>`).join('')}</div>` : '';
+  d.innerHTML = `
+    <div class="w-9 h-9 rounded-xl bg-primary flex items-center justify-center flex-shrink-0 shadow-md mt-1"><span class="material-symbols-outlined text-white text-lg" style="font-variation-settings:'FILL' 1;">psychology</span></div>
+    <div class="space-y-2 flex-1">
+      <div class="bg-surface-container-lowest p-5 rounded-tr-2xl rounded-b-2xl shadow-sm border border-outline-variant/10"><p class="text-on-surface leading-relaxed text-sm">${fmtAI(text)}</p></div>
+      ${chips}
+      <p class="text-xs text-outline">${ftime(new Date())} · Krishi AI</p>
+    </div>`;
+  el.appendChild(d); scroll();
+}
+
+function showTyping() {
+  const el = document.getElementById('chatMessages');
+  const d = document.createElement('div');
+  d.id = 'typing'; d.className = 'flex gap-3 max-w-3xl msg-in';
+  d.innerHTML = `<div class="w-9 h-9 rounded-xl bg-primary flex items-center justify-center flex-shrink-0 shadow-md"><span class="material-symbols-outlined text-white text-lg" style="font-variation-settings:'FILL' 1;">psychology</span></div><div class="bg-surface-container-lowest p-4 rounded-tr-2xl rounded-b-2xl shadow-sm border border-outline-variant/10"><div class="flex items-center gap-1.5"><div class="typing-dot" style="animation-delay:0s;"></div><div class="typing-dot" style="animation-delay:.2s;"></div><div class="typing-dot" style="animation-delay:.4s;"></div><span class="text-xs text-outline ml-2">Krishi AI is thinking...</span></div></div>`;
+  el.appendChild(d); scroll();
+}
+function hideTyping() { const e = document.getElementById('typing'); if(e) e.remove(); }
+
+function toggleVoice() { S.isListening ? stopVoice() : startVoice(); }
+function startVoice() {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  
+  if (!SpeechRecognition) {
+    alert('Speech Recognition is not supported in this browser. Please use Chrome or Edge.');
+    return;
+  }
+
+  S.isListening = true;
+  document.getElementById('micBtn').classList.add('mic-listening');
+  document.getElementById('micIcon').textContent = 'mic_off';
+  document.getElementById('voiceWaveBar').classList.replace('hidden', 'flex');
+
+  const r = new SpeechRecognition();
+  // Ensure the language string matches exactly what the API expects
+  const langMap = {
+    'Hindi':'hi-IN','Marathi':'mr-IN','Punjabi':'pa-IN',
+    'Tamil':'ta-IN','Telugu':'te-IN','Bengali':'bn-IN',
+    'Gujarati':'gu-IN','Kannada':'kn-IN','English':'en-IN'
+  };
+  r.lang = langMap[S.language] || 'en-IN';
+  r.continuous = false; // Stops automatically after you finish speaking
+  r.interimResults = false;
+
+  r.onresult = (e) => {
+    const t = e.results[0][0].transcript;
+    document.getElementById('chatInput').value = t;
+    stopVoice();
+    sendMessage(t); 
+  };
+
+  r.onerror = (e) => {
+    console.error("Speech Error:", e.error); // Check your F12 console for this!
+    if(e.error === 'not-allowed') alert("Microphone permission denied.");
+    stopVoice();
+  };
+
+  r.onend = () => {
+    if (S.isListening) stopVoice();
+  };
+
+  try {
+    r.start();
+    S._r = r;
+  } catch (err) {
+    console.error("Start Error:", err);
+    stopVoice();
+  }
+}
+function stopVoice() {
+  S.isListening = false;
+  if (S._r) { try { S._r.stop(); } catch(e) {} }
+  document.getElementById('micBtn').classList.remove('mic-listening');
+  document.getElementById('micIcon').textContent = 'mic';
+  document.getElementById('voiceWaveBar').classList.add('hidden');
+  document.getElementById('voiceWaveBar').classList.remove('flex');
+}
+
+function handleImageSelect(e) {
+  const f = e.target.files[0]; if (!f) return;
+  const r = new FileReader();
+  r.onload = ev => { S.image = ev.target.result.split(',')[1]; document.getElementById('imagePreview').src = ev.target.result; document.getElementById('imagePreviewWrap').classList.remove('hidden'); };
+  r.readAsDataURL(f);
+}
+function removeImage() { S.image = null; document.getElementById('imagePreviewWrap').classList.add('hidden'); document.getElementById('imagePreview').src = ''; document.getElementById('imageInput').value = ''; }
+
+function save() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(S.sessions.slice(0,20))); } catch(e) {} }
+function saveSession() { const i = S.sessions.findIndex(s=>s.id===S.currentId); if(i!==-1) { S.sessions[i].messages = S.messages; S.sessions[i].updatedAt = new Date().toISOString(); } save(); }
+function loadSession(id) {
+  const s = S.sessions.find(x=>x.id===id); if(!s) return;
+  S.currentId = id; S.messages = s.messages || [];
+  document.getElementById('chatMessages').innerHTML = '';
+  renderWelcome();
+  S.messages.forEach(m => { if(m.role==='user') appendUser(m.content, m.image); else appendAI(m.content, m.suggestions||[]); });
+  document.getElementById('sessionTitle').textContent = s.title || 'Consultation';
+  updateMeta(); renderSidebar();
+}
+function setTitle(msg) { const t = msg.length>35 ? msg.substring(0,35)+'...' : msg; const i = S.sessions.findIndex(s=>s.id===S.currentId); if(i!==-1) S.sessions[i].title = t; document.getElementById('sessionTitle').textContent = t; save(); }
+function renderSidebar() {
+  const list = document.getElementById('historyList'); list.innerHTML = '';
+  S.sessions.slice(0,12).forEach(s => {
+    const d = document.createElement('div');
+    d.className = `history-item ${s.id===S.currentId?'active':''} flex items-center gap-2 px-4 py-2.5 rounded-xl mx-1`;
+    d.innerHTML = `<span class="material-symbols-outlined text-emerald-400/70 text-base flex-shrink-0" style="font-variation-settings:'FILL' 1;">chat</span><span class="text-xs text-emerald-100/80 truncate flex-1">${esc(s.title||'New Consultation')}</span>${s.id===S.currentId?'<span class="w-1.5 h-1.5 bg-primary rounded-full flex-shrink-0"></span>':''}`;
+    d.onclick = () => loadSession(s.id); list.appendChild(d);
+  });
+}
+function clearAllHistory() { if(!confirm('Clear all chat history?')) return; S.sessions = []; localStorage.removeItem(STORAGE_KEY); newSession(); }
+function updateMeta() { const c = S.messages.filter(m=>m.role==='user').length; document.getElementById('sessionMeta').textContent = `${c} message${c!==1?'s':''}`; }
+function changeLanguage(l) { S.language = l; localStorage.setItem('krishiAI_language', l); localStorage.setItem('cropwise_language', l); }
+
+function fallback(q) {
+  const ql = q.toLowerCase();
+  if (ql.includes('wheat') || ql.includes('rust')) return {reply:'🌾 For wheat rust, apply Propiconazole 25% EC at 200ml/acre. Spray 6–9 AM. Repeat after 10 days if needed.',suggestions:['Cost of Propiconazole?','Prevent rust next season','Other wheat diseases']};
+  if (ql.includes('soil') || ql.includes('nitrogen')) return {reply:'🌱 Nitrogen is low — add 2kg urea/acre before Thursday. pH 5.2 is too acidic — add lime at 25kg/acre this weekend.',suggestions:['Test soil at home','Organic nitrogen fix','When to apply lime?']};
+  if (ql.includes('scheme') || ql.includes('kisan')) return {reply:'📋 You are eligible for PM-KISAN (₹6,000/year), PMFBY crop insurance, and PM-KUSUM solar pump (60% subsidy).',suggestions:['Apply PM-KISAN now','PMFBY insurance amount','PM-KUSUM deadline']};
+  if (ql.includes('mandi') || ql.includes('price')) return {reply:'📊 Wheat at Azamgarh Mandi: ₹2,180/quintal. Net after transport: ₹2,060. Signal: SELL NOW — prices up 6% this week.',suggestions:['Compare all mandis','Mustard prices today','Best time to sell potatoes']};
+  return {reply:'🤝 I am here to help with all farming decisions. Can you tell me more about your crop, location, or problem?',suggestions:['Tell me about my soil','Check mandi prices','My scheme eligibility']};
+}
+
+function handleKeyDown(e) { if(e.key==='Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } }
+function scroll() { const el = document.getElementById('chatMessages'); setTimeout(()=>el.scrollTop=el.scrollHeight, 50); }
+function esc(t) { return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function ftime(d) { return d.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}); }
+function fmtAI(t) { return esc(t).replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\*(.*?)\*/g,'<em>$1</em>').replace(/\n/g,'<br>'); }
+function toggleProfileDropdown() { document.getElementById('profileDropdown').classList.toggle('hidden'); }
+document.addEventListener('click', e => { const w = document.getElementById('profileWrapper'); if(w && !w.contains(e.target)) document.getElementById('profileDropdown').classList.add('hidden'); });
+
+init();
+</script>
+</body>
+</html>

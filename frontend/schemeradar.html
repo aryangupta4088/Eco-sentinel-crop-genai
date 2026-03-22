@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Scheme Radar - Eco Sentinel</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "secondary-fixed":"#ffdbcc","tertiary-fixed":"#ffdfa0","secondary-container":"#ffa67a","on-tertiary-container":"#ffefd7","inverse-surface":"#31312b","surface-dim":"#dddad2","surface":"#fcf9f1","on-error-container":"#93000a","on-secondary-container":"#783916","surface-container":"#f1eee6","surface-bright":"#fcf9f1","secondary-fixed-dim":"#ffb693","tertiary":"#6e5100","on-secondary":"#ffffff","surface-container-high":"#ebe8e0","on-error":"#ffffff","on-tertiary-fixed":"#261a00","on-primary-fixed":"#002204","surface-variant":"#e5e2da","on-surface":"#1c1c17","outline-variant":"#bfcaba","on-secondary-fixed-variant":"#733512","surface-container-lowest":"#ffffff","on-primary-fixed-variant":"#005312","primary-fixed":"#a3f69c","outline":"#707a6c","on-secondary-fixed":"#351000","on-primary-container":"#cbffc2","on-tertiary":"#ffffff","on-primary":"#ffffff","surface-tint":"#1b6d24","primary-container":"#2e7d32","tertiary-container":"#8c6800","inverse-on-surface":"#f4f0e8","surface-container-highest":"#e5e2da","secondary":"#904c27","inverse-primary":"#88d982","error-container":"#ffdad6","tertiary-fixed-dim":"#f8bd2a","primary":"#0d631b","on-background":"#1c1c17","error":"#ba1a1a","surface-container-low":"#f7f3eb","background":"#fcf9f1","primary-fixed-dim":"#88d982","on-tertiary-fixed-variant":"#5c4300","on-surface-variant":"#40493d"
+        },
+        fontFamily: {"headline":["Plus Jakarta Sans"],"body":["Be Vietnam Pro"],"label":["Be Vietnam Pro"]},
+        borderRadius: {"DEFAULT":"1rem","lg":"2rem","xl":"3rem","full":"9999px"},
+      },
+    },
+  }
+</script>
+<style>
+  .material-symbols-outlined { font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24; vertical-align:middle; }
+  .sidebar-gradient { background: linear-gradient(180deg, #062f11 0%, #031e0b 100%); }
+  .organic-shape { border-radius: 63% 37% 54% 46% / 55% 48% 52% 45%; }
+  body { background-color:#f7f3eb; color:#1c1c17; font-family:'Be Vietnam Pro',sans-serif; }
+  ::-webkit-scrollbar { width:6px; }
+  ::-webkit-scrollbar-track { background:transparent; }
+  ::-webkit-scrollbar-thumb { background:#bfcaba; border-radius:10px; }
+  .ai-result { border-left:4px solid #0d631b; animation: fadeIn 0.4s ease; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+  .loading-pulse { animation: pulse 1.5s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  .modal-overlay { background:rgba(0,0,0,0.5); backdrop-filter:blur(4px); }
+</style>
+</head>
+<body class="min-h-screen antialiased overflow-hidden h-screen flex flex-col">
+
+<!-- ── TOP NAV ─────────────────────────────────────── -->
+<nav class="fixed top-0 w-full z-50 bg-emerald-950/70 backdrop-blur-xl shadow-2xl shadow-emerald-950/20">
+  <div class="flex justify-between items-center w-full px-6 py-4 max-w-screen-2xl mx-auto">
+    <div class="flex items-center gap-8">
+      <span class="text-2xl font-black tracking-tighter text-emerald-50 font-headline">Eco Sentinel</span>
+      <div class="hidden lg:flex items-center gap-6">
+        <a class="font-headline text-sm tracking-wide uppercase font-bold text-emerald-100/70 hover:text-emerald-50 transition-colors" href="./dashboard.html">Home</a>
+        <a class="font-headline text-sm tracking-wide uppercase font-bold text-emerald-100/70 hover:text-emerald-50 transition-colors" href="./agritrend.html">AgriTrend</a>
+        <a class="font-headline text-sm tracking-wide uppercase font-bold text-emerald-100/70 hover:text-emerald-50 transition-colors" href="./askkrishiai.html">Ask Krishi AI</a>
+        <a class="font-headline text-sm tracking-wide uppercase font-bold text-emerald-400 border-b-2 border-emerald-400 pb-1" href="./schemeradar.html">Scheme Radar</a>
+        <a class="font-headline text-sm tracking-wide uppercase font-bold text-emerald-100/70 hover:text-emerald-50 transition-colors" href="./croptracker.html">Crop Tracker</a>
+        <a class="font-headline text-sm tracking-wide uppercase font-bold text-emerald-100/70 hover:text-emerald-50 transition-colors" href="./diagonoseandprotect.html">Diagnose</a>
+        <a class="font-headline text-sm tracking-wide uppercase font-bold text-emerald-100/70 hover:text-emerald-50 transition-colors" href="./earnmore.html">Earn More</a>
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      <button class="hidden md:flex items-center gap-2 px-4 py-2 rounded-full font-headline text-xs font-bold uppercase tracking-wider text-emerald-50 hover:bg-emerald-800/50 transition-all">Personal Dashboard</button>
+      <button class="px-6 py-2.5 bg-gradient-to-r from-primary to-primary-container text-on-primary rounded-full font-headline text-xs font-black uppercase tracking-widest shadow-lg hover:scale-105 active:scale-95 transition-all" data-auth-btn onclick="openAuthModal('signup')" >Signup</button>
+      <span class="material-symbols-outlined text-emerald-50 cursor-pointer">account_circle</span>
+    </div>
+  </div>
+</nav>
+
+<div class="flex flex-1 pt-20 overflow-hidden">
+
+  <!-- ── SIDEBAR ─────────────────────────────────────── -->
+  <aside class="hidden lg:flex flex-col h-full sidebar-gradient w-80 fixed left-0 top-16 z-40 p-6 font-['Be_Vietnam_Pro'] text-emerald-50 overflow-y-auto">
+    <div class="space-y-6 mb-10">
+      <h3 class="px-2 text-[10px] uppercase tracking-widest font-bold text-emerald-200/40">Check Eligibility</h3>
+
+      <!-- Eligibility Form -->
+      <div class="space-y-3 px-2">
+        <input id="sr-name" placeholder="Your Name" class="w-full px-4 py-2.5 bg-emerald-900/40 rounded-full border-emerald-800/50 focus:ring-2 focus:ring-primary text-emerald-50 text-sm placeholder:text-emerald-200/40"/>
+        <input id="sr-land" placeholder="Land (acres)" type="number" class="w-full px-4 py-2.5 bg-emerald-900/40 rounded-full border-emerald-800/50 focus:ring-2 focus:ring-primary text-emerald-50 text-sm placeholder:text-emerald-200/40"/>
+        <input id="sr-state" placeholder="State (e.g. Punjab)" class="w-full px-4 py-2.5 bg-emerald-900/40 rounded-full border-emerald-800/50 focus:ring-2 focus:ring-primary text-emerald-50 text-sm placeholder:text-emerald-200/40"/>
+        <input id="sr-income" placeholder="Annual Income (₹)" type="number" class="w-full px-4 py-2.5 bg-emerald-900/40 rounded-full border-emerald-800/50 focus:ring-2 focus:ring-primary text-emerald-50 text-sm placeholder:text-emerald-200/40"/>
+        <button id="sr-check-btn" class="w-full py-3 bg-primary text-white font-bold rounded-full hover:scale-105 transition-transform text-sm shadow-lg">
+          Check My Eligibility ✨
+        </button>
+      </div>
+
+      <!-- Filter Buttons -->
+      <div class="space-y-2 px-2 mt-4">
+        <h3 class="text-[10px] uppercase tracking-widest font-bold text-emerald-200/40 mb-2">Filter</h3>
+        <button class="filter-btn w-full text-left px-4 py-3 rounded-full bg-emerald-800/50 text-white font-bold text-sm" data-filter="all">All Schemes</button>
+        <button class="filter-btn w-full text-left px-4 py-3 rounded-full hover:bg-emerald-800/30 text-emerald-100/70 font-medium text-sm transition-colors" data-filter="active">Active</button>
+        <button class="filter-btn w-full text-left px-4 py-3 rounded-full hover:bg-emerald-800/30 text-emerald-100/70 font-medium text-sm transition-colors" data-filter="deadline">Deadline Soon</button>
+        <button class="filter-btn w-full text-left px-4 py-3 rounded-full hover:bg-emerald-800/30 text-emerald-100/70 font-medium text-sm transition-colors" data-filter="new">New</button>
+      </div>
+    </div>
+
+    <!-- Smart Recommendation -->
+    <div class="bg-primary/20 rounded-2xl p-6 border border-primary/20 relative overflow-hidden mb-10">
+      <div class="absolute -top-8 -right-8 w-24 h-24 bg-primary/20 organic-shape"></div>
+      <div class="relative z-10">
+        <div class="flex items-center gap-2 mb-4">
+          <span class="material-symbols-outlined text-tertiary-fixed-dim text-xl">stars</span>
+          <h2 class="text-sm font-bold font-headline uppercase tracking-wider">Smart Pick</h2>
+        </div>
+        <p class="text-xs text-emerald-100/80 mb-6 leading-relaxed">Based on your soil health, you qualify for the <span class="font-bold text-white">Cold Storage Infrastructure Subsidy</span>.</p>
+        <button class="w-full py-3 bg-tertiary-fixed text-on-tertiary-fixed text-xs font-bold rounded-full hover:scale-105 transition-all">View Detail</button>
+      </div>
+    </div>
+
+    <!-- Disaster Alert Section -->
+    <div class="px-2 space-y-3 mb-6">
+      <h3 class="text-[10px] uppercase tracking-widest font-bold text-emerald-200/40">Disaster Weather Alert</h3>
+      <input id="sr-crop" placeholder="Crop (e.g. Wheat)" class="w-full px-4 py-2.5 bg-emerald-900/40 rounded-full text-emerald-50 text-sm placeholder:text-emerald-200/40"/>
+      <input id="sr-stage" placeholder="Crop Stage (e.g. Flowering)" class="w-full px-4 py-2.5 bg-emerald-900/40 rounded-full text-emerald-50 text-sm placeholder:text-emerald-200/40"/>
+      <input id="sr-district" placeholder="District" class="w-full px-4 py-2.5 bg-emerald-900/40 rounded-full text-emerald-50 text-sm placeholder:text-emerald-200/40"/>
+      <button id="sr-alert-btn" class="w-full py-3 bg-error text-white font-bold rounded-full hover:scale-105 transition-transform text-sm">
+        Get Weather Alert 🌩️
+      </button>
+    </div>
+
+    <div class="mt-auto pt-6 border-t border-emerald-900/50 space-y-2 px-2">
+      <div class="text-emerald-100/60 hover:text-white flex items-center gap-3 px-2 py-2 cursor-pointer transition-colors text-sm">
+        <span class="material-symbols-outlined text-lg">settings</span><span>Settings</span>
+      </div>
+      <div class="text-emerald-100/60 hover:text-white flex items-center gap-3 px-2 py-2 cursor-pointer transition-colors text-sm">
+        <span class="material-symbols-outlined text-lg">help_outline</span><span>Help Support</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ── MAIN CONTENT ────────────────────────────────── -->
+  <main class="flex-1 ml-0 lg:ml-80 flex flex-col relative bg-surface-container-low min-h-0 overflow-y-auto">
+    <div class="max-w-5xl mx-auto px-6 md:px-12 pt-12 pb-24 grid grid-cols-1 lg:grid-cols-12 gap-12">
+      <div class="lg:col-span-8">
+
+        <section class="mb-8">
+          <h1 class="text-5xl font-extrabold text-primary mb-2 font-headline tracking-tight">Scheme Radar</h1>
+          <p class="text-on-surface-variant text-lg">Every government scheme you qualify for — in one place.</p>
+        </section>
+
+        <!-- Eligibility Result Banner -->
+        <div id="sr-eligibility-result" class="hidden mb-8 bg-surface-container-lowest p-6 rounded-xl ai-result shadow-sm">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="material-symbols-outlined text-primary" style="font-variation-settings:'FILL' 1;">verified</span>
+            <span class="font-headline font-bold text-primary uppercase tracking-wide text-sm">Your Eligibility Report</span>
+          </div>
+          <p id="sr-eligibility-text" class="text-on-surface text-sm leading-relaxed whitespace-pre-line"></p>
+        </div>
+
+        <!-- Scheme Cards -->
+        <div class="space-y-8" id="scheme-cards">
+
+          <!-- PM-KISAN -->
+          <div class="scheme-card bg-surface-container-lowest p-8 rounded-xl shadow-sm hover:shadow-md transition-all relative border border-outline-variant/10" data-tag="active">
+            <div class="absolute top-0 right-0 p-4">
+              <span class="bg-green-100 text-green-800 px-4 py-1.5 rounded-full text-sm font-bold flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-green-600 animate-pulse"></span> Active
+              </span>
+            </div>
+            <h3 class="text-2xl font-bold font-headline mb-3">PM-KISAN Samman Nidhi</h3>
+            <p class="text-on-surface-variant mb-6 leading-relaxed">Direct income support to provide financial assistance for purchasing farm inputs and other farming-related needs.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div>
+                <span class="text-xs font-bold uppercase tracking-wider text-outline block mb-1">Benefit</span>
+                <p class="text-3xl font-extrabold text-primary font-headline">₹6,000 <span class="text-lg font-medium">/ year</span></p>
+                <p class="text-sm text-on-surface-variant italic">Direct to bank transfer</p>
+              </div>
+              <div>
+                <span class="text-xs font-bold uppercase tracking-wider text-outline block mb-1">Eligibility</span>
+                <p class="text-lg font-semibold">All landholding farmer families</p>
+              </div>
+            </div>
+            <!-- AI result area -->
+            <div class="scheme-ai-result hidden mb-4 bg-surface-container-low p-4 rounded-xl ai-result text-sm text-on-surface whitespace-pre-line"></div>
+            <div class="flex flex-wrap gap-4">
+              <button class="learn-more-btn flex-1 md:flex-none px-8 py-3.5 rounded-full border-2 border-primary text-primary font-bold hover:bg-primary/5 transition-colors" data-scheme="PM-KISAN Samman Nidhi ₹6000 per year direct bank transfer">Learn More</button>
+              <button class="apply-btn flex-1 md:flex-none px-8 py-3.5 rounded-full bg-gradient-to-r from-primary to-primary-container text-white font-bold shadow-lg hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2" data-scheme="PM-KISAN Samman Nidhi">
+                <span class="material-symbols-outlined">bolt</span> Auto-Apply in 1 Tap
+              </button>
+            </div>
+          </div>
+
+          <!-- PMFBY -->
+          <div class="scheme-card bg-surface-container-lowest p-8 rounded-xl shadow-sm hover:shadow-md transition-all relative border border-outline-variant/10" data-tag="deadline">
+            <div class="absolute top-0 right-0 p-4">
+              <span class="bg-amber-100 text-amber-800 px-4 py-1.5 rounded-full text-sm font-bold flex items-center gap-2">
+                <span class="material-symbols-outlined text-sm">schedule</span> Deadline in 6 days
+              </span>
+            </div>
+            <h3 class="text-2xl font-bold font-headline mb-3">PMFBY Crop Insurance</h3>
+            <p class="text-on-surface-variant mb-6 leading-relaxed">Yield-based insurance scheme to safeguard your income from natural calamities and unforeseen crop losses.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div>
+                <span class="text-xs font-bold uppercase tracking-wider text-outline block mb-1">Benefit</span>
+                <p class="text-3xl font-extrabold text-primary font-headline">₹40,000 <span class="text-lg font-medium">/ acre</span></p>
+                <p class="text-sm text-on-surface-variant italic">Maximum loss coverage</p>
+              </div>
+              <div>
+                <span class="text-xs font-bold uppercase tracking-wider text-outline block mb-1">Eligibility</span>
+                <p class="text-lg font-semibold">Kharif and Rabi crop farmers</p>
+              </div>
+            </div>
+            <div class="scheme-ai-result hidden mb-4 bg-surface-container-low p-4 rounded-xl ai-result text-sm text-on-surface whitespace-pre-line"></div>
+            <div class="flex flex-wrap gap-4">
+              <button class="learn-more-btn flex-1 md:flex-none px-8 py-3.5 rounded-full border-2 border-primary text-primary font-bold hover:bg-primary/5 transition-colors" data-scheme="PMFBY Pradhan Mantri Fasal Bima Yojana crop insurance ₹40000 per acre coverage">Learn More</button>
+              <button class="apply-btn flex-1 md:flex-none px-8 py-3.5 rounded-full bg-gradient-to-r from-primary to-primary-container text-white font-bold shadow-lg hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2" data-scheme="PMFBY Crop Insurance">
+                <span class="material-symbols-outlined">bolt</span> Auto-Apply in 1 Tap
+              </button>
+            </div>
+          </div>
+
+          <!-- PM-KUSUM -->
+          <div class="scheme-card bg-surface-container-lowest p-8 rounded-xl shadow-sm hover:shadow-md transition-all relative border border-outline-variant/10" data-tag="new">
+            <div class="absolute top-0 right-0 p-4">
+              <span class="bg-blue-100 text-blue-800 px-4 py-1.5 rounded-full text-sm font-bold">New Scheme</span>
+            </div>
+            <h3 class="text-2xl font-bold font-headline mb-3">PM-KUSUM Solar Pump</h3>
+            <p class="text-on-surface-variant mb-6 leading-relaxed">Clean energy transition support for sustainable irrigation using reliable solar power infrastructure.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div>
+                <span class="text-xs font-bold uppercase tracking-wider text-outline block mb-1">Benefit</span>
+                <p class="text-3xl font-extrabold text-primary font-headline">60% Subsidy</p>
+                <p class="text-sm text-on-surface-variant italic">On total installation cost</p>
+              </div>
+              <div>
+                <span class="text-xs font-bold uppercase tracking-wider text-outline block mb-1">Eligibility</span>
+                <p class="text-lg font-semibold">Less than 2 hectare land</p>
+              </div>
+            </div>
+            <div class="scheme-ai-result hidden mb-4 bg-surface-container-low p-4 rounded-xl ai-result text-sm text-on-surface whitespace-pre-line"></div>
+            <div class="flex flex-wrap gap-4">
+              <button class="learn-more-btn flex-1 md:flex-none px-8 py-3.5 rounded-full border-2 border-primary text-primary font-bold hover:bg-primary/5 transition-colors" data-scheme="PM-KUSUM solar pump 60% subsidy irrigation scheme">Learn More</button>
+              <button class="apply-btn flex-1 md:flex-none px-8 py-3.5 rounded-full bg-primary text-white font-bold hover:bg-primary-container transition-all" data-scheme="PM-KUSUM Solar Pump">Check Eligibility</button>
+            </div>
+          </div>
+
+          <!-- KCC -->
+          <div class="scheme-card bg-surface-container-lowest p-8 rounded-xl shadow-sm hover:shadow-md transition-all relative border border-outline-variant/10" data-tag="active">
+            <div class="absolute top-0 right-0 p-4">
+              <span class="bg-green-100 text-green-800 px-4 py-1.5 rounded-full text-sm font-bold flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-green-600 animate-pulse"></span> Active
+              </span>
+            </div>
+            <h3 class="text-2xl font-bold font-headline mb-3">Kisan Credit Card (KCC)</h3>
+            <p class="text-on-surface-variant mb-6 leading-relaxed">Flexible credit facility for farmers to meet their agricultural and allied activity needs at very low interest rates.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div>
+                <span class="text-xs font-bold uppercase tracking-wider text-outline block mb-1">Benefit</span>
+                <p class="text-3xl font-extrabold text-primary font-headline">4% <span class="text-lg font-medium">interest rate</span></p>
+                <p class="text-sm text-on-surface-variant italic">Up to ₹3 lakh credit limit</p>
+              </div>
+              <div>
+                <span class="text-xs font-bold uppercase tracking-wider text-outline block mb-1">Eligibility</span>
+                <p class="text-lg font-semibold">All farmers with land records</p>
+              </div>
+            </div>
+            <div class="scheme-ai-result hidden mb-4 bg-surface-container-low p-4 rounded-xl ai-result text-sm text-on-surface whitespace-pre-line"></div>
+            <div class="flex flex-wrap gap-4">
+              <button class="learn-more-btn flex-1 md:flex-none px-8 py-3.5 rounded-full border-2 border-primary text-primary font-bold hover:bg-primary/5 transition-colors" data-scheme="Kisan Credit Card KCC 4% interest rate up to 3 lakh">Learn More</button>
+              <button class="apply-btn flex-1 md:flex-none px-8 py-3.5 rounded-full bg-gradient-to-r from-primary to-primary-container text-white font-bold shadow-lg hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2" data-scheme="Kisan Credit Card KCC">
+                <span class="material-symbols-outlined">bolt</span> Auto-Apply in 1 Tap
+              </button>
+            </div>
+          </div>
+
+          <!-- Soil Health Card -->
+          <div class="scheme-card bg-surface-container-lowest p-8 rounded-xl shadow-sm hover:shadow-md transition-all relative border border-outline-variant/10" data-tag="active">
+            <div class="absolute top-0 right-0 p-4">
+              <span class="bg-green-100 text-green-800 px-4 py-1.5 rounded-full text-sm font-bold flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-green-600 animate-pulse"></span> Active
+              </span>
+            </div>
+            <h3 class="text-2xl font-bold font-headline mb-3">Soil Health Card Scheme</h3>
+            <p class="text-on-surface-variant mb-6 leading-relaxed">Free soil testing and health card with crop-wise fertilizer recommendations to improve productivity.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div>
+                <span class="text-xs font-bold uppercase tracking-wider text-outline block mb-1">Benefit</span>
+                <p class="text-3xl font-extrabold text-primary font-headline">Free <span class="text-lg font-medium">soil test</span></p>
+                <p class="text-sm text-on-surface-variant italic">Save ₹1500+ on fertilizer annually</p>
+              </div>
+              <div>
+                <span class="text-xs font-bold uppercase tracking-wider text-outline block mb-1">Eligibility</span>
+                <p class="text-lg font-semibold">All farmers across India</p>
+              </div>
+            </div>
+            <div class="scheme-ai-result hidden mb-4 bg-surface-container-low p-4 rounded-xl ai-result text-sm text-on-surface whitespace-pre-line"></div>
+            <div class="flex flex-wrap gap-4">
+              <button class="learn-more-btn flex-1 md:flex-none px-8 py-3.5 rounded-full border-2 border-primary text-primary font-bold hover:bg-primary/5 transition-colors" data-scheme="Soil Health Card Scheme free soil testing fertilizer recommendation">Learn More</button>
+              <button class="apply-btn flex-1 md:flex-none px-8 py-3.5 rounded-full bg-gradient-to-r from-primary to-primary-container text-white font-bold shadow-lg hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2" data-scheme="Soil Health Card Scheme">
+                <span class="material-symbols-outlined">bolt</span> Auto-Apply in 1 Tap
+              </button>
+            </div>
+          </div>
+
+        </div><!-- end scheme-cards -->
+      </div>
+
+      <!-- ── RIGHT SIDEBAR ──────────────────────────── -->
+      <aside class="lg:col-span-4 space-y-8">
+
+        <!-- Weather Alert Result -->
+        <div id="sr-weather-result" class="hidden bg-error/10 p-6 rounded-xl border border-error/20 ai-result">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="material-symbols-outlined text-error" style="font-variation-settings:'FILL' 1;">warning</span>
+            <span class="font-headline font-bold text-error uppercase tracking-wide text-xs">Weather Alert</span>
+          </div>
+          <p id="sr-weather-text" class="text-on-surface text-sm leading-relaxed whitespace-pre-line"></p>
+        </div>
+
+        <!-- Already Applied -->
+        <div class="bg-surface-container-high p-8 rounded-xl border border-outline-variant/15">
+          <h2 class="text-xl font-bold font-headline mb-6 flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary">history_edu</span> Already Applied
+          </h2>
+          <div class="bg-surface-container-lowest p-6 rounded-lg shadow-sm">
+            <div class="flex items-center gap-4 mb-4">
+              <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center text-green-700">
+                <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">check_circle</span>
+              </div>
+              <div>
+                <h4 class="font-bold text-sm">Soil Health Card Subsidy</h4>
+                <p class="text-[10px] text-outline uppercase font-bold tracking-widest">ID: SCH-2024-8891</p>
+              </div>
+            </div>
+            <div class="space-y-3">
+              <div class="flex justify-between text-xs">
+                <span class="text-on-surface-variant font-medium">Processing — 4 days remaining</span>
+                <span class="font-bold text-primary">75%</span>
+              </div>
+              <div class="h-2 w-full bg-surface-container-highest rounded-full overflow-hidden">
+                <div class="h-full bg-primary rounded-full" style="width:75%"></div>
+              </div>
+            </div>
+          </div>
+          <button class="w-full mt-6 py-3 text-secondary font-bold hover:underline text-sm">View All Applications</button>
+        </div>
+
+      </aside>
+    </div>
+  </main>
+</div>
+
+<!-- ── APPLY MODAL ─────────────────────────────────── -->
+<div id="apply-modal" class="hidden fixed inset-0 z-50 modal-overlay flex items-center justify-center p-4">
+  <div class="bg-surface-container-lowest rounded-xl shadow-2xl p-8 w-full max-w-md">
+    <div class="flex items-center justify-between mb-6">
+      <h3 class="font-headline font-bold text-primary text-lg" id="modal-title">Apply for Scheme</h3>
+      <button id="modal-close" class="text-on-surface-variant hover:text-on-surface">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <p id="modal-body" class="text-on-surface text-sm leading-relaxed whitespace-pre-line mb-6"></p>
+    <div class="flex gap-3">
+      <button id="modal-close2" class="flex-1 py-3 border-2 border-outline-variant rounded-full font-bold text-sm hover:bg-surface-container transition-colors">Close</button>
+      <a id="modal-apply-link" href="https://pmkisan.gov.in" target="_blank" class="flex-1 py-3 bg-primary text-white rounded-full font-bold text-sm text-center hover:scale-105 transition-transform">Apply Online →</a>
+    </div>
+  </div>
+</div>
+
+<!-- ── MOBILE BOTTOM NAV ───────────────────────────── -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-end px-4 pb-4 h-20 bg-stone-50/90 backdrop-blur-lg shadow-[0_-4px_20px_rgba(0,0,0,0.05)] rounded-t-[2.5rem] border-t border-stone-200/20">
+  <a class="flex flex-col items-center justify-center text-stone-500 p-2" href="./dashboard.html">
+    <span class="material-symbols-outlined">home</span>
+    <span class="text-[10px] font-semibold uppercase tracking-wider">Home</span>
+  </a>
+  <a class="flex flex-col items-center justify-center text-stone-500 p-2" href="./agritrend.html">
+    <span class="material-symbols-outlined">trending_up</span>
+    <span class="text-[10px] font-semibold uppercase tracking-wider">Trends</span>
+  </a>
+  <a class="flex flex-col items-center justify-center bg-green-800 text-white rounded-full p-3 mb-2 transform -translate-y-2 shadow-lg" href="./schemeradar.html">
+    <span class="material-symbols-outlined">radar</span>
+    <span class="text-[10px] font-semibold uppercase tracking-wider">Radar</span>
+  </a>
+  <a class="flex flex-col items-center justify-center text-stone-500 p-2" href="./askkrishiai.html">
+    <span class="material-symbols-outlined">psychology</span>
+    <span class="text-[10px] font-semibold uppercase tracking-wider">AI</span>
+  </a>
+  <a class="flex flex-col items-center justify-center text-stone-500 p-2" href="./earnmore.html">
+    <span class="material-symbols-outlined">storefront</span>
+    <span class="text-[10px] font-semibold uppercase tracking-wider">Earn</span>
+  </a>
+</nav>
+
+<!-- ── MIC FAB ─────────────────────────────────────── -->
+<button id="mic-fab" class="fixed right-6 bottom-24 md:bottom-8 w-16 h-16 bg-secondary text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-40 group ring-4 ring-tertiary-fixed-dim/20">
+  <span id="mic-icon" class="material-symbols-outlined text-3xl" style="font-variation-settings:'FILL' 1;">mic</span>
+  <div class="absolute inset-0 bg-tertiary-fixed-dim rounded-full animate-ping opacity-20 scale-125"></div>
+</button>
+
+<!-- ── JAVASCRIPT ─────────────────────────────────── -->
+<script>
+// ── CONFIG ────────────────────────────────────────────
+const API_BASE = 'http://localhost:3000';
+function getLanguage() { return localStorage.getItem('cropwise_language') || 'Hindi'; }
+
+async function apiCall(endpoint, body) {
+  const res = await fetch(`${API_BASE}${endpoint}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ ...body, language: getLanguage() })
+  });
+  if (!res.ok) throw new Error(`API error: ${res.status}`);
+  return res.json();
+}
+
+// ── ELIGIBILITY CHECK ─────────────────────────────────
+document.getElementById('sr-check-btn').addEventListener('click', async () => {
+  const name   = document.getElementById('sr-name').value.trim();
+  const land   = document.getElementById('sr-land').value.trim();
+  const state  = document.getElementById('sr-state').value.trim();
+  const income = document.getElementById('sr-income').value.trim();
+  const result = document.getElementById('sr-eligibility-result');
+  const text   = document.getElementById('sr-eligibility-text');
+
+  if (!name || !land || !state) { alert('Please fill Name, Land and State'); return; }
+
+  result.classList.remove('hidden');
+  text.textContent = '⏳ Checking your eligibility for all schemes...';
+  text.className = 'loading-pulse text-primary font-medium text-sm';
+
+  try {
+    const data = await apiCall('/api/subsidy/check', { farmerName: name, landAcres: land, state, income });
+    text.className = 'text-on-surface text-sm leading-relaxed whitespace-pre-line';
+    text.textContent = data.schemes;
+    // Scroll to result
+    result.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  } catch(e) {
+    text.className = 'text-error text-sm';
+    text.textContent = '❌ Failed. Make sure backend is running on port 3000.';
+  }
+});
+
+// ── DISASTER WEATHER ALERT ────────────────────────────
+document.getElementById('sr-alert-btn').addEventListener('click', async () => {
+  const crop     = document.getElementById('sr-crop').value.trim();
+  const stage    = document.getElementById('sr-stage').value.trim();
+  const district = document.getElementById('sr-district').value.trim();
+  const result   = document.getElementById('sr-weather-result');
+  const text     = document.getElementById('sr-weather-text');
+
+  if (!crop || !district) { alert('Please enter crop and district'); return; }
+
+  result.classList.remove('hidden');
+  text.textContent = '🌩️ Fetching weather forecast and alert...';
+  text.className = 'loading-pulse text-error font-medium text-sm';
+
+  try {
+    const data = await apiCall('/api/subsidy/disaster', { crop, stage: stage || 'Growing', district });
+    text.className = 'text-on-surface text-sm leading-relaxed whitespace-pre-line';
+    text.textContent = data.alert;
+    result.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  } catch(e) {
+    text.className = 'text-error text-sm';
+    text.textContent = '❌ Failed. Make sure backend is running on port 3000.';
+  }
+});
+
+// ── LEARN MORE BUTTONS ────────────────────────────────
+document.querySelectorAll('.learn-more-btn').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    const scheme  = btn.dataset.scheme;
+    const card    = btn.closest('.scheme-card');
+    const aiDiv   = card.querySelector('.scheme-ai-result');
+
+    aiDiv.classList.remove('hidden');
+    aiDiv.textContent = '⏳ Getting details...';
+    aiDiv.className = 'scheme-ai-result mb-4 bg-surface-container-low p-4 rounded-xl ai-result loading-pulse text-primary text-sm font-medium';
+
+    try {
+      const data = await apiCall('/api/agritrend/quick-byte', {
+        technology: scheme,
+        crop: document.getElementById('sr-crop').value || 'farming',
+        acres: document.getElementById('sr-land').value || '5'
+      });
+      aiDiv.className = 'scheme-ai-result mb-4 bg-surface-container-low p-4 rounded-xl ai-result text-sm text-on-surface whitespace-pre-line';
+      aiDiv.textContent = data.quickByte;
+    } catch(e) {
+      aiDiv.className = 'scheme-ai-result mb-4 bg-surface-container-low p-4 rounded-xl ai-result text-sm text-error';
+      aiDiv.textContent = '❌ Failed. Make sure backend is running.';
+    }
+  });
+});
+
+// ── AUTO-APPLY BUTTONS ────────────────────────────────
+const applyLinks = {
+  'PM-KISAN Samman Nidhi': 'https://pmkisan.gov.in',
+  'PMFBY Crop Insurance':  'https://pmfby.gov.in',
+  'PM-KUSUM Solar Pump':   'https://pmkusum.mnre.gov.in',
+  'Kisan Credit Card KCC': 'https://www.nabard.org',
+  'Soil Health Card Scheme':'https://soilhealth.dac.gov.in'
+};
+
+document.querySelectorAll('.apply-btn').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    const scheme  = btn.dataset.scheme;
+    const modal   = document.getElementById('apply-modal');
+    const title   = document.getElementById('modal-title');
+    const body    = document.getElementById('modal-body');
+    const link    = document.getElementById('modal-apply-link');
+
+    title.textContent = `Apply — ${scheme}`;
+    body.textContent  = '⏳ Getting application steps...';
+    modal.classList.remove('hidden');
+
+    try {
+      const data = await apiCall('/api/subsidy/check', {
+        farmerName: document.getElementById('sr-name').value || 'Farmer',
+        landAcres:  document.getElementById('sr-land').value  || '5',
+        state:      document.getElementById('sr-state').value || 'India',
+        income:     document.getElementById('sr-income').value || '100000'
+      });
+      // Extract just the relevant scheme steps
+      body.textContent = data.schemes;
+    } catch(e) {
+      body.textContent = `To apply for ${scheme}:\n1. Visit your nearest Common Service Centre (CSC)\n2. Carry Aadhaar card, bank passbook, and land records\n3. Fill the application form with the CSC operator\n4. Get your application ID for tracking`;
+    }
+
+    link.href = applyLinks[scheme] || 'https://india.gov.in';
+  });
+});
+
+// Close modal
+document.getElementById('modal-close').addEventListener('click',  () => document.getElementById('apply-modal').classList.add('hidden'));
+document.getElementById('modal-close2').addEventListener('click', () => document.getElementById('apply-modal').classList.add('hidden'));
+
+// ── FILTER BUTTONS ────────────────────────────────────
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const filter = btn.dataset.filter;
+    document.querySelectorAll('.filter-btn').forEach(b => {
+      b.className = 'filter-btn w-full text-left px-4 py-3 rounded-full hover:bg-emerald-800/30 text-emerald-100/70 font-medium text-sm transition-colors';
+    });
+    btn.className = 'filter-btn w-full text-left px-4 py-3 rounded-full bg-emerald-800/50 text-white font-bold text-sm';
+
+    document.querySelectorAll('.scheme-card').forEach(card => {
+      if (filter === 'all' || card.dataset.tag === filter) {
+        card.style.display = '';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  });
+});
+
+// ── MIC FAB — Voice Eligibility Check ────────────────
+const micFab  = document.getElementById('mic-fab');
+const micIcon = document.getElementById('mic-icon');
+let isListening = false;
+
+micFab.addEventListener('click', () => {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { alert('Voice not supported. Try Chrome.'); return; }
+  if (isListening) return;
+
+  const r = new SR();
+  r.lang = getLanguage() === 'Hindi' ? 'hi-IN' : 'en-IN';
+  r.start();
+  isListening = true;
+  micIcon.textContent = 'mic_off';
+
+  r.onresult = (e) => {
+    const spoken = e.results[0][0].transcript;
+    isListening = false;
+    micIcon.textContent = 'mic';
+    // Put spoken text in state field and auto check
+    document.getElementById('sr-state').value = spoken;
+    alert(`Got: "${spoken}" — fill in remaining fields and click Check Eligibility`);
+  };
+  r.onerror = () => { isListening = false; micIcon.textContent = 'mic'; };
+});
+</script>
+
+
+<!-- ── AUTH MODAL ─────────────────────────────────── -->
+<div id="auth-modal" class="hidden fixed inset-0 z-[999] flex items-center justify-center p-4" style="background:rgba(0,0,0,0.5);backdrop-filter:blur(6px);">
+  <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-sm relative">
+    <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+    <!-- Tabs -->
+    <div class="flex mb-6 bg-gray-100 rounded-full p-1">
+      <button id="tab-signin" onclick="switchTab('signin')" class="flex-1 py-2 rounded-full text-sm font-bold transition-all bg-white shadow text-green-800">Sign In</button>
+      <button id="tab-signup" onclick="switchTab('signup')" class="flex-1 py-2 rounded-full text-sm font-bold transition-all text-gray-500">Sign Up</button>
+    </div>
+    <!-- Sign In Form -->
+    <div id="form-signin">
+      <h2 class="text-xl font-black text-green-900 mb-1">Welcome back 🌱</h2>
+      <p class="text-gray-500 text-sm mb-5">Sign in to your Eco Sentinel account</p>
+      <input id="si-phone" placeholder="Mobile Number / Kisan ID" class="w-full border border-gray-200 rounded-full px-4 py-3 text-sm mb-3 focus:outline-none focus:ring-2 focus:ring-green-600"/>
+      <input id="si-pass" type="password" placeholder="Password" class="w-full border border-gray-200 rounded-full px-4 py-3 text-sm mb-4 focus:outline-none focus:ring-2 focus:ring-green-600"/>
+      <button onclick="handleSignIn()" class="w-full bg-green-800 text-white rounded-full py-3 font-bold text-sm hover:bg-green-700 transition-colors">Sign In</button>
+      <p id="si-error" class="text-red-500 text-xs mt-2 hidden text-center"></p>
+      <p class="text-center text-xs text-gray-400 mt-4">Don't have an account? <span onclick="switchTab('signup')" class="text-green-700 font-bold cursor-pointer">Sign Up</span></p>
+    </div>
+    <!-- Sign Up Form -->
+    <div id="form-signup" class="hidden">
+      <h2 class="text-xl font-black text-green-900 mb-1">Join Eco Sentinel 🌿</h2>
+      <p class="text-gray-500 text-sm mb-5">Create your free farmer account</p>
+      <input id="su-name" placeholder="Full Name" class="w-full border border-gray-200 rounded-full px-4 py-3 text-sm mb-3 focus:outline-none focus:ring-2 focus:ring-green-600"/>
+      <input id="su-phone" placeholder="Mobile Number" class="w-full border border-gray-200 rounded-full px-4 py-3 text-sm mb-3 focus:outline-none focus:ring-2 focus:ring-green-600"/>
+      <input id="su-state" placeholder="Your State (e.g. Punjab)" class="w-full border border-gray-200 rounded-full px-4 py-3 text-sm mb-3 focus:outline-none focus:ring-2 focus:ring-green-600"/>
+      <input id="su-pass" type="password" placeholder="Create Password" class="w-full border border-gray-200 rounded-full px-4 py-3 text-sm mb-4 focus:outline-none focus:ring-2 focus:ring-green-600"/>
+      <button onclick="handleSignUp()" class="w-full bg-green-800 text-white rounded-full py-3 font-bold text-sm hover:bg-green-700 transition-colors">Create Account</button>
+      <p id="su-error" class="text-red-500 text-xs mt-2 hidden text-center"></p>
+      <p class="text-center text-xs text-gray-400 mt-4">Already have an account? <span onclick="switchTab('signin')" class="text-green-700 font-bold cursor-pointer">Sign In</span></p>
+    </div>
+    <!-- Success State -->
+    <div id="form-success" class="hidden text-center py-4">
+      <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+        <span class="material-symbols-outlined text-green-700 text-4xl" style="font-variation-settings:'FILL' 1;">check_circle</span>
+      </div>
+      <h3 class="font-black text-green-900 text-lg mb-2" id="success-title">Welcome!</h3>
+      <p class="text-gray-500 text-sm" id="success-msg">You are now signed in.</p>
+      <button onclick="closeAuthModal()" class="mt-4 w-full bg-green-800 text-white rounded-full py-3 font-bold text-sm">Continue</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── AUTH FUNCTIONS ────────────────────────────────────
+function openAuthModal(tab) {
+  document.getElementById('auth-modal').classList.remove('hidden');
+  switchTab(tab || 'signin');
+}
+function closeAuthModal() {
+  document.getElementById('auth-modal').classList.add('hidden');
+}
+function switchTab(tab) {
+  document.getElementById('form-signin').classList.toggle('hidden', tab !== 'signin');
+  document.getElementById('form-signup').classList.toggle('hidden', tab !== 'signup');
+  document.getElementById('form-success').classList.add('hidden');
+  document.getElementById('tab-signin').className = `flex-1 py-2 rounded-full text-sm font-bold transition-all ${tab==='signin'?'bg-white shadow text-green-800':'text-gray-500'}`;
+  document.getElementById('tab-signup').className = `flex-1 py-2 rounded-full text-sm font-bold transition-all ${tab==='signup'?'bg-white shadow text-green-800':'text-gray-500'}`;
+}
+
+function handleSignIn() {
+  const phone = document.getElementById('si-phone').value.trim();
+  const pass  = document.getElementById('si-pass').value.trim();
+  const err   = document.getElementById('si-error');
+  if (!phone || !pass) { err.textContent = 'Please fill all fields'; err.classList.remove('hidden'); return; }
+
+  // Save to localStorage (simple auth — no backend needed)
+  const users = JSON.parse(localStorage.getItem('eco_users') || '[]');
+  const user  = users.find(u => u.phone === phone && u.pass === pass);
+
+  if (user) {
+    localStorage.setItem('eco_user', JSON.stringify(user));
+    showSuccess(`Welcome back, ${user.name}! 🌱`, 'You are signed in successfully.');
+    updateNavForUser(user);
+  } else {
+    err.textContent = 'Invalid credentials. Try signing up first.';
+    err.classList.remove('hidden');
+  }
+}
+
+function handleSignUp() {
+  const name  = document.getElementById('su-name').value.trim();
+  const phone = document.getElementById('su-phone').value.trim();
+  const state = document.getElementById('su-state').value.trim();
+  const pass  = document.getElementById('su-pass').value.trim();
+  const err   = document.getElementById('su-error');
+
+  if (!name || !phone || !state || !pass) { err.textContent = 'Please fill all fields'; err.classList.remove('hidden'); return; }
+
+  // Save new user
+  const users = JSON.parse(localStorage.getItem('eco_users') || '[]');
+  if (users.find(u => u.phone === phone)) { err.textContent = 'Account already exists. Sign in instead.'; err.classList.remove('hidden'); return; }
+
+  const kisanId = `KP-2026-${state.substring(0,2).toUpperCase()}-${Math.floor(Math.random()*90000+10000)}`;
+  const user = { name, phone, state, pass, kisanId, joinedAt: new Date().toISOString() };
+  users.push(user);
+  localStorage.setItem('eco_users', JSON.stringify(users));
+  localStorage.setItem('eco_user', JSON.stringify(user));
+
+  showSuccess(`Welcome, ${name}! 🌿`, `Your Kisan ID: ${kisanId}`);
+  updateNavForUser(user);
+}
+
+function showSuccess(title, msg) {
+  document.getElementById('form-signin').classList.add('hidden');
+  document.getElementById('form-signup').classList.add('hidden');
+  document.getElementById('form-success').classList.remove('hidden');
+  document.getElementById('success-title').textContent = title;
+  document.getElementById('success-msg').textContent = msg;
+}
+
+function updateNavForUser(user) {
+  // Update signup button to show user name
+  document.querySelectorAll('[data-auth-btn]').forEach(btn => {
+    btn.textContent = user.name.split(' ')[0];
+    btn.onclick = () => openAuthModal('signin');
+  });
+}
+
+function checkAuthOnLoad() {
+  const user = JSON.parse(localStorage.getItem('eco_user') || 'null');
+  if (user) updateNavForUser(user);
+}
+
+// Close modal on background click
+document.getElementById('auth-modal').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('auth-modal')) closeAuthModal();
+});
+
+checkAuthOnLoad();
+</script>
+
+</body></html>

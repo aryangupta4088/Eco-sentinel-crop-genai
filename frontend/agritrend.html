@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AgriTrend | Eco Sentinel</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "on-secondary-container": "#783916","on-primary-fixed-variant": "#005312","inverse-surface": "#31312b","on-secondary-fixed": "#351000","surface-container-low": "#f7f3eb","inverse-primary": "#88d982","secondary-fixed-dim": "#ffb693","on-primary-fixed": "#002204","background": "#fcf9f1","secondary-container": "#ffa67a","on-tertiary-fixed": "#261a00","on-surface-variant": "#40493d","surface-variant": "#e5e2da","primary-container": "#2e7d32","primary": "#0d631b","on-background": "#1c1c17","tertiary": "#6e5100","secondary-fixed": "#ffdbcc","surface": "#fcf9f1","on-tertiary": "#ffffff","on-primary-container": "#cbffc2","on-primary": "#ffffff","surface-dim": "#dddad2","error-container": "#ffdad6","error": "#ba1a1a","tertiary-container": "#8c6800","surface-tint": "#1b6d24","surface-container-lowest": "#ffffff","inverse-on-surface": "#f4f0e8","on-tertiary-fixed-variant": "#5c4300","surface-bright": "#fcf9f1","on-error": "#ffffff","surface-container-high": "#ebe8e0","secondary": "#904c27","on-tertiary-container": "#ffefd7","surface-container-highest": "#e5e2da","on-secondary": "#ffffff","outline-variant": "#bfcaba","tertiary-fixed": "#ffdfa0","on-secondary-fixed-variant": "#733512","primary-fixed-dim": "#88d982","outline": "#707a6c","on-surface": "#1c1c17","tertiary-fixed-dim": "#f8bd2a","on-error-container": "#93000a","surface-container": "#f1eee6","primary-fixed": "#a3f69c"
+        },
+        fontFamily: {"headline": ["Plus Jakarta Sans"],"body": ["Be Vietnam Pro"],"label": ["Be Vietnam Pro"]},
+        borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+      },
+    },
+  }
+</script>
+<style>
+  body {
+    background-color: #fcf9f1;
+    background-image: radial-gradient(#bfcaba 0.5px, transparent 0.5px);
+    background-size: 24px 24px;
+    font-family: 'Be Vietnam Pro', sans-serif;
+  }
+  .glass-card { background: rgba(255,255,255,0.7); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  .ai-card { border-left: 4px solid #0d631b; animation: fadeIn 0.5s ease; }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+  .loading-pulse { animation: pulse 1.5s infinite; }
+  @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
+</style>
+</head>
+<body class="text-on-surface antialiased">
+
+<!-- ── TOP NAV ─────────────────────────────────────── -->
+<nav class="fixed top-0 w-full z-50 bg-emerald-950/70 backdrop-blur-xl shadow-2xl shadow-emerald-950/20">
+  <div class="flex justify-between items-center w-full px-6 py-4 max-w-screen-2xl mx-auto">
+    <div class="flex items-center gap-8">
+      <span class="text-2xl font-black tracking-tighter text-emerald-50 font-headline">Eco Sentinel</span>
+      <div class="hidden lg:flex items-center gap-6">
+        <a class="font-headline text-sm tracking-wide uppercase font-bold text-emerald-100/70 hover:text-emerald-50 transition-colors" href="./dashboard.html">Home</a>
+        <a class="font-headline text-sm tracking-wide uppercase font-bold text-emerald-400 border-b-2 border-emerald-400 pb-1" href="./agritrend.html">AgriTrend</a>
+        <a class="font-headline text-sm tracking-wide uppercase font-bold text-emerald-100/70 hover:text-emerald-50 transition-colors" href="./askkrishiai.html">Ask Krishi AI</a>
+        <a class="font-headline text-sm tracking-wide uppercase font-bold text-emerald-100/70 hover:text-emerald-50 transition-colors" href="./schemeradar.html">Scheme Radar</a>
+        <a class="font-headline text-sm tracking-wide uppercase font-bold text-emerald-100/70 hover:text-emerald-50 transition-colors" href="./croptracker.html">Crop Tracker</a>
+        <a class="font-headline text-sm tracking-wide uppercase font-bold text-emerald-100/70 hover:text-emerald-50 transition-colors" href="./diagonoseandprotect.html">Diagnose</a>
+        <a class="font-headline text-sm tracking-wide uppercase font-bold text-emerald-100/70 hover:text-emerald-50 transition-colors" href="./earnmore.html">Earn More</a>
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      <button class="hidden md:flex items-center gap-2 px-4 py-2 rounded-full font-headline text-xs font-bold uppercase tracking-wider text-emerald-50 hover:bg-emerald-800/50 transition-all">Personal Dashboard</button>
+      <button class="px-6 py-2.5 bg-gradient-to-r from-primary to-primary-container text-on-primary rounded-full font-headline text-xs font-black uppercase tracking-widest shadow-lg hover:scale-105 active:scale-95 transition-all">Signup</button>
+      <span class="material-symbols-outlined text-emerald-50 cursor-pointer">account_circle</span>
+    </div>
+  </div>
+</nav>
+
+<main class="pt-32 pb-24 px-6 max-w-7xl mx-auto min-h-screen">
+
+  <!-- ── HEADER ─────────────────────────────────────── -->
+  <header class="mb-12 max-w-3xl">
+    <div class="inline-block px-4 py-1.5 bg-secondary-container/30 text-secondary font-headline text-xs font-bold rounded-full mb-6 tracking-widest uppercase">Intelligence Briefing</div>
+    <h1 class="text-5xl md:text-7xl font-headline font-extrabold text-on-surface leading-[1.1] mb-6">
+      AgriTrend: <span class="text-primary italic">Latest</span> Agricultural Insights
+    </h1>
+    <p class="text-lg text-on-surface-variant font-medium leading-relaxed">
+      Empowering the Indian soil with precision data and real-time market shifts. Curated for the modern sentinel of the field.
+    </p>
+  </header>
+
+  <!-- ── PERSONALIZED FEED FORM ────────────────────── -->
+  <div class="glass-card rounded-xl p-6 mb-10 border border-outline-variant/20">
+    <h2 class="font-headline font-bold text-primary text-lg mb-4">🌾 Get Your Personalized AgriTrend Feed</h2>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <input id="at-crop" placeholder="Your Crop (e.g. Wheat)" class="border border-outline-variant rounded-full px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary bg-white"/>
+      <input id="at-state" placeholder="Your State (e.g. Punjab)" class="border border-outline-variant rounded-full px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary bg-white"/>
+      <input id="at-acres" placeholder="Acres (e.g. 5)" type="number" class="border border-outline-variant rounded-full px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary bg-white"/>
+      <button id="at-fetch-btn" class="bg-primary text-white rounded-full py-2.5 px-6 font-bold text-sm hover:scale-105 transition-transform active:scale-95 shadow-md">
+        Get My Feed ✨
+      </button>
+    </div>
+    <!-- AI Feed Result -->
+    <div id="at-result" class="hidden mt-6 bg-surface-container-low rounded-xl p-6 ai-card">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="material-symbols-outlined text-primary" style="font-variation-settings:'FILL' 1;">psychology</span>
+        <span class="font-headline font-bold text-primary text-sm uppercase tracking-wide">Your Personalized Updates</span>
+      </div>
+      <p id="at-result-text" class="text-on-surface leading-relaxed whitespace-pre-line text-sm"></p>
+    </div>
+    <!-- Quick Byte Panel -->
+    <div id="qb-result" class="hidden mt-4 bg-tertiary-fixed/30 rounded-xl p-5 ai-card">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="material-symbols-outlined text-tertiary text-sm">bolt</span>
+        <span class="font-headline font-bold text-tertiary text-xs uppercase tracking-wide">Quick Byte</span>
+      </div>
+      <p id="qb-result-text" class="text-on-surface text-sm leading-relaxed whitespace-pre-line"></p>
+    </div>
+  </div>
+
+  <!-- ── STATIC CARDS + QUICK BYTE BUTTONS ─────────── -->
+  <div class="grid grid-cols-1 gap-12" id="cards-container">
+
+    <!-- Card 1 -->
+    <div class="glass-card rounded-xl p-6 md:p-10 flex flex-col md:flex-row gap-8 hover:shadow-xl transition-all duration-500 border border-outline-variant/10 group">
+      <div class="flex-1 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center gap-3 mb-4">
+            <span class="px-3 py-1 bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-widest rounded-full">New Tech</span>
+            <span class="text-on-surface-variant text-xs font-medium">March 2026</span>
+          </div>
+          <h2 class="text-2xl md:text-3xl font-headline font-bold text-on-surface mb-4 group-hover:text-primary transition-colors">
+            Nano-DAP replaces full DAP bag at 20% lower cost.
+          </h2>
+          <p class="text-on-surface-variant leading-relaxed text-base">
+            ICAR research shows one 500ml bottle of Nano-DAP equals one full 50kg bag. Wheat farmers on 5 acres save ₹2,400 per season. Available at all IFFCO outlets from March 2026.
+          </p>
+        </div>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <div class="inline-flex items-center gap-3 px-5 py-3 bg-secondary-container text-on-secondary-container font-headline font-bold text-sm rounded-full shadow-sm">
+            <span class="material-symbols-outlined text-lg">trending_up</span>
+            Saves ₹2,400 on your farm size.
+          </div>
+          <button class="quick-byte-btn inline-flex items-center gap-2 px-5 py-3 bg-primary/10 text-primary font-headline font-bold text-sm rounded-full hover:bg-primary/20 transition-colors" data-tech="Nano-DAP">
+            <span class="material-symbols-outlined text-lg">bolt</span> Quick Byte
+          </button>
+        </div>
+      </div>
+      <div class="w-full md:w-80 lg:w-[400px] aspect-video relative rounded-lg overflow-hidden bg-surface-container-highest shadow-inner">
+        <img alt="Fertilizer application" class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDu-wbT7QaRmvge9UsByqsQBCUr1ND4QFYgdEpsfK_gohdB9kiOdYP1ZvwKw2VMqQ49-keo1UhcKEHug_aWH5p-65EDWmavfWXOrbfjdyF9K-j3yDxyjIgbYrI4A-HNETVLqDSgzJrBY5AsoKeO83poKZZJaTfPPOdPrfusfj8NT4Owdk_7Rp8YpK_3VIkU0lJgQRgmyvG3QXkyZ8k5QbE2pbG8h2uwPZ9-3sy06G7sPRSZZiS8RpKlykwOaLREatzdEDH8AjprO8c"/>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="glass-card rounded-xl p-6 md:p-10 flex flex-col md:flex-row gap-8 hover:shadow-xl transition-all duration-500 border border-outline-variant/10 group">
+      <div class="flex-1 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center gap-3 mb-4">
+            <span class="px-3 py-1 bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-widest rounded-full">Government Scheme</span>
+            <span class="text-on-surface-variant text-xs font-medium">Live Now</span>
+          </div>
+          <h2 class="text-2xl md:text-3xl font-headline font-bold text-on-surface mb-4 group-hover:text-primary transition-colors">
+            Drone spraying cuts pesticide use by 35%.
+          </h2>
+          <p class="text-on-surface-variant leading-relaxed text-base">
+            New PM-KUSUM approved drones cover 1 acre in 7 minutes. Subsidy covers 60% of drone rental cost for small farmers. Reduces chemical exposure and saves 40 litres of water per spray.
+          </p>
+        </div>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <div class="inline-flex items-center gap-3 px-5 py-3 bg-secondary-container text-on-secondary-container font-headline font-bold text-sm rounded-full shadow-sm">
+            <span class="material-symbols-outlined text-lg">payments</span>
+            60% subsidy available now.
+          </div>
+          <button class="quick-byte-btn inline-flex items-center gap-2 px-5 py-3 bg-primary/10 text-primary font-headline font-bold text-sm rounded-full hover:bg-primary/20 transition-colors" data-tech="Drone Spraying PM-KUSUM subsidy">
+            <span class="material-symbols-outlined text-lg">bolt</span> Quick Byte
+          </button>
+        </div>
+      </div>
+      <div class="w-full md:w-80 lg:w-[400px] aspect-video relative rounded-lg overflow-hidden bg-surface-container-highest shadow-inner">
+        <img alt="Agricultural drone" class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB8BLrICxxE8i36dH5VY8RvO0MhWzDWXEh8CVRt-BctNVO6uGjQMeLZot2g_uiKw2QZWKeZOGPGWdG_RMH5IJKZQEF3qdi2yYSws_iFj1br5CwLsav78Y3-DPQq4AjGIC4er7SPmMSlVlKjforXkVqb_oqXIZ4fM-n1hOWwuO3jB35_VQNWqsN56J9ci2prZNZbibN0HPH69x4q9kze1dFHEUs9dqLgDmixw6sNEHDKPFAAGaWjsznRYUtPlrlX4TxR7u1sfrwThoY"/>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="glass-card rounded-xl p-6 md:p-10 flex flex-col md:flex-row gap-8 hover:shadow-xl transition-all duration-500 border border-outline-variant/10 group">
+      <div class="flex-1 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center gap-3 mb-4">
+            <span class="px-3 py-1 bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-widest rounded-full">Export Alert</span>
+            <span class="text-on-surface-variant text-xs font-medium">Market Pulse</span>
+          </div>
+          <h2 class="text-2xl md:text-3xl font-headline font-bold text-on-surface mb-4 group-hover:text-primary transition-colors">
+            Millets declared superfood — export demand up 300%.
+          </h2>
+          <p class="text-on-surface-variant leading-relaxed text-base">
+            Global millet exports from India jumped 3x after UN declared 2023 International Year of Millets. Bajra farmers in Rajasthan earning ₹800 more per quintal than last year. Government guaranteeing MSP plus 15% bonus for 2026 season.
+          </p>
+        </div>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <div class="inline-flex items-center gap-3 px-5 py-3 bg-secondary-container text-on-secondary-container font-headline font-bold text-sm rounded-full shadow-sm">
+            <span class="material-symbols-outlined text-lg">currency_rupee</span>
+            Switch crop — profit up 18%.
+          </div>
+          <button class="quick-byte-btn inline-flex items-center gap-2 px-5 py-3 bg-primary/10 text-primary font-headline font-bold text-sm rounded-full hover:bg-primary/20 transition-colors" data-tech="Millets export superfood MSP bonus">
+            <span class="material-symbols-outlined text-lg">bolt</span> Quick Byte
+          </button>
+        </div>
+      </div>
+      <div class="w-full md:w-80 lg:w-[400px] aspect-video relative rounded-lg overflow-hidden bg-surface-container-highest shadow-inner">
+        <img alt="Millet harvest" class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3Z6Y6oGC1Yks1kVnQ-vEfQzGQrIaKIkyAcGTKwxVaEHuGW3QeWfPNMFNlawHnTV9SiiI1Spkidwas99ufO37NMoUXvPx9dyAJM4_gaZS6vgaes2obr7SJzvokMeoXCleP01WTwPvwfsRp9cH1XwazWhEolvuhQ2pC3Oeu16_WvNOnhVWqNgGhR9v_4WHJlMcfMZk_nh_hV0PaBgSrlF2IRe30XqHqA4tzWD6i0-kDifLm4XjpVWGaweMDQR6IfvjdspO7LL0QuFk"/>
+      </div>
+    </div>
+
+  </div><!-- end cards -->
+</main>
+
+<!-- ── MIC FAB ─────────────────────────────────────── -->
+<div class="fixed bottom-10 right-10 z-40 group">
+  <div class="absolute inset-0 bg-tertiary-fixed-dim blur-2xl opacity-20 group-hover:opacity-40 transition-opacity"></div>
+  <button id="mic-fab" class="relative w-20 h-20 rounded-full bg-secondary shadow-2xl flex items-center justify-center text-on-secondary hover:scale-110 active:scale-95 transition-all">
+    <span id="mic-icon" class="material-symbols-outlined text-4xl" style="font-variation-settings:'FILL' 1;">mic</span>
+  </button>
+  <div class="absolute -top-12 right-0 bg-surface px-4 py-2 rounded-lg shadow-xl text-xs font-bold text-on-surface whitespace-nowrap border border-outline-variant/20 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+    "Ask Krishi AI about Nano-DAP"
+  </div>
+</div>
+
+<!-- ── BOTTOM NAV (mobile) ────────────────────────── -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 bg-emerald-950/90 backdrop-blur-lg shadow-[0_-10px_40px_rgba(0,0,0,0.3)] rounded-t-[2.5rem]">
+  <a class="flex flex-col items-center justify-center text-emerald-100/50 p-2" href="./dashboard.html">
+    <span class="material-symbols-outlined">home</span>
+    <span class="text-[10px] font-semibold mt-1">Home</span>
+  </a>
+  <a class="flex flex-col items-center justify-center bg-emerald-800/60 text-emerald-50 rounded-full p-3 scale-110 -translate-y-2" href="./agritrend.html">
+    <span class="material-symbols-outlined">trending_up</span>
+    <span class="text-[10px] font-semibold mt-1 uppercase">Trends</span>
+  </a>
+  <a class="flex flex-col items-center justify-center text-emerald-100/50 p-2" href="./askkrishiai.html">
+    <span class="material-symbols-outlined">smart_toy</span>
+    <span class="text-[10px] font-semibold mt-1">AI Ask</span>
+  </a>
+  <a class="flex flex-col items-center justify-center text-emerald-100/50 p-2" href="./schemeradar.html">
+    <span class="material-symbols-outlined">policy</span>
+    <span class="text-[10px] font-semibold mt-1">Schemes</span>
+  </a>
+</nav>
+
+<!-- ── JAVASCRIPT ─────────────────────────────────── -->
+<script>
+// ── CONFIG ────────────────────────────────────────────
+const API_BASE = 'http://localhost:3000';
+
+function getLanguage() {
+  return localStorage.getItem('cropwise_language') || 'Hindi';
+}
+
+async function apiCall(endpoint, body) {
+  const res = await fetch(`${API_BASE}${endpoint}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ ...body, language: getLanguage() })
+  });
+  if (!res.ok) throw new Error(`API error: ${res.status}`);
+  return res.json();
+}
+
+// ── PERSONALIZED FEED ─────────────────────────────────
+document.getElementById('at-fetch-btn').addEventListener('click', async () => {
+  const crop   = document.getElementById('at-crop').value.trim();
+  const state  = document.getElementById('at-state').value.trim();
+  const acres  = document.getElementById('at-acres').value.trim();
+  const result = document.getElementById('at-result');
+  const text   = document.getElementById('at-result-text');
+
+  if (!crop || !state) { alert('Please enter your crop and state'); return; }
+
+  result.classList.remove('hidden');
+  text.textContent = '⏳ Fetching your personalized AgriTrend feed...';
+  text.className = 'loading-pulse text-primary font-medium text-sm';
+
+  try {
+    const data = await apiCall('/api/agritrend/feed', { crop, state, acres });
+    text.className = 'text-on-surface leading-relaxed whitespace-pre-line text-sm';
+    text.textContent = data.feed;
+  } catch(e) {
+    text.className = 'text-error text-sm';
+    text.textContent = '❌ Failed to fetch feed. Make sure backend is running on port 3000.';
+  }
+});
+
+// ── QUICK BYTE BUTTONS ────────────────────────────────
+document.querySelectorAll('.quick-byte-btn').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    const tech   = btn.dataset.tech;
+    const crop   = document.getElementById('at-crop').value.trim() || 'Wheat';
+    const acres  = document.getElementById('at-acres').value.trim() || '5';
+    const panel  = document.getElementById('qb-result');
+    const text   = document.getElementById('qb-result-text');
+
+    panel.classList.remove('hidden');
+    text.textContent = `⚡ Loading Quick Byte for "${tech}"...`;
+    text.className = 'loading-pulse text-tertiary font-medium text-sm';
+
+    // Scroll to result
+    panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    try {
+      const data = await apiCall('/api/agritrend/quick-byte', { technology: tech, crop, acres });
+      text.className = 'text-on-surface text-sm leading-relaxed whitespace-pre-line';
+      text.textContent = data.quickByte;
+    } catch(e) {
+      text.className = 'text-error text-sm';
+      text.textContent = '❌ Failed. Make sure backend is running.';
+    }
+  });
+});
+
+// ── MIC FAB — Voice to Chat ───────────────────────────
+const micFab  = document.getElementById('mic-fab');
+const micIcon = document.getElementById('mic-icon');
+let isListening = false;
+
+micFab.addEventListener('click', () => {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) {
+    alert('Voice not supported on this browser. Try Chrome.');
+    return;
+  }
+
+  if (isListening) return;
+
+  const r = new SR();
+  r.lang = getLanguage() === 'Hindi' ? 'hi-IN' : 'en-IN';
+  r.start();
+  isListening = true;
+  micIcon.textContent = 'mic_off';
+  micFab.classList.add('bg-error');
+  micFab.classList.remove('bg-secondary');
+
+  r.onresult = async (e) => {
+    const spoken = e.results[0][0].transcript;
+    isListening = false;
+    micIcon.textContent = 'mic';
+    micFab.classList.remove('bg-error');
+    micFab.classList.add('bg-secondary');
+
+    // Fill crop field with spoken text and fetch feed
+    document.getElementById('at-crop').value = spoken;
+    const result = document.getElementById('at-result');
+    const text   = document.getElementById('at-result-text');
+    result.classList.remove('hidden');
+    text.textContent = `🎙️ You said: "${spoken}" — fetching updates...`;
+    text.className = 'loading-pulse text-primary font-medium text-sm';
+
+    try {
+      const data = await apiCall('/api/agritrend/feed', {
+        crop: spoken,
+        state: document.getElementById('at-state').value || 'India',
+        acres: document.getElementById('at-acres').value || '5'
+      });
+      text.className = 'text-on-surface leading-relaxed whitespace-pre-line text-sm';
+      text.textContent = data.feed;
+    } catch(e) {
+      text.className = 'text-error text-sm';
+      text.textContent = '❌ Failed. Make sure backend is running.';
+    }
+  };
+
+  r.onerror = () => {
+    isListening = false;
+    micIcon.textContent = 'mic';
+    micFab.classList.remove('bg-error');
+    micFab.classList.add('bg-secondary');
+    alert('Could not hear clearly. Please try again.');
+  };
+});
+</script>
+
+</body></html>

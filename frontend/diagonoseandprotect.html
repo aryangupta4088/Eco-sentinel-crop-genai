@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Diagnose and Protect | Eco Sentinel</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+<!-- ── LEAFLET MAP (Free, No API Key) ─────────────── -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "inverse-surface":"#31312b","on-secondary-fixed":"#351000","secondary-fixed":"#ffdbcc","inverse-primary":"#88d982","primary-container":"#2e7d32","secondary":"#904c27","primary-fixed-dim":"#88d982","on-surface":"#1c1c17","secondary-container":"#ffa67a","on-error-container":"#93000a","outline-variant":"#bfcaba","outline":"#707a6c","inverse-on-surface":"#f4f0e8","primary-fixed":"#a3f69c","error-container":"#ffdad6","on-error":"#ffffff","primary":"#0d631b","on-primary-fixed-variant":"#005312","surface-container-highest":"#e5e2da","on-primary-container":"#cbffc2","on-secondary-fixed-variant":"#733512","on-primary-fixed":"#002204","on-tertiary-container":"#ffefd7","on-secondary":"#ffffff","secondary-fixed-dim":"#ffb693","background":"#fcf9f1","tertiary-container":"#8c6800","surface-tint":"#1b6d24","on-primary":"#ffffff","error":"#ba1a1a","surface-container-low":"#f7f3eb","tertiary-fixed-dim":"#f8bd2a","on-tertiary-fixed-variant":"#5c4300","tertiary-fixed":"#ffdfa0","surface-dim":"#dddad2","on-background":"#1c1c17","surface-container-lowest":"#ffffff","on-tertiary":"#ffffff","on-surface-variant":"#40493d","surface-container-high":"#ebe8e0","surface-variant":"#e5e2da","on-secondary-container":"#783916","tertiary":"#6e5100","on-tertiary-fixed":"#261a00","surface-container":"#f1eee6","surface-bright":"#fcf9f1","surface":"#fcf9f1"
+        },
+        fontFamily: {"headline":["Plus Jakarta Sans"],"body":["Be Vietnam Pro"],"label":["Be Vietnam Pro"]},
+        borderRadius: {"DEFAULT":"1rem","lg":"2rem","xl":"3rem","full":"9999px"},
+      },
+    },
+  }
+</script>
+<style>
+  .material-symbols-outlined { font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24; }
+  .organic-shape-1 { clip-path:polygon(10% 0%,100% 0%,90% 100%,0% 100%); }
+  .organic-shape-2 { border-radius:60% 40% 30% 70%/60% 30% 70% 40%; }
+  .ai-result { border-left:4px solid #0d631b; animation:fadeIn 0.4s ease; }
+  .ai-result-error { border-left:4px solid #ba1a1a; animation:fadeIn 0.4s ease; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+  .loading-pulse { animation:pulse 1.5s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  /* Leaflet map container */
+  #pest-map { height:400px; width:100%; border-radius:0.75rem; z-index:1; }
+  /* Custom map markers */
+  .danger-marker { background:#ba1a1a; border:3px solid white; border-radius:50%; width:16px; height:16px; box-shadow:0 0 0 4px rgba(186,26,26,0.3); animation:mapPulse 2s infinite; }
+  .warning-marker { background:#f8bd2a; border:3px solid white; border-radius:50%; width:14px; height:14px; box-shadow:0 0 0 4px rgba(248,189,42,0.3); }
+  .home-marker { background:#0d631b; border:3px solid white; border-radius:50%; width:18px; height:18px; box-shadow:0 4px 12px rgba(13,99,27,0.4); }
+  @keyframes mapPulse { 0%,100%{box-shadow:0 0 0 4px rgba(186,26,26,0.3)} 50%{box-shadow:0 0 0 12px rgba(186,26,26,0.1)} }
+  .leaflet-popup-content-wrapper { border-radius:12px; font-family:'Be Vietnam Pro',sans-serif; }
+</style>
+</head>
+<body class="bg-surface-container-low font-body text-on-surface">
+
+<!-- ── TOP NAV ─────────────────────────────────────── -->
+<header class="bg-[#f7f3eb] w-full border-none">
+  <div class="flex justify-between items-center px-6 py-4 max-w-7xl mx-auto">
+    <h1 class="text-2xl font-bold text-[#0d631b] font-headline">Eco Sentinel</h1>
+    <nav class="hidden md:flex gap-8 items-center font-['Plus_Jakarta_Sans'] text-sm tracking-tight">
+      <a class="text-[#1c1c17]/70 hover:text-[#0d631b] transition-colors" href="../farmer_dashboard_synced_navbar/code.html">Home</a>
+      <a class="text-[#1c1c17]/70 hover:text-[#0d631b] transition-colors" href="../eco_sentinel_agritrend/code.html">AgriTrend</a>
+      <a class="text-[#1c1c17]/70 hover:text-[#0d631b] transition-colors" href="../ask_krishi_ai_chat_enhanced/code.html">Ask Krishi AI</a>
+      <a class="text-[#1c1c17]/70 hover:text-[#0d631b] transition-colors" href="../scheme_radar_final_synced_layout/code.html">Scheme Radar</a>
+      <a class="text-[#0d631b] border-b-2 border-[#0d631b] font-bold pb-1" href="#">Crop Status</a>
+    </nav>
+    
+    <div class="flex items-center gap-3">
+        <button class="hidden md:block bg-white text-emerald-950 px-6 py-2.5 rounded-full font-bold text-sm hover:bg-emerald-50 transition-colors shadow-lg">Sign Up</button>
+        <!-- Profile dropdown -->
+        <div class="relative" id="profileWrapper">
+          <button onclick="toggleProfileMenu()" class="w-10 h-10 rounded-full bg-emerald-800 flex items-center justify-center text-emerald-100 hover:bg-emerald-700 transition-colors overflow-hidden">
+            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAaTyXjKV0ZcLt7PfEPFdA-IKtVkRwKUHb3wQZFu3SjmCubq4iMLIi1PYS4VOgaTgj30gzK6muEpsXUouh40Dt9Ufhzt-FHxPTnGfLUYEU0zGXL2rzoFl2UM7N-Wi_ly8EYJpwulY5Y4MhlX0BZagv9HRCz2lictQav_UXGQ24TGISh3xxAgwvnG1lH6Icjk-zy26OEZ--UVgCTW7JHMd8oo_5uubeAxQBRnCG0wdzecM0OETCarmaSihij1Fy5DWp5G9Txr6fcfcQ" class="w-full h-full object-cover" alt=""/>
+          </button>
+          <div id="profileMenu" class="hidden absolute right-0 top-14 w-48 bg-emerald-950 rounded-2xl shadow-2xl border border-white/10 p-2 z-50">
+            <a href="./my_profile_trust.html" class="flex items-center gap-2 px-3 py-2.5 rounded-xl text-emerald-100/80 hover:bg-white/10 text-sm font-medium transition-colors">
+              <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">person</span>My Profile
+            </a>
+            <a href="./diagonoseandprotect.html" class="flex items-center gap-2 px-3 py-2.5 rounded-xl text-emerald-100/80 hover:bg-white/10 text-sm font-medium transition-colors">
+              <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">dashboard</span>Dashboard
+            </a>
+            <a href="./growpage.html" class="flex items-center gap-2 px-3 py-2.5 rounded-xl text-emerald-100/80 hover:bg-white/10 text-sm font-medium transition-colors">
+              <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">eco</span>Grow Smart
+            </a>
+            <div class="h-px bg-white/10 my-1"></div>
+            <a href="./language.html" class="flex items-center gap-2 px-3 py-2.5 rounded-xl text-red-400 hover:bg-red-500/10 text-sm font-medium transition-colors">
+              <span class="material-symbols-outlined text-sm">logout</span>Sign Out
+            </a>
+          </div>
+        </div>
+      </div>
+  </div>
+</header>
+
+<!-- Hidden file input -->
+<input type="file" id="scan-file-input" accept="image/*" class="hidden"/>
+
+<main class="max-w-4xl mx-auto px-6 pt-12 pb-32 space-y-16">
+
+  <!-- ── PAGE HEADER ────────────────────────────────── -->
+  <section class="space-y-2">
+    <h2 class="text-4xl md:text-5xl font-extrabold font-headline text-on-surface tracking-tight">Diagnose and Protect</h2>
+    <p class="text-lg text-on-surface-variant font-medium">Catch disease early, stay alert, find help fast.</p>
+  </section>
+
+  <!-- ── SECTION 1: AGRI-LENS ───────────────────────── -->
+  <section class="space-y-8">
+    <div class="flex items-center gap-3">
+      <span class="material-symbols-outlined text-primary text-3xl">filter_center_focus</span>
+      <h3 class="text-2xl font-bold font-headline">Agri-Lens Diagnosis</h3>
+    </div>
+
+    <!-- Upload Box -->
+    <div id="upload-box" class="bg-surface-container-high border-4 border-dashed border-outline-variant/30 rounded-lg p-12 flex flex-col items-center justify-center text-center space-y-6 transition-all hover:bg-surface-container-highest/50 cursor-pointer">
+      <div class="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center">
+        <span class="material-symbols-outlined text-primary text-4xl">photo_camera</span>
+      </div>
+      <div class="space-y-2">
+        <p class="text-xl font-bold font-headline">Scan your leaf or crop</p>
+        <p class="text-on-surface-variant text-sm max-w-xs mx-auto">Our AI identifies thousands of pests and diseases instantly from a photo.</p>
+        <p id="selected-file-name" class="text-primary font-bold text-sm hidden"></p>
+      </div>
+      <div class="flex gap-4">
+        <button id="camera-btn" class="bg-primary text-on-primary px-8 py-3 rounded-full font-bold flex items-center gap-2 hover:opacity-90 transition-all active:scale-90">
+          <span class="material-symbols-outlined">camera</span> Use Camera
+        </button>
+        <button id="upload-btn" class="bg-surface-container-lowest text-primary border border-primary/20 px-8 py-3 rounded-full font-bold flex items-center gap-2 hover:bg-white transition-all active:scale-90">
+          <span class="material-symbols-outlined">upload</span> Upload Photo
+        </button>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    <div id="scan-loading" class="hidden bg-primary/5 border border-primary/20 rounded-lg p-8 text-center">
+      <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 loading-pulse">
+        <span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings:'FILL' 1;">biotech</span>
+      </div>
+      <p class="font-bold text-primary text-lg">Analysing your crop image...</p>
+      <p class="text-on-surface-variant text-sm mt-1">AI is checking for 500+ diseases and pests</p>
+    </div>
+
+    <!-- Diagnosis Result Card (dynamic) -->
+    <div id="diagnosis-result" class="hidden bg-surface-container-lowest rounded-lg overflow-hidden shadow-[0_40px_40px_rgba(28,28,23,0.06)] flex flex-col md:flex-row gap-6 p-6 ai-result">
+      <div class="w-full md:w-48 h-48 rounded-DEFAULT overflow-hidden flex-shrink-0 bg-surface-container-high flex items-center justify-center">
+        <img id="diagnosis-img" src="" alt="Scanned crop" class="w-full h-full object-cover hidden"/>
+        <span id="diagnosis-img-placeholder" class="material-symbols-outlined text-6xl text-outline-variant">eco</span>
+      </div>
+      <div class="flex-1 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <h4 id="diagnosis-title" class="text-2xl font-bold font-headline">—</h4>
+            <p id="diagnosis-subtitle" class="italic text-on-surface-variant text-sm font-medium"></p>
+          </div>
+          <span id="diagnosis-badge" class="bg-tertiary-fixed text-on-tertiary-fixed px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-secondary"></span> Analysing...
+          </span>
+        </div>
+        <div id="diagnosis-body" class="text-on-surface text-sm leading-relaxed whitespace-pre-line"></div>
+        <div class="pt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-t border-outline-variant/10">
+          <p class="text-sm font-medium text-on-surface-variant flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary text-sm">store</span>
+            Medicine available at nearby agri shops.
+          </p>
+          <div class="bg-surface-container-high px-3 py-1 rounded-full flex items-center gap-2 w-fit">
+            <span class="material-symbols-outlined text-primary text-lg" style="font-variation-settings:'FILL' 1;">smart_toy</span>
+            <span class="text-xs font-bold font-label uppercase tracking-tighter text-on-surface-variant">Powered by Krishi AI</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Static example result (shown before first scan) -->
+    <div id="static-result" class="bg-surface-container-lowest rounded-lg overflow-hidden shadow-[0_40px_40px_rgba(28,28,23,0.06)] flex flex-col md:flex-row gap-6 p-6">
+      <div class="w-full md:w-48 h-48 rounded-DEFAULT overflow-hidden flex-shrink-0">
+        <img alt="Yellow Rust disease on wheat leaves" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuALli6zp8LTm2fuvL8umI6HghlBxLcU5HQByvPGYKPoC04jgQ2yjVNAdqCHooU7ONlx1LQRp9sWoXlU75U1Rso94nfAFBFheRMJSFOpobAIaWb2RufU8zgCd8N1zkuqKCSlaqsnm0DW3W4O_vfeGPMCtz2pjKpIU_pEkinskU2moSfxq5J48bKPbXwyfVwUFNUc2fbQnbKq7t818rUJQkx49LrNrrgPE19_XBmcugkUOvpKptYpfV2roVsajPutPCTtnkDWRdqYsbs"/>
+      </div>
+      <div class="flex-1 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <h4 class="text-2xl font-bold font-headline">Yellow Rust <span class="text-sm font-normal text-on-surface-variant">(Example)</span></h4>
+            <p class="italic text-on-surface-variant text-sm font-medium">Puccinia striiformis</p>
+          </div>
+          <span class="bg-tertiary-fixed text-on-tertiary-fixed px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-secondary"></span> Moderate — Act within 48 hours
+          </span>
+        </div>
+        <div class="space-y-2">
+          <p class="font-bold text-sm text-primary uppercase tracking-widest">Recommended Treatment</p>
+          <ol class="space-y-2 list-none">
+            <li class="flex items-start gap-3 text-on-surface">
+              <span class="w-6 h-6 rounded-full bg-surface-container-high text-on-surface text-xs flex items-center justify-center font-bold flex-shrink-0">1</span>
+              <span>Apply Propiconazole 25% EC @ 200ml per acre mixed in 200 litres of water.</span>
+            </li>
+            <li class="flex items-start gap-3 text-on-surface">
+              <span class="w-6 h-6 rounded-full bg-surface-container-high text-on-surface text-xs flex items-center justify-center font-bold flex-shrink-0">2</span>
+              <span>Spray early morning or late evening when wind speed is low.</span>
+            </li>
+            <li class="flex items-start gap-3 text-on-surface">
+              <span class="w-6 h-6 rounded-full bg-surface-container-high text-on-surface text-xs flex items-center justify-center font-bold flex-shrink-0">3</span>
+              <span>Repeat after 10 days if symptoms persist on new leaves.</span>
+            </li>
+          </ol>
+        </div>
+        <p class="text-xs text-on-surface-variant italic">↑ Upload your own crop photo above to get a real diagnosis</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SECTION 2: COMMUNITY PULSE (REAL MAP) ──────── -->
+  <section class="space-y-8">
+    <div class="flex items-center gap-3">
+      <span class="material-symbols-outlined text-secondary text-3xl">distance</span>
+      <h3 class="text-2xl font-bold font-headline">Community Pulse</h3>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+
+      <!-- REAL LEAFLET MAP -->
+      <div class="lg:col-span-3 rounded-lg overflow-hidden shadow-inner relative">
+        <div id="pest-map"></div>
+        <!-- Map loading hint -->
+        <div id="map-location-hint" class="absolute top-3 left-3 z-10 bg-white/90 backdrop-blur px-3 py-2 rounded-full text-xs font-bold text-primary shadow-md flex items-center gap-2">
+          <span class="material-symbols-outlined text-sm">my_location</span>
+          <span id="map-location-text">Getting your location...</span>
+        </div>
+      </div>
+
+      <!-- Alert Cards -->
+      <div class="lg:col-span-2 space-y-6">
+        <!-- Zone Alert (dynamic) -->
+        <div id="zone-alert-card" class="bg-error-container p-6 rounded-lg space-y-4 border-l-8 border-error">
+          <div class="flex items-center gap-2 text-on-error-container">
+            <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">warning</span>
+            <span class="font-bold text-sm tracking-widest uppercase">Zone Alert</span>
+          </div>
+          <p id="zone-alert-text" class="text-on-error-container font-medium leading-relaxed">
+            Yellow Rust has been reported on 4 farms within 5 km of your location. Immediate preventive spraying is recommended for susceptible wheat varieties.
+          </p>
+          <button id="treatment-guide-btn" class="w-full bg-error text-on-error py-3 rounded-full font-bold text-sm transition-all hover:opacity-90 active:scale-90">
+            See Preventive Treatment Guide
+          </button>
+        </div>
+
+        <!-- Treatment Guide Result -->
+        <div id="treatment-result" class="hidden bg-surface-container-lowest p-5 rounded-lg ai-result text-sm text-on-surface whitespace-pre-line leading-relaxed shadow-sm"></div>
+
+        <!-- Report Pest Button -->
+        <div>
+          <!-- Report Form -->
+          <div id="report-form" class="hidden bg-surface-container-low p-5 rounded-lg mb-3 space-y-3">
+            <h4 class="font-bold text-sm text-on-surface">Report Pest/Disease</h4>
+            <input id="report-pest" placeholder="Pest/Disease name (e.g. Yellow Rust)" class="w-full border border-outline-variant rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"/>
+            <input id="report-crop" placeholder="Crop affected (e.g. Wheat)" class="w-full border border-outline-variant rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"/>
+            <input id="report-district" placeholder="Your District" class="w-full border border-outline-variant rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"/>
+            <button id="submit-report-btn" class="w-full bg-secondary text-white py-2.5 rounded-full font-bold text-sm hover:scale-105 transition-transform">
+              Submit Report
+            </button>
+            <div id="report-result" class="hidden text-sm text-on-surface whitespace-pre-line p-3 bg-surface-container-high rounded-lg"></div>
+          </div>
+
+          <button id="report-pest-btn" class="w-full border-2 border-outline-variant py-4 rounded-full font-bold text-on-surface flex items-center justify-center gap-2 hover:bg-surface-container-highest transition-all">
+            <span class="material-symbols-outlined text-secondary">report_problem</span>
+            Report a pest on my farm
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SECTION 3: KISAN-SETU MARKETPLACE ─────────── -->
+  <section class="space-y-8">
+    <div class="flex items-center gap-3">
+      <span class="material-symbols-outlined text-tertiary text-3xl">groups</span>
+      <h3 class="text-2xl font-bold font-headline">Kisan-Setu: Marketplace</h3>
+    </div>
+
+    <!-- Harvest Banner -->
+    <div class="bg-primary p-8 rounded-lg text-on-primary flex flex-col md:flex-row items-center justify-between gap-6 overflow-hidden relative">
+      <div class="absolute right-0 top-0 w-32 h-32 bg-white/5 organic-shape-2 -mr-12 -mt-12"></div>
+      <div class="space-y-2 relative z-10">
+        <h4 class="text-2xl font-bold font-headline">Harvest season starts in 18 days.</h4>
+        <p class="text-on-primary/80 font-medium">Demand for skilled laborers is rising. Book verified workers now to avoid price hikes.</p>
+      </div>
+      <button id="find-workers-btn" class="bg-tertiary-fixed text-on-tertiary-fixed px-8 py-3 rounded-full font-extrabold whitespace-nowrap relative z-10 transition-all hover:brightness-110 active:scale-95">
+        Find Workers Now
+      </button>
+    </div>
+
+    <!-- Worker Search Result -->
+    <div id="worker-result" class="hidden bg-surface-container-lowest p-6 rounded-xl ai-result shadow-sm">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="material-symbols-outlined text-primary" style="font-variation-settings:'FILL' 1;">groups</span>
+        <span class="font-headline font-bold text-primary uppercase tracking-wide text-sm">AI Worker Recommendation</span>
+      </div>
+      <p id="worker-result-text" class="text-on-surface text-sm leading-relaxed whitespace-pre-line"></p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+      <!-- Worker Request Form -->
+      <div class="bg-surface-container-high p-8 rounded-lg h-fit space-y-6">
+        <h5 class="text-lg font-bold font-headline">Post a Worker Request</h5>
+        <div class="space-y-4">
+          <div class="space-y-1">
+            <label class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant px-1">Select Task Type</label>
+            <select id="worker-task" class="w-full bg-surface-container-highest border-none rounded-DEFAULT p-3 text-sm focus:ring-2 focus:ring-primary">
+              <option>Harvesting</option>
+              <option>Spraying</option>
+              <option>Sowing</option>
+              <option>Tractor Plowing</option>
+              <option>Drone Spraying</option>
+            </select>
+          </div>
+          <div class="space-y-1">
+            <label class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant px-1">Crop</label>
+            <input id="worker-crop" class="w-full bg-surface-container-highest border-none rounded-DEFAULT p-3 text-sm focus:ring-2 focus:ring-primary" placeholder="e.g. Wheat"/>
+          </div>
+          <div class="space-y-1">
+            <label class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant px-1">District</label>
+            <input id="worker-district" class="w-full bg-surface-container-highest border-none rounded-DEFAULT p-3 text-sm focus:ring-2 focus:ring-primary" placeholder="e.g. Ludhiana"/>
+          </div>
+          <div class="space-y-1">
+            <label class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant px-1">Days Needed</label>
+            <input id="worker-days" class="w-full bg-surface-container-highest border-none rounded-DEFAULT p-3 text-sm focus:ring-2 focus:ring-primary" placeholder="e.g. 3" type="number"/>
+          </div>
+          <button id="post-requirement-btn" class="w-full bg-primary text-on-primary py-4 rounded-full font-bold shadow-lg shadow-primary/20 transition-all active:scale-95 hover:opacity-90">
+            Post Requirement
+          </button>
+        </div>
+      </div>
+
+      <!-- Worker Profiles -->
+      <div class="lg:col-span-2 space-y-4" id="worker-profiles">
+
+        <!-- Profile 1 -->
+        <div class="worker-card bg-surface-container-lowest p-5 rounded-lg border border-outline-variant/10 flex flex-col sm:flex-row items-center sm:items-start gap-6 transition-all hover:shadow-xl">
+          <div class="w-20 h-20 rounded-full overflow-hidden flex-shrink-0 border-2 border-primary/20">
+            <img alt="Suresh Kumar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMMw_Hv_XTcwi72FKUnFd8ncs2Gb7wAQLnnuBQdhDipNMZ18S47_wpASjrCoEOQOLt-dfMqggAz9nDLwhkGIbe9_6JwK7whjuHSoKgOI_aTwPmtzQqTB7cdmcr8UXa1rZ3RV00U9BDZiNmXSeazHTKzWxPY5CJCt_TsMle4LzL2hNVftIJYiZp0IfNaMDIb-Im5YsiqI3rBKjk7nFMZ8zD-XFXTyJSZFH9QqudRNIS4vO5bftvSfLpazQ49KXbUFk97tAK5uI4MZ8"/>
+          </div>
+          <div class="flex-1 space-y-2 text-center sm:text-left">
+            <div class="flex flex-wrap items-center justify-center sm:justify-start gap-3">
+              <h6 class="text-xl font-bold">Suresh Kumar</h6>
+              <span class="bg-primary-container/20 text-primary-container px-3 py-0.5 rounded-full text-[10px] font-bold uppercase">Wheat Specialist</span>
+              <span class="bg-secondary-container/20 text-on-secondary-container px-3 py-0.5 rounded-full text-[10px] font-bold uppercase flex items-center gap-1">
+                <span class="material-symbols-outlined text-[14px]" style="font-variation-settings:'FILL' 1;">verified_user</span> e-Shram Verified
+              </span>
+            </div>
+            <div class="flex items-center justify-center sm:justify-start gap-4 text-on-surface-variant text-sm font-medium">
+              <span class="flex items-center gap-1"><span class="material-symbols-outlined text-tertiary text-lg" style="font-variation-settings:'FILL' 1;">star</span> 4.9 (124)</span>
+              <span class="flex items-center gap-1"><span class="material-symbols-outlined text-lg">location_on</span> 2.4 km</span>
+            </div>
+            <div class="pt-2 flex flex-wrap items-center justify-center sm:justify-start gap-6">
+              <div><p class="text-[10px] font-bold uppercase text-on-surface-variant">Daily Wage</p><p class="text-lg font-bold text-primary">₹550 / day</p></div>
+              <button class="call-worker-btn bg-secondary text-white px-6 py-2.5 rounded-full font-bold flex items-center gap-2 text-sm hover:scale-105 transition-all" data-name="Suresh Kumar" data-skill="wheat harvesting" data-rate="550">
+                <span class="material-symbols-outlined text-sm">phone_in_talk</span> Book Worker
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Profile 2 -->
+        <div class="worker-card bg-surface-container-lowest p-5 rounded-lg border border-outline-variant/10 flex flex-col sm:flex-row items-center sm:items-start gap-6 transition-all hover:shadow-xl">
+          <div class="w-20 h-20 rounded-full overflow-hidden flex-shrink-0 border-2 border-primary/20">
+            <img alt="Ramkali Devi" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDWt3YEA_aUvIYHxkvQA-A1DDdsoeFbvZX3Ft2_emkbRIfbRvhwEqivkemprhNKQWfPt96dkVt06PalVrb3vPGwFmEnB8ekhSVKp7ifLMrCmYJfdEyyMJJD_cffNlnQikZA6SqKZcgd5Pk5bqg0cJXxESMuv0MR153TNfzbviFGObZ1S3ZrR-g8mdYg8fb73E6w9GtLspkIalenud_sNEVCfhyzZOctlofKieeICim_VEtPyH7rQifdauuh-k64RqaS1w1qWetQi_w"/>
+          </div>
+          <div class="flex-1 space-y-2 text-center sm:text-left">
+            <div class="flex flex-wrap items-center justify-center sm:justify-start gap-3">
+              <h6 class="text-xl font-bold">Ramkali Devi</h6>
+              <span class="bg-primary-container/20 text-primary-container px-3 py-0.5 rounded-full text-[10px] font-bold uppercase">Pesticide Spray</span>
+              <span class="bg-secondary-container/20 text-on-secondary-container px-3 py-0.5 rounded-full text-[10px] font-bold uppercase flex items-center gap-1">
+                <span class="material-symbols-outlined text-[14px]" style="font-variation-settings:'FILL' 1;">verified_user</span> e-Shram Verified
+              </span>
+            </div>
+            <div class="flex items-center justify-center sm:justify-start gap-4 text-on-surface-variant text-sm font-medium">
+              <span class="flex items-center gap-1"><span class="material-symbols-outlined text-tertiary text-lg" style="font-variation-settings:'FILL' 1;">star</span> 4.7 (89)</span>
+              <span class="flex items-center gap-1"><span class="material-symbols-outlined text-lg">location_on</span> 0.8 km</span>
+            </div>
+            <div class="pt-2 flex flex-wrap items-center justify-center sm:justify-start gap-6">
+              <div><p class="text-[10px] font-bold uppercase text-on-surface-variant">Daily Wage</p><p class="text-lg font-bold text-primary">₹480 / day</p></div>
+              <button class="call-worker-btn bg-secondary text-white px-6 py-2.5 rounded-full font-bold flex items-center gap-2 text-sm hover:scale-105 transition-all" data-name="Ramkali Devi" data-skill="pesticide spraying" data-rate="480">
+                <span class="material-symbols-outlined text-sm">phone_in_talk</span> Book Worker
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Profile 3 -->
+        <div class="worker-card bg-surface-container-lowest p-5 rounded-lg border border-outline-variant/10 flex flex-col sm:flex-row items-center sm:items-start gap-6 transition-all hover:shadow-xl">
+          <div class="w-20 h-20 rounded-full overflow-hidden flex-shrink-0 border-2 border-primary/20">
+            <img alt="Anil Yadav" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuADsCEq_TXCljc24VGeLp3nJ8r-7sFTXul7dtXfbR5uNYhpA29wAkuBcSp4LcdS0Q3Pi53azgh-FCuYAoi3cb4_qi5CqtSMiH1zPcnbfb1k0WMVjSIbzAoWoiIt_8kHJNhQAyZPpJYFspqV9JhnAOsTJgg8Y0O14GNS55dSCT01sdlVLQsvUyhoNKmFq3LABPI5lbQ8p7KO9gCVtaFIWRpGZrw-aRMXciDCzCDtKOIWvtHQaB7qpBf2BECt9-RxO5YzVOUbHIWpgmw"/>
+          </div>
+          <div class="flex-1 space-y-2 text-center sm:text-left">
+            <div class="flex flex-wrap items-center justify-center sm:justify-start gap-3">
+              <h6 class="text-xl font-bold">Anil Yadav</h6>
+              <span class="bg-primary-container/20 text-primary-container px-3 py-0.5 rounded-full text-[10px] font-bold uppercase">Drone Pilot</span>
+              <span class="bg-secondary-container/20 text-on-secondary-container px-3 py-0.5 rounded-full text-[10px] font-bold uppercase flex items-center gap-1">
+                <span class="material-symbols-outlined text-[14px]" style="font-variation-settings:'FILL' 1;">verified_user</span> e-Shram Verified
+              </span>
+            </div>
+            <div class="flex items-center justify-center sm:justify-start gap-4 text-on-surface-variant text-sm font-medium">
+              <span class="flex items-center gap-1"><span class="material-symbols-outlined text-tertiary text-lg" style="font-variation-settings:'FILL' 1;">star</span> 5.0 (42)</span>
+              <span class="flex items-center gap-1"><span class="material-symbols-outlined text-lg">location_on</span> 5.5 km</span>
+            </div>
+            <div class="pt-2 flex flex-wrap items-center justify-center sm:justify-start gap-6">
+              <div><p class="text-[10px] font-bold uppercase text-on-surface-variant">Daily Wage</p><p class="text-lg font-bold text-primary">₹1200 / day</p></div>
+              <button class="call-worker-btn bg-secondary text-white px-6 py-2.5 rounded-full font-bold flex items-center gap-2 text-sm hover:scale-105 transition-all" data-name="Anil Yadav" data-skill="drone spraying" data-rate="1200">
+                <span class="material-symbols-outlined text-sm">phone_in_talk</span> Book Worker
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ── MOBILE BOTTOM NAV ───────────────────────────── -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-end px-4 pb-4 bg-[#fcf9f1]/70 backdrop-blur-md shadow-[0_-4px_40px_rgba(28,28,23,0.06)] rounded-t-[2rem]">
+  <a class="flex flex-col items-center justify-center text-[#1c1c17] p-3 hover:opacity-80" href="./dashboard.html">
+    <span class="material-symbols-outlined">home</span>
+    <span class="text-[10px] uppercase font-bold tracking-widest">Home</span>
+  </a>
+  <a class="flex flex-col items-center justify-center text-[#1c1c17] p-3 hover:opacity-80" href=".agritrend.html">
+    <span class="material-symbols-outlined">trending_up</span>
+    <span class="text-[10px] uppercase font-bold tracking-widest">AgriTrend</span>
+  </a>
+  <a class="flex flex-col items-center justify-center bg-[#0d631b] text-white rounded-full p-3 mb-2 scale-110" href="#">
+    <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">health_and_safety</span>
+    <span class="text-[10px] uppercase font-bold tracking-widest">Protect</span>
+  </a>
+  <a class="flex flex-col items-center justify-center text-[#1c1c17] p-3 hover:opacity-80" href="./schemeradar.html">
+    <span class="material-symbols-outlined">radar</span>
+    <span class="text-[10px] uppercase font-bold tracking-widest">Radar</span>
+  </a>
+  <a class="flex flex-col items-center justify-center text-[#1c1c17] p-3 hover:opacity-80" href="#">
+    <span class="material-symbols-outlined">account_circle</span>
+    <span class="text-[10px] uppercase font-bold tracking-widest">Account</span>
+  </a>
+</nav>
+
+<!-- ── MIC FAB ─────────────────────────────────────── -->
+<button id="mic-fab" class="fixed bottom-24 right-6 md:bottom-12 md:right-12 w-16 h-16 bg-secondary text-white rounded-full flex items-center justify-center shadow-2xl z-40 transition-all hover:scale-110 active:scale-95 overflow-hidden">
+  <span id="mic-icon" class="material-symbols-outlined text-3xl relative z-10" style="font-variation-settings:'FILL' 1;">mic</span>
+</button>
+
+<!-- ── JAVASCRIPT ─────────────────────────────────── -->
+<script>
+// ── CONFIG ────────────────────────────────────────────
+const API_BASE = 'http://localhost:3000';
+function getLanguage() { return localStorage.getItem('cropwise_language') || 'Hindi'; }
+
+async function apiCall(endpoint, body) {
+  const res = await fetch(`${API_BASE}${endpoint}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ ...body, language: getLanguage() })
+  });
+  if (!res.ok) throw new Error(`API error: ${res.status}`);
+  return res.json();
+}
+
+// ── LEAFLET MAP SETUP ─────────────────────────────────
+let map = null;
+let userLat = 30.9010; // Default: Punjab, India
+let userLng = 75.8573;
+
+// Pest report data (from backend + static examples)
+const pestReports = [
+  { lat: 30.920, lng: 75.870, pest: 'Yellow Rust', crop: 'Wheat', severity: 'danger', dist: '1.2km' },
+  { lat: 30.885, lng: 75.840, pest: 'Aphid Attack', crop: 'Mustard', severity: 'warning', dist: '3.8km' },
+  { lat: 30.910, lng: 75.890, pest: 'Stem Borer', crop: 'Paddy', severity: 'warning', dist: '2.1km' },
+  { lat: 30.895, lng: 75.820, pest: 'White Fly', crop: 'Cotton', severity: 'danger', dist: '4.5km' },
+];
+
+function initMap(lat, lng) {
+  if (map) map.remove();
+
+  map = L.map('pest-map', { zoomControl: true, scrollWheelZoom: false }).setView([lat, lng], 13);
+
+  // OpenStreetMap tiles — completely free
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '©️ OpenStreetMap contributors',
+    maxZoom: 18
+  }).addTo(map);
+
+  // User farm marker (green)
+  const homeIcon = L.divIcon({ className: '', html: '<div class="home-marker"></div>', iconSize: [18,18], iconAnchor: [9,9] });
+  L.marker([lat, lng], { icon: homeIcon })
+    .addTo(map)
+    .bindPopup(`<div style="font-family:'Be Vietnam Pro',sans-serif;"><b style="color:#0d631b;">🏠 Your Farm</b><br/><span style="font-size:12px;color:#40493d;">Current Location — Safe Zone</span></div>`)
+    .openPopup();
+
+  // Pest report markers
+  pestReports.forEach(report => {
+    const isDanger = report.severity === 'danger';
+    const icon = L.divIcon({
+      className: '',
+      html: `<div class="${isDanger ? 'danger-marker' : 'warning-marker'}"></div>`,
+      iconSize: [isDanger ? 16 : 14, isDanger ? 16 : 14],
+      iconAnchor: [isDanger ? 8 : 7, isDanger ? 8 : 7]
+    });
+
+    // Offset markers slightly from user location
+    const markerLat = lat + (report.lat - 30.9010);
+    const markerLng = lng + (report.lng - 75.8573);
+
+    L.marker([markerLat, markerLng], { icon })
+      .addTo(map)
+      .bindPopup(`
+        <div style="font-family:'Be Vietnam Pro',sans-serif;min-width:160px;">
+          <b style="color:${isDanger ? '#ba1a1a' : '#6e5100'};">${isDanger ? '🔴' : '🟡'} ${report.pest}</b><br/>
+          <span style="font-size:12px;color:#40493d;">Crop: ${report.crop}</span><br/>
+          <span style="font-size:11px;color:#707a6c;">${report.dist} from your farm</span>
+        </div>
+      `);
+
+    // Red danger circle
+    if (isDanger) {
+      L.circle([markerLat, markerLng], {
+        color: '#ba1a1a', fillColor: '#ba1a1a', fillOpacity: 0.08, radius: 800, weight: 1
+      }).addTo(map);
+    }
+  });
+}
+
+// Get user location or use default
+function setupMap() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      pos => {
+        userLat = pos.coords.latitude;
+        userLng = pos.coords.longitude;
+        document.getElementById('map-location-text').textContent = 'Live Location Active';
+        initMap(userLat, userLng);
+      },
+      () => {
+        document.getElementById('map-location-text').textContent = 'Default: Punjab, India';
+        initMap(userLat, userLng);
+      },
+      { timeout: 8000 }
+    );
+  } else {
+    document.getElementById('map-location-text').textContent = 'Default: Punjab, India';
+    initMap(userLat, userLng);
+  }
+}
+
+// Init map on load
+window.addEventListener('load', setupMap);
+
+// ── IMAGE SCAN ────────────────────────────────────────
+const fileInput   = document.getElementById('scan-file-input');
+const uploadBtn   = document.getElementById('upload-btn');
+const cameraBtn   = document.getElementById('camera-btn');
+let selectedFile  = null;
+
+uploadBtn.addEventListener('click', () => { fileInput.removeAttribute('capture'); fileInput.click(); });
+cameraBtn.addEventListener('click', () => { fileInput.setAttribute('capture', 'environment'); fileInput.click(); });
+document.getElementById('upload-box').addEventListener('click', (e) => {
+  if (e.target === e.currentTarget) fileInput.click();
+});
+
+fileInput.addEventListener('change', async (e) => {
+  selectedFile = e.target.files[0];
+  if (!selectedFile) return;
+
+  // Show selected file name
+  const nameEl = document.getElementById('selected-file-name');
+  nameEl.textContent = `✅ ${selectedFile.name} selected`;
+  nameEl.classList.remove('hidden');
+
+  // Show preview in result card
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    document.getElementById('diagnosis-img').src = ev.target.result;
+    document.getElementById('diagnosis-img').classList.remove('hidden');
+    document.getElementById('diagnosis-img-placeholder').classList.add('hidden');
+  };
+  reader.readAsDataURL(selectedFile);
+
+  // Start scan
+  await performScan(selectedFile);
+});
+
+async function performScan(file) {
+  // Hide static example, show loading
+  document.getElementById('static-result').classList.add('hidden');
+  document.getElementById('scan-loading').classList.remove('hidden');
+  document.getElementById('diagnosis-result').classList.add('hidden');
+
+  try {
+    const formData = new FormData();
+    formData.append('image', file);
+    formData.append('language', getLanguage());
+
+    const res  = await fetch(`${API_BASE}/api/scan`, { method: 'POST', body: formData });
+    const data = await res.json();
+
+    document.getElementById('scan-loading').classList.add('hidden');
+    document.getElementById('diagnosis-result').classList.remove('hidden');
+
+    if (data.diagnosis) {
+      // Parse first line as disease name
+      const lines = data.diagnosis.split('\n').filter(l => l.trim());
+      document.getElementById('diagnosis-title').textContent = lines[0]?.replace(/[*#]/g, '').trim() || 'Diagnosis Complete';
+      document.getElementById('diagnosis-subtitle').textContent = 'AI powered crop disease detection';
+      document.getElementById('diagnosis-badge').innerHTML = `<span class="w-2 h-2 rounded-full bg-secondary"></span> Analysis Complete`;
+      document.getElementById('diagnosis-body').textContent = data.diagnosis;
+    } else {
+      document.getElementById('diagnosis-title').textContent = 'Scan Failed';
+      document.getElementById('diagnosis-body').textContent = data.error || 'Could not analyse image.';
+    }
+  } catch(e) {
+    document.getElementById('scan-loading').classList.add('hidden');
+    document.getElementById('diagnosis-result').classList.remove('hidden');
+    document.getElementById('diagnosis-title').textContent = 'Error';
+    document.getElementById('diagnosis-body').textContent = '❌ Scan failed. Make sure backend is running on port 3000.';
+    document.getElementById('diagnosis-result').className = 'bg-surface-container-lowest rounded-lg overflow-hidden shadow p-6 flex flex-col md:flex-row gap-6 ai-result-error';
+  }
+}
+
+// ── TREATMENT GUIDE BUTTON ────────────────────────────
+document.getElementById('treatment-guide-btn').addEventListener('click', async () => {
+  const result = document.getElementById('treatment-result');
+  result.classList.remove('hidden');
+  result.textContent = '⏳ Getting preventive treatment guide...';
+  result.className = 'bg-surface-container-lowest p-5 rounded-lg ai-result loading-pulse text-primary text-sm font-medium';
+
+  try {
+    const data = await apiCall('/api/chat', {
+      message: 'Yellow Rust has been reported on nearby farms. Give me a complete preventive treatment guide for my Wheat crop: exact medicine names, doses, timing, and cost per acre.'
+    });
+    result.className = 'bg-surface-container-lowest p-5 rounded-lg ai-result text-sm text-on-surface whitespace-pre-line leading-relaxed shadow-sm';
+    result.textContent = data.response;
+  } catch(e) {
+    result.className = 'bg-surface-container-lowest p-5 rounded-lg ai-result-error text-sm text-error';
+    result.textContent = '❌ Failed. Make sure backend is running on port 3000.';
+  }
+});
+
+// ── REPORT PEST ───────────────────────────────────────
+document.getElementById('report-pest-btn').addEventListener('click', () => {
+  document.getElementById('report-form').classList.toggle('hidden');
+});
+
+document.getElementById('submit-report-btn').addEventListener('click', async () => {
+  const pest     = document.getElementById('report-pest').value.trim();
+  const crop     = document.getElementById('report-crop').value.trim();
+  const district = document.getElementById('report-district').value.trim();
+  const result   = document.getElementById('report-result');
+
+  if (!pest || !crop || !district) { alert('Please fill all fields'); return; }
+
+  result.classList.remove('hidden');
+  result.textContent = '⏳ Submitting report...';
+
+  try {
+    const data = await apiCall('/api/community/report', { pest, crop, district });
+    result.textContent = data.zoneAlert
+      ? `✅ Reported! Zone Alert: ${data.zoneAlert}`
+      : `✅ Report submitted! ${data.nearbyCount} similar reports in your district. Stay alert!`;
+
+    // Add new marker to map
+    const icon = L.divIcon({ className: '', html: '<div class="danger-marker"></div>', iconSize:[16,16], iconAnchor:[8,8] });
+    L.marker([userLat + 0.005, userLng + 0.005], { icon })
+      .addTo(map)
+      .bindPopup(`<b style="color:#ba1a1a;">🔴 ${pest}</b><br/><span style="font-size:12px;">Just reported by you</span>`)
+      .openPopup();
+
+  } catch(e) {
+    result.textContent = '❌ Failed to submit. Make sure backend is running.';
+  }
+});
+
+// ── FIND WORKERS / POST REQUIREMENT ──────────────────
+async function findWorkers() {
+  const task     = document.getElementById('worker-task').value;
+  const crop     = document.getElementById('worker-crop').value || 'Wheat';
+  const district = document.getElementById('worker-district').value || 'Local';
+  const days     = document.getElementById('worker-days').value || '3';
+  const result   = document.getElementById('worker-result');
+  const text     = document.getElementById('worker-result-text');
+
+  result.classList.remove('hidden');
+  text.textContent = '⏳ Finding best workers for your requirement...';
+  text.className = 'loading-pulse text-primary text-sm font-medium';
+
+  try {
+    const data = await apiCall('/api/kisansetu/find', { task, crop, days, district });
+    text.className = 'text-on-surface text-sm leading-relaxed whitespace-pre-line';
+    text.textContent = data.recommendation;
+    result.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  } catch(e) {
+    text.className = 'text-error text-sm';
+    text.textContent = '❌ Failed. Make sure backend is running on port 3000.';
+  }
+}
+
+document.getElementById('find-workers-btn').addEventListener('click', findWorkers);
+document.getElementById('post-requirement-btn').addEventListener('click', findWorkers);
+
+// ── BOOK WORKER BUTTONS ───────────────────────────────
+document.querySelectorAll('.call-worker-btn').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    const name  = btn.dataset.name;
+    const skill = btn.dataset.skill;
+    const rate  = btn.dataset.rate;
+    const task  = document.getElementById('worker-task').value;
+    const days  = document.getElementById('worker-days').value || '3';
+
+    btn.textContent = '⏳ Booking...';
+    btn.disabled = true;
+
+    try {
+      const data = await apiCall('/api/chat', {
+        message: `I want to book worker ${name} who specializes in ${skill} at ₹${rate}/day for ${days} days for ${task}. Give me: total cost, what to discuss when they arrive, and 2 tips for getting best work from them.`
+      });
+      alert(`✅ Booking Info for ${name}:\n\n${data.response}`);
+    } catch(e) {
+      alert(`To book ${name}: Call your local Kisan Seva Kendra or WhatsApp the worker directly. Rate: ₹${rate}/day`);
+    }
+
+    btn.innerHTML = '<span class="material-symbols-outlined text-sm">phone_in_talk</span> Book Worker';
+    btn.disabled = false;
+  });
+});
+
+// ── MIC FAB ───────────────────────────────────────────
+const micFab  = document.getElementById('mic-fab');
+const micIcon = document.getElementById('mic-icon');
+let isListening = false;
+
+micFab.addEventListener('click', () => {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { alert('Voice not supported. Try Chrome.'); return; }
+  if (isListening) return;
+
+  const r = new SR();
+  r.lang = getLanguage() === 'Hindi' ? 'hi-IN' : 'en-IN';
+  r.start();
+  isListening = true;
+  micIcon.textContent = 'mic_off';
+  micFab.style.background = '#ba1a1a';
+
+  r.onresult = async (e) => {
+    const spoken = e.results[0][0].transcript;
+    isListening = false;
+    micIcon.textContent = 'mic';
+    micFab.style.background = '';
+
+    // Show treatment result with voice query
+    const result = document.getElementById('treatment-result');
+    result.classList.remove('hidden');
+    result.textContent = `🎙️ "${spoken}" — getting answer...`;
+    result.className = 'bg-surface-container-lowest p-5 rounded-lg ai-result loading-pulse text-primary text-sm font-medium';
+
+    try {
+      const data = await apiCall('/api/chat', { message: spoken });
+      result.className = 'bg-surface-container-lowest p-5 rounded-lg ai-result text-sm text-on-surface whitespace-pre-line leading-relaxed shadow-sm';
+      result.textContent = `🎙️ "${spoken}"\n\n${data.response}`;
+      result.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } catch(err) {
+      result.className = 'bg-surface-container-lowest p-5 rounded-lg ai-result-error text-sm text-error';
+      result.textContent = '❌ Failed. Make sure backend is running.';
+    }
+  };
+
+  r.onerror = () => {
+    isListening = false;
+    micIcon.textContent = 'mic';
+    micFab.style.background = '';
+  };
+});
+</script>
+
+</body></html>

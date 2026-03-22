@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Grow Smart | Eco Sentinel</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+tailwind.config = {
+  darkMode:"class",
+  theme:{extend:{
+    colors:{
+      "inverse-surface":"#31312b","error":"#ba1a1a","secondary-container":"#ffa67a",
+      "on-secondary":"#ffffff","inverse-primary":"#88d982","tertiary-fixed-dim":"#f8bd2a",
+      "on-error-container":"#93000a","surface-container-highest":"#e5e2da",
+      "on-background":"#1c1c17","primary-fixed":"#a3f69c","on-surface":"#1c1c17",
+      "on-tertiary":"#ffffff","on-primary":"#ffffff","outline":"#707a6c",
+      "surface-container":"#f1eee6","on-tertiary-fixed":"#261a00",
+      "on-tertiary-fixed-variant":"#5c4300","surface-variant":"#e5e2da",
+      "on-primary-container":"#cbffc2","tertiary-container":"#8c6800",
+      "surface-container-high":"#ebe8e0","on-secondary-container":"#783916",
+      "inverse-on-surface":"#f4f0e8","on-primary-fixed":"#002204","surface-dim":"#dddad2",
+      "on-surface-variant":"#40493d","tertiary":"#6e5100","surface-container-lowest":"#ffffff",
+      "on-tertiary-container":"#ffefd7","on-error":"#ffffff","surface-container-low":"#f7f3eb",
+      "surface-bright":"#fcf9f1","secondary-fixed":"#ffdbcc","primary":"#0d631b",
+      "tertiary-fixed":"#ffdfa0","surface-tint":"#1b6d24","error-container":"#ffdad6",
+      "on-secondary-fixed":"#351000","surface":"#fcf9f1","secondary":"#904c27",
+      "on-secondary-fixed-variant":"#733512","on-primary-fixed-variant":"#005312",
+      "outline-variant":"#bfcaba","primary-container":"#2e7d32","secondary-fixed-dim":"#ffb693",
+      "primary-fixed-dim":"#88d982","background":"#fcf9f1"
+    },
+    fontFamily:{"headline":["Plus Jakarta Sans"],"body":["Be Vietnam Pro"],"label":["Be Vietnam Pro"]},
+    borderRadius:{"DEFAULT":"1rem","lg":"2rem","xl":"3rem","full":"9999px"},
+  }},
+}
+</script>
+<style>
+  .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;}
+  .glass-panel{background:rgba(252,249,241,0.75);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);}
+  .asymmetric-grid{display:grid;grid-template-columns:1.2fr 0.8fr;}
+  @media(max-width:1024px){.asymmetric-grid{grid-template-columns:1fr;}}
+
+  /* ── Animations ── */
+  @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes msgIn{from{opacity:0;transform:translateY(12px)scale(0.97)}to{opacity:1;transform:translateY(0)scale(1)}}
+  @keyframes barGrow{from{width:0}}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+  @keyframes bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-5px)}}
+  @keyframes shimmer{0%{background-position:-200% center}100%{background-position:200% center}}
+
+  .fade-up{animation:fadeUp 0.5s cubic-bezier(.22,1,.36,1) both;}
+  .msg-in{animation:msgIn 0.35s cubic-bezier(.22,1,.36,1) both;}
+  .bar-fill{animation:barGrow 1s cubic-bezier(.22,1,.36,1) 0.4s both;}
+  .typing-dot{animation:bounce 1.2s ease-in-out infinite;}
+  .typing-dot:nth-child(2){animation-delay:0.15s;}
+  .typing-dot:nth-child(3){animation-delay:0.3s;}
+  .blink-pulse{animation:pulse 2s ease-in-out infinite;}
+
+  /* ── Soil metric card ── */
+  .soil-card{transition:transform 0.2s,box-shadow 0.2s;}
+  .soil-card:hover{transform:translateY(-4px);box-shadow:0 12px 28px rgba(28,28,23,0.08);}
+
+  /* ── Booklet chat ── */
+  .booklet-chat{max-height:420px;overflow-y:auto;}
+  .booklet-chat::-webkit-scrollbar{width:4px;}
+  .booklet-chat::-webkit-scrollbar-thumb{background:#bfcaba;border-radius:10px;}
+
+  /* ── Switch panel ── */
+  .switch-panel{display:none;animation:fadeUp 0.4s cubic-bezier(.22,1,.36,1) both;}
+  .switch-panel.open{display:block;}
+
+  /* ── Feedback panel ── */
+  .feedback-text{display:none;animation:fadeUp 0.35s cubic-bezier(.22,1,.36,1) both;}
+  .feedback-text.open{display:block;}
+
+  /* ── Timeline item hover ── */
+  .timeline-item{transition:background 0.2s,transform 0.15s;}
+  .timeline-item:hover{background:#fff;transform:translateX(4px);}
+
+  /* ── Generate button shimmer ── */
+  .shimmer-btn{
+    background:linear-gradient(90deg,#0d631b 25%,#1b8a2a 50%,#0d631b 75%);
+    background-size:200% auto;
+    animation:shimmer 2s linear infinite;
+  }
+
+  /* ── Mic active ── */
+  @keyframes micPulse{0%{box-shadow:0 0 0 0 rgba(13,99,27,0.4)}70%{box-shadow:0 0 0 12px rgba(13,99,27,0)}100%{box-shadow:0 0 0 0 rgba(13,99,27,0)}}
+  .mic-active{animation:micPulse 1s ease-out infinite;background:#dc2626!important;}
+</style>
+</head>
+
+<body class="bg-surface-container-low font-body text-on-surface">
+
+<!-- ── NAVBAR ── -->
+<header class="sticky top-0 z-50 bg-emerald-950/80 backdrop-blur-xl border-b border-white/10 shadow-xl">
+  <div class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
+    <div class="flex items-center gap-2">
+      <div class="w-9 h-9 bg-emerald-500 rounded-xl flex items-center justify-center">
+        <span class="material-symbols-outlined text-white text-lg" style="font-variation-settings:'FILL' 1;">eco</span>
+      </div>
+      <a href="../farmer_dashboard_synced_navbar/code.html" class="text-xl font-extrabold text-white tracking-tight font-headline">Eco Sentinel</a>
+    </div>
+    <nav class="hidden md:flex items-center gap-7">
+      <a class="font-headline font-bold text-sm text-white/60 hover:text-white transition-colors" href="../farmer_dashboard_synced_navbar/code.html">Home</a>
+      <a class="font-headline font-bold text-sm text-white/60 hover:text-white transition-colors" href="../eco_sentinel_agritrend/code.html">AgriTrend</a>
+      <a class="font-headline font-bold text-sm text-white/60 hover:text-white transition-colors" href="../ask_krishi_ai_chat_enhanced/code.html">Ask Krishi AI</a>
+      <a class="font-headline font-bold text-sm text-white/60 hover:text-white transition-colors" href="../scheme_radar_final_synced_layout/code.html">Scheme Radar</a>
+      <a class="font-headline font-bold text-sm text-emerald-400 border-b-2 border-emerald-400 pb-1" href="#">Grow Smart</a>
+    </nav>
+    <div class="flex items-center gap-3">
+      <button class="p-2 hover:bg-white/10 rounded-lg transition-colors relative" id="notifBtn">
+        <span class="material-symbols-outlined text-white/80" style="font-variation-settings:'FILL' 1;">notifications</span>
+        <span class="absolute top-1 right-1 w-2 h-2 bg-error rounded-full blink-pulse"></span>
+      </button>
+      <!-- Profile dropdown -->
+      <div class="relative" id="profileWrapper">
+        <button onclick="toggleProfile()" class="p-1 hover:bg-white/10 rounded-full transition-colors">
+          <span class="material-symbols-outlined text-white/80 text-2xl" style="font-variation-settings:'FILL' 1;">account_circle</span>
+        </button>
+        <div id="profileMenu" class="hidden absolute right-0 top-12 w-48 bg-emerald-950 rounded-2xl shadow-2xl border border-white/10 p-2 z-50">
+          <a href="../my_profile_trust/code.html" class="flex items-center gap-2 px-3 py-2.5 rounded-xl text-white/80 hover:bg-white/10 text-sm font-medium">
+            <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">person</span>My Profile
+          </a>
+          <a href="../diagnose_protect/code.html" class="flex items-center gap-2 px-3 py-2.5 rounded-xl text-white/80 hover:bg-white/10 text-sm font-medium">
+            <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">dashboard</span>Dashboard
+          </a>
+          <a href="#" class="flex items-center gap-2 px-3 py-2.5 rounded-xl text-emerald-400 bg-white/5 text-sm font-medium">
+            <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">eco</span>Grow Smart
+          </a>
+          <div class="h-px bg-white/10 my-1"></div>
+          <a href="../eco_sentinel_language_entry_final_synced/code.html" class="flex items-center gap-2 px-3 py-2.5 rounded-xl text-red-400 hover:bg-red-500/10 text-sm font-medium">
+            <span class="material-symbols-outlined text-sm">logout</span>Sign Out
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ── MAIN ── -->
+<main class="max-w-7xl mx-auto px-6 py-12 pb-32">
+
+  <!-- Hero -->
+  <div class="mb-14 fade-up">
+    <h1 class="font-headline text-5xl md:text-6xl font-extrabold text-on-surface mb-3 tracking-tight">Grow Smart</h1>
+    <p class="text-xl text-on-surface-variant max-w-2xl">Your soil, your crop, your season — all in one place</p>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SECTION 1 — SOIL VITALS IoT MONITOR (P3)
+  ══════════════════════════════════════════ -->
+  <section class="mb-20 fade-up" style="animation-delay:0.1s">
+    <div class="flex items-center gap-3 mb-8">
+      <span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings:'FILL' 1;">sensors</span>
+      <h2 class="font-headline text-3xl font-bold">Your Soil Health Right Now</h2>
+      <span class="ml-auto text-xs text-on-surface-variant flex items-center gap-1 bg-primary/10 px-3 py-1 rounded-full">
+        <span class="w-2 h-2 bg-primary rounded-full blink-pulse"></span>
+        Sensor reading — Today 6:14 AM
+      </span>
+    </div>
+
+    <div class="asymmetric-grid gap-6">
+      <!-- Soil metrics 2x2 -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+        <!-- Nitrogen -->
+        <div class="soil-card bg-surface-container-lowest p-6 rounded-xl border border-outline-variant/15 flex flex-col justify-between">
+          <div class="flex justify-between items-start mb-4">
+            <span class="text-sm font-semibold opacity-60 uppercase tracking-widest">Nitrogen (N)</span>
+            <span class="px-3 py-1 bg-tertiary-fixed text-on-tertiary-fixed-variant rounded-full text-xs font-bold">Low</span>
+          </div>
+          <div class="flex items-baseline gap-2 mb-3">
+            <span class="text-4xl font-headline font-extrabold text-tertiary" id="nVal">68%</span>
+            <span class="text-on-surface-variant text-sm">Target: 90%+</span>
+          </div>
+          <div class="h-2 bg-surface-container-high rounded-full overflow-hidden">
+            <div class="bar-fill h-full bg-tertiary-fixed-dim rounded-full" style="width:68%"></div>
+          </div>
+        </div>
+
+        <!-- Phosphorus -->
+        <div class="soil-card bg-surface-container-lowest p-6 rounded-xl border border-outline-variant/15 flex flex-col justify-between">
+          <div class="flex justify-between items-start mb-4">
+            <span class="text-sm font-semibold opacity-60 uppercase tracking-widest">Phosphorus (P)</span>
+            <span class="px-3 py-1 bg-primary-fixed text-on-primary-fixed-variant rounded-full text-xs font-bold">Good</span>
+          </div>
+          <div class="flex items-baseline gap-2 mb-3">
+            <span class="text-4xl font-headline font-extrabold text-primary" id="pVal">82%</span>
+            <span class="text-on-surface-variant text-sm">Optimal</span>
+          </div>
+          <div class="h-2 bg-surface-container-high rounded-full overflow-hidden">
+            <div class="bar-fill h-full bg-primary rounded-full" style="width:82%"></div>
+          </div>
+        </div>
+
+        <!-- Potassium -->
+        <div class="soil-card bg-surface-container-lowest p-6 rounded-xl border border-outline-variant/15 flex flex-col justify-between">
+          <div class="flex justify-between items-start mb-4">
+            <span class="text-sm font-semibold opacity-60 uppercase tracking-widest">Potassium (K)</span>
+            <span class="px-3 py-1 bg-primary-fixed text-on-primary-fixed-variant rounded-full text-xs font-bold">Good</span>
+          </div>
+          <div class="flex items-baseline gap-2 mb-3">
+            <span class="text-4xl font-headline font-extrabold text-primary" id="kVal">91%</span>
+            <span class="text-on-surface-variant text-sm">Optimal</span>
+          </div>
+          <div class="h-2 bg-surface-container-high rounded-full overflow-hidden">
+            <div class="bar-fill h-full bg-primary rounded-full" style="width:91%"></div>
+          </div>
+        </div>
+
+        <!-- pH -->
+        <div class="soil-card bg-surface-container-lowest p-6 rounded-xl border border-outline-variant/15 flex flex-col justify-between">
+          <div class="flex justify-between items-start mb-4">
+            <span class="text-sm font-semibold opacity-60 uppercase tracking-widest">Soil pH</span>
+            <span class="px-3 py-1 bg-error-container text-on-error-container rounded-full text-xs font-bold">Acidic</span>
+          </div>
+          <div class="flex items-baseline gap-2 mb-3">
+            <span class="text-4xl font-headline font-extrabold text-error" id="phVal">5.2</span>
+            <span class="text-on-surface-variant text-sm">Target: 6.5</span>
+          </div>
+          <div class="h-2 bg-surface-container-high rounded-full overflow-hidden">
+            <div class="bar-fill h-full bg-error rounded-full" style="width:52%"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI Instruction Card -->
+      <div class="glass-panel p-8 rounded-xl border border-primary/10 relative overflow-hidden flex flex-col justify-between">
+        <div class="absolute top-0 right-0 p-4 opacity-5">
+          <span class="material-symbols-outlined text-9xl">psychology</span>
+        </div>
+        <div>
+          <div class="flex items-center gap-2 mb-4">
+            <span class="px-3 py-1 bg-primary text-on-primary rounded-full text-[10px] font-bold tracking-widest uppercase">Generated by Krishi AI</span>
+          </div>
+          <p class="text-lg font-medium leading-relaxed mb-6" id="soilAdviceText">
+            Your soil nitrogen is <span class="text-tertiary font-bold">30% below optimal</span>. Add 2kg urea per acre before Thursday. Your soil is like chai that is too bitter — add lime at 25kg per acre this weekend to sweeten it.
+          </p>
+        </div>
+        <div class="space-y-3">
+          <button onclick="askSoilAI()" class="w-full flex items-center justify-center gap-2 bg-primary text-white py-3 rounded-full font-bold text-sm hover:brightness-110 transition-all active:scale-95">
+            <span class="material-symbols-outlined text-lg" style="font-variation-settings:'FILL' 1;">psychology</span>
+            Ask Krishi AI About My Soil
+          </button>
+          <div class="flex items-center gap-2 text-sm text-on-surface-variant">
+            <span class="material-symbols-outlined text-sm">schedule</span>
+            <span>Sensor reading — Today 6:14 AM</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       SECTION 2 — DIGITAL CROP CHRONICLES (P1) — LIVE AI CHAT
+  ══════════════════════════════════════════════════════ -->
+  <section class="mb-20 fade-up" style="animation-delay:0.15s">
+    <div class="flex items-center gap-3 mb-8">
+      <span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings:'FILL' 1;">auto_stories</span>
+      <h2 class="font-headline text-3xl font-bold">Your Crop Roadmap</h2>
+      <span class="ml-2 px-3 py-1 bg-primary/10 text-primary text-xs font-bold rounded-full uppercase tracking-wide">AI Booklet Generator</span>
+    </div>
+
+    <!-- ── LIVE CHAT INTERFACE ── -->
+    <div class="bg-surface-container-low border border-outline-variant/15 rounded-2xl overflow-hidden mb-8">
+
+      <!-- Chat header -->
+      <div class="flex items-center gap-3 px-6 py-4 bg-primary/5 border-b border-outline-variant/10">
+        <div class="w-9 h-9 rounded-xl bg-primary flex items-center justify-center">
+          <span class="material-symbols-outlined text-white text-lg" style="font-variation-settings:'FILL' 1;">psychology</span>
+        </div>
+        <div>
+          <p class="font-headline font-bold text-sm">Krishi AI — Crop Chronicles</p>
+          <p class="text-xs text-on-surface-variant">Tell me your crop — I'll generate your complete farming roadmap</p>
+        </div>
+        <div class="ml-auto flex items-center gap-1.5">
+          <span class="w-2 h-2 bg-primary rounded-full blink-pulse"></span>
+          <span class="text-xs text-primary font-bold">Live</span>
+        </div>
+      </div>
+
+      <!-- Chat messages area -->
+      <div class="booklet-chat px-6 py-5 space-y-4" id="chronicleChat">
+        <!-- AI welcome -->
+        <div class="flex gap-3 msg-in">
+          <div class="w-9 h-9 rounded-xl bg-primary flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-white text-sm" style="font-variation-settings:'FILL' 1;">psychology</span>
+          </div>
+          <div class="bg-primary/10 px-4 py-3 rounded-tr-xl rounded-b-xl max-w-lg">
+            <p class="font-medium text-sm">Namaste! Which crop are you planning to grow? Tell me the crop name, variety and your field size — I'll create your complete day-by-day farming roadmap.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Input bar -->
+      <div class="px-6 pb-5 pt-3 border-t border-outline-variant/10">
+        <div class="relative">
+          <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+            <span class="material-symbols-outlined text-primary/40 text-lg">chat</span>
+          </div>
+          <input id="chronicleInput" type="text"
+            class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-full py-4 pl-12 pr-28 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all text-sm"
+            placeholder="e.g. Wheat HD-2967, 3 acres, Field A..."
+            onkeydown="if(event.key==='Enter'){sendChronicleMsg();}"/>
+          <div class="absolute inset-y-1.5 right-1.5 flex items-center gap-1">
+            <button onclick="toggleChronicleVoice()" id="chronicleMic" class="p-2.5 rounded-full hover:bg-surface-container-high transition-colors text-on-surface-variant active:scale-95">
+              <span class="material-symbols-outlined text-lg">mic</span>
+            </button>
+            <button onclick="sendChronicleMsg()" class="bg-primary text-on-primary px-5 py-2 rounded-full font-bold text-sm shadow-md hover:brightness-110 active:scale-95 transition-all">
+              Send
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── GENERATED TIMELINE (shown after AI response) ── -->
+    <div id="timelinePanel" class="space-y-4">
+      <!-- Timeline Item 1 -->
+      <div class="timeline-item group relative flex gap-6 items-start bg-surface-container-lowest p-6 rounded-xl border border-outline-variant/10">
+        <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white z-10 shrink-0">
+          <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">check</span>
+        </div>
+        <div class="flex-1 flex flex-col md:flex-row gap-5 items-start">
+          <div class="w-20 h-20 rounded-lg overflow-hidden bg-surface-container-high shrink-0">
+            <img alt="Soil prep" class="w-full h-full object-cover"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuATS1VD-h7wnAwxSYKBoPKcgWQkCR9WE-kW0OICTaldQf4Ra-f9J8nrqzqBMzbNupmjFpnyKULJkOf_JslNt_bqfn_7vSj3_yA7sg19ex0ElPmqre803hz95k-MAaHdVDNi4sp5EFrpgwLusyVDrjoEu0SATdtrKH0gK-PcLz2W62ylYbvDgGAuZIgO0ORhF5cdoOMce71tDovhEBdrVhdetjtqnifb0LA1bUvMx4wdiYhOMQdex5JapG-nr5iur3xXq_kaRsrP2DA"/>
+          </div>
+          <div class="flex-1">
+            <div class="flex justify-between items-start mb-1">
+              <span class="text-sm font-bold text-primary uppercase">Day 1</span>
+              <input type="checkbox" checked class="w-5 h-5 rounded border-primary text-primary focus:ring-primary/20 cursor-pointer"/>
+            </div>
+            <h3 class="text-xl font-bold mb-1">Seed Treatment & Sowing</h3>
+            <p class="text-on-surface-variant text-sm">Treat Pusa Bold seeds with Thiram. Sow at 4-5cm depth with 30cm row spacing.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Timeline Item 2 -->
+      <div class="timeline-item group relative flex gap-6 items-start bg-surface-container-lowest p-6 rounded-xl border border-outline-variant/10">
+        <div class="w-8 h-8 rounded-full bg-outline-variant flex items-center justify-center text-white z-10 shrink-0">
+          <span class="material-symbols-outlined text-sm">circle</span>
+        </div>
+        <div class="flex-1 flex flex-col md:flex-row gap-5 items-start">
+          <div class="w-20 h-20 rounded-lg overflow-hidden bg-surface-container-high shrink-0">
+            <img alt="Irrigation" class="w-full h-full object-cover"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCtE7_CinAP7lgD62L3i2CylZj-yL3CQY4Ei7MCMgVI_DSfQwpGXUyCRJk_NowZZ3C8AJU1EAx2bA5vp0zJNZKWmpo9uX8TSom-a-GlOfxTqW6zBiiPheSEtw8gf8bwhqO3ZZG9VvVDBZu_LPglItsaAR65lh5_FW8cVb15Qir-hA1gBAQOIjE9emhRNLD3rl4RM84WNa3AwQItLW35lR_YcFSj-Fs0phPaD0OkDgz6EQN7bo6gHYu22P5Uvf2ZB6wSaU-ITy29wJ0"/>
+          </div>
+          <div class="flex-1">
+            <div class="flex justify-between items-start mb-1">
+              <span class="text-sm font-bold text-primary/70 uppercase">Day 25</span>
+              <input type="checkbox" class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary/20 cursor-pointer"/>
+            </div>
+            <h3 class="text-xl font-bold mb-1">Pre-flowering Irrigation</h3>
+            <p class="text-on-surface-variant text-sm">Apply first light irrigation at rosette stage for better branching.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mini day cards -->
+      <div class="ml-14 grid grid-cols-2 md:grid-cols-4 gap-3 mt-4">
+        <div class="bg-surface-container p-4 rounded-xl cursor-pointer hover:bg-surface-container-high transition-colors" onclick="askDayPrompt('Day 40 Thinning and Weeding')">
+          <span class="text-[10px] font-bold uppercase block mb-1 text-primary/70">Day 40</span>
+          <h4 class="font-bold text-sm">Thinning & Weeding</h4>
+          <p class="text-xs text-on-surface-variant mt-1">Ask AI →</p>
+        </div>
+        <div class="bg-surface-container p-4 rounded-xl cursor-pointer hover:bg-surface-container-high transition-colors" onclick="askDayPrompt('Day 60 Aphid Monitoring')">
+          <span class="text-[10px] font-bold uppercase block mb-1 text-primary/70">Day 60</span>
+          <h4 class="font-bold text-sm">Aphid Monitoring</h4>
+          <p class="text-xs text-on-surface-variant mt-1">Ask AI →</p>
+        </div>
+        <div class="bg-surface-container p-4 rounded-xl cursor-pointer hover:bg-surface-container-high transition-colors" onclick="askDayPrompt('Day 75 Second Irrigation')">
+          <span class="text-[10px] font-bold uppercase block mb-1 text-primary/70">Day 75</span>
+          <h4 class="font-bold text-sm">Second Irrigation</h4>
+          <p class="text-xs text-on-surface-variant mt-1">Ask AI →</p>
+        </div>
+        <div class="bg-surface-container p-4 rounded-xl cursor-pointer hover:bg-surface-container-high transition-colors" onclick="askDayPrompt('Day 110 Harvesting tips')">
+          <span class="text-[10px] font-bold uppercase block mb-1 text-primary/70">Day 110</span>
+          <h4 class="font-bold text-sm">Harvesting</h4>
+          <p class="text-xs text-on-surface-variant mt-1">Ask AI →</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Generate booklet button -->
+    <div class="mt-10 flex flex-col items-center gap-3">
+      <button onclick="generateBooklet()" class="shimmer-btn px-10 py-5 text-white rounded-full font-headline font-extrabold text-lg shadow-xl active:scale-95 transition-transform flex items-center gap-3">
+        <span class="material-symbols-outlined text-2xl" style="font-variation-settings:'FILL' 1;">menu_book</span>
+        Generate My Full Crop Booklet
+      </button>
+      <span class="text-[10px] font-bold tracking-widest text-on-surface-variant/60 uppercase">Powered by Krishi AI + Stable Diffusion</span>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════
+       SECTION 3 — CLIMATE-RESILIENT CROP SWAP (P4)
+  ══════════════════════════════════════════════════ -->
+  <section class="mb-20 fade-up" style="animation-delay:0.2s">
+    <div class="flex items-center gap-3 mb-8">
+      <span class="material-symbols-outlined text-secondary text-3xl" style="font-variation-settings:'FILL' 1;">trending_up</span>
+      <h2 class="font-headline text-3xl font-bold">Is Your Crop Future-Proof?</h2>
+    </div>
+
+    <div class="bg-surface-container p-8 rounded-2xl border border-outline-variant/15">
+      <!-- Climate Alert -->
+      <div class="bg-secondary-fixed text-on-secondary-fixed p-6 rounded-xl flex items-center gap-5 mb-8">
+        <div class="w-14 h-14 bg-white/30 rounded-full flex items-center justify-center flex-shrink-0">
+          <span class="material-symbols-outlined text-3xl" style="font-variation-settings:'FILL' 1;">warning</span>
+        </div>
+        <div>
+          <h3 class="font-headline font-bold text-xl">Drought Warning: Azamgarh District</h3>
+          <p class="text-sm opacity-80">Predicted rainfall for Jan-Mar is 22% lower than average. Your current wheat crop requires high water usage.</p>
+        </div>
+      </div>
+
+      <!-- Comparison -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <!-- Current -->
+        <div class="p-7 rounded-xl bg-surface-container-low border border-outline-variant/10">
+          <div class="text-xs font-bold text-on-surface-variant uppercase mb-3">Current Choice</div>
+          <h4 class="text-3xl font-headline font-bold mb-5">Wheat</h4>
+          <div class="space-y-2 mb-6">
+            <div class="flex justify-between border-b border-outline-variant/10 pb-2 text-sm">
+              <span class="opacity-60">Water Needed</span><span class="font-bold">High (4-6 irrigations)</span>
+            </div>
+            <div class="flex justify-between border-b border-outline-variant/10 pb-2 text-sm">
+              <span class="opacity-60">Climate Risk</span><span class="font-bold text-error">High</span>
+            </div>
+            <div class="flex justify-between border-b border-outline-variant/10 pb-2 text-sm">
+              <span class="opacity-60">Input Cost</span><span class="font-bold">₹12,000/acre</span>
+            </div>
+          </div>
+          <div class="text-on-surface-variant text-xs mb-1">Estimated Profit</div>
+          <div class="text-4xl font-headline font-extrabold">₹38,000</div>
+        </div>
+
+        <!-- Suggested -->
+        <div class="p-7 rounded-xl bg-primary/5 border-2 border-primary/25 relative">
+          <div class="absolute -top-3 left-7 px-4 py-1 bg-primary text-white text-[10px] font-bold rounded-full uppercase tracking-tight shadow-lg">Recommended Swap</div>
+          <div class="text-xs font-bold text-primary uppercase mb-3">Suggested Alternative</div>
+          <h4 class="text-3xl font-headline font-bold mb-5 text-primary">Barley</h4>
+          <div class="space-y-2 mb-6">
+            <div class="flex justify-between border-b border-primary/10 pb-2 text-sm">
+              <span class="text-primary/60">Water Needed</span><span class="font-bold text-primary">Low (1-2 irrigations)</span>
+            </div>
+            <div class="flex justify-between border-b border-primary/10 pb-2 text-sm">
+              <span class="text-primary/60">Climate Risk</span><span class="font-bold text-primary">Low</span>
+            </div>
+            <div class="flex justify-between border-b border-primary/10 pb-2 text-sm">
+              <span class="text-primary/60">Input Cost</span><span class="font-bold text-primary">₹9,500/acre</span>
+            </div>
+          </div>
+          <div class="text-primary text-xs mb-1">Estimated Profit</div>
+          <div class="text-4xl font-headline font-extrabold text-primary">₹44,200</div>
+          <div class="mt-3 text-xs text-primary/70 font-medium">+18% profit · -40% water · Export demand up</div>
+        </div>
+      </div>
+
+      <!-- Switch button + AI panel trigger -->
+      <div class="flex flex-col items-center gap-4">
+        <button onclick="toggleSwitchPanel()" class="px-8 py-4 bg-secondary text-on-secondary rounded-full font-headline font-bold text-lg hover:shadow-lg transition-all active:scale-95 flex items-center gap-2">
+          <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">swap_horiz</span>
+          Show Me How to Switch to Barley
+        </button>
+        <span class="px-3 py-1 bg-surface-container-highest text-[10px] font-bold text-on-surface-variant rounded-full border border-outline-variant/10">Powered by Krishi AI</span>
+      </div>
+
+      <!-- ── SWITCH AI PANEL ── -->
+      <div id="switchPanel" class="switch-panel mt-8 bg-emerald-950 rounded-2xl overflow-hidden">
+        <div class="flex items-center gap-3 px-6 py-4 border-b border-white/10">
+          <div class="w-9 h-9 rounded-xl bg-primary flex items-center justify-center">
+            <span class="material-symbols-outlined text-white text-sm" style="font-variation-settings:'FILL' 1;">psychology</span>
+          </div>
+          <div>
+            <p class="font-headline font-bold text-white text-sm">Krishi AI — Crop Switch Guide</p>
+            <p class="text-xs text-emerald-400">Step-by-step guide to switching from Wheat to Barley</p>
+          </div>
+        </div>
+        <div class="px-6 py-5 space-y-4 max-h-72 overflow-y-auto" id="switchChat" style="scrollbar-width:thin;scrollbar-color:#2e7d32 transparent;">
+          <!-- AI initial message -->
+          <div class="flex gap-3 msg-in">
+            <div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center flex-shrink-0">
+              <span class="material-symbols-outlined text-white text-sm" style="font-variation-settings:'FILL' 1;">psychology</span>
+            </div>
+            <div class="bg-white/10 text-white/90 px-4 py-3 rounded-tr-xl rounded-b-xl text-sm max-w-lg">
+              Smart decision! Switching to Barley will save ₹2,500 in input costs and earn ₹6,200 more profit. Here's your 3-step switch plan:<br/><br/>
+              <strong>Step 1:</strong> Stop wheat irrigation now (saves water cost)<br/>
+              <strong>Step 2:</strong> Source RD-2552 Barley seeds from nearest IFFCO outlet<br/>
+              <strong>Step 3:</strong> Sow within next 8 days for optimal season alignment<br/><br/>
+              Want me to find seed sources near Azamgarh?
+            </div>
+          </div>
+        </div>
+        <!-- Switch panel input -->
+        <div class="px-6 pb-5 pt-3 border-t border-white/10">
+          <div class="flex gap-3 items-center bg-white/10 rounded-2xl px-4 py-3 border border-white/10">
+            <input id="switchInput" type="text"
+              class="flex-1 bg-transparent text-white placeholder-white/40 text-sm border-none outline-none focus:ring-0"
+              placeholder="Ask about Barley farming..."
+              onkeydown="if(event.key==='Enter'){sendSwitchMsg();}"/>
+            <button onclick="sendSwitchMsg()" class="bg-primary text-white rounded-full w-9 h-9 flex items-center justify-center hover:brightness-110 active:scale-95 flex-shrink-0">
+              <span class="material-symbols-outlined text-lg" style="font-variation-settings:'FILL' 1;">send</span>
+            </button>
+          </div>
+          <!-- Quick prompts -->
+          <div class="flex gap-2 flex-wrap mt-3">
+            <button onclick="sendSwitchMsg('Where to buy Barley seeds near Azamgarh?')" class="px-3 py-1.5 bg-white/10 text-white/70 rounded-full text-xs hover:bg-white/20 transition-colors">Seed sources near me</button>
+            <button onclick="sendSwitchMsg('What is the profit calculation for 3 acres of Barley?')" class="px-3 py-1.5 bg-white/10 text-white/70 rounded-full text-xs hover:bg-white/20 transition-colors">Profit for 3 acres</button>
+            <button onclick="sendSwitchMsg('What is the best time to sow Barley in January?')" class="px-3 py-1.5 bg-white/10 text-white/70 rounded-full text-xs hover:bg-white/20 transition-colors">Best sowing time</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       SECTION 4 — ADAPTIVE FARMER-LED LOGIC (P2) — RLHF
+  ══════════════════════════════════════════════════════ -->
+  <section class="mb-20 fade-up" style="animation-delay:0.25s">
+    <div class="flex items-center gap-3 mb-8">
+      <span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings:'FILL' 1;">diversity_1</span>
+      <h2 class="font-headline text-3xl font-bold">Did Our Advice Work For You?</h2>
+    </div>
+
+    <div class="max-w-3xl mx-auto">
+      <div class="bg-surface-container-highest p-8 rounded-2xl relative overflow-hidden text-center">
+        <div class="text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-3">Last Recommendation</div>
+        <p class="text-xl italic mb-8 text-on-surface">"Apply 2kg urea per acre before Thursday for nitrogen recovery."</p>
+
+        <!-- Feedback buttons -->
+        <div class="grid grid-cols-2 gap-4 mb-6" id="feedbackBtns">
+          <button onclick="submitFeedback('positive')" class="flex items-center justify-center gap-3 py-5 bg-primary text-on-primary rounded-xl font-bold hover:shadow-lg transition-all active:scale-95 group">
+            <span class="material-symbols-outlined group-hover:scale-125 transition-transform" style="font-variation-settings:'FILL' 1;">thumb_up</span>
+            Yes it worked
+          </button>
+          <button onclick="submitFeedback('negative')" class="flex items-center justify-center gap-3 py-5 bg-error text-on-error rounded-xl font-bold hover:shadow-lg transition-all active:scale-95 group">
+            <span class="material-symbols-outlined group-hover:scale-125 transition-transform" style="font-variation-settings:'FILL' 1;">thumb_down</span>
+            No it didn't work
+          </button>
+        </div>
+
+        <!-- Feedback text box (shows on "No") -->
+        <div id="feedbackPanel" class="feedback-text bg-surface-container-lowest p-5 rounded-xl text-left mb-5 border border-outline-variant/20">
+          <p class="text-sm font-bold mb-2 text-on-surface">Tell us what happened — your feedback improves Krishi AI for every farmer:</p>
+          <textarea id="feedbackText" class="w-full bg-surface-container border border-outline-variant/30 rounded-xl p-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none resize-none" rows="3" placeholder="e.g. The soil was already wet, urea caused waterlogging..."></textarea>
+          <button onclick="submitDetailedFeedback()" class="mt-3 bg-primary text-white px-6 py-2 rounded-full text-sm font-bold hover:brightness-110 active:scale-95 transition-all">
+            Submit Feedback
+          </button>
+        </div>
+
+        <!-- Success state (hidden initially) -->
+        <div id="feedbackSuccess" class="hidden bg-primary/10 border border-primary/20 rounded-xl p-4 mb-5">
+          <p class="text-primary font-bold text-sm flex items-center gap-2 justify-center">
+            <span class="material-symbols-outlined text-lg" style="font-variation-settings:'FILL' 1;">check_circle</span>
+            Thank you! Your feedback is improving Krishi AI for 1,240 farmers in Azamgarh.
+          </p>
+        </div>
+
+        <!-- Community stats -->
+        <div class="inline-flex items-center gap-3 px-5 py-3 bg-white/50 rounded-full border border-primary/10">
+          <div class="flex -space-x-2">
+            <div class="w-8 h-8 rounded-full border-2 border-white bg-primary-container flex items-center justify-center text-[10px] text-on-primary-container font-bold">A</div>
+            <div class="w-8 h-8 rounded-full border-2 border-white bg-secondary-container flex items-center justify-center text-[10px] text-on-secondary-container font-bold">B</div>
+            <div class="w-8 h-8 rounded-full border-2 border-white bg-tertiary-container flex items-center justify-center text-[10px] text-on-tertiary-container font-bold">C</div>
+          </div>
+          <span class="text-sm font-medium">Your feedback improved Krishi AI for <span class="font-bold text-primary">1,240 farmers</span></span>
+        </div>
+
+        <div class="mt-6">
+          <span class="px-3 py-1 bg-surface-container text-[10px] font-bold tracking-widest text-on-surface-variant uppercase rounded-full border border-outline-variant/10">Adaptive Learning — RLHF Powered</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ── MOBILE BOTTOM NAV ── -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 bg-[#fcf9f1]/80 backdrop-blur-md shadow-[0_-4px_40px_rgba(28,28,23,0.06)] border-t border-[#bfcaba]/15 rounded-t-[2rem]">
+  <a href="../farmer_dashboard_synced_navbar/code.html" class="flex flex-col items-center text-[#1c1c17]/50 p-2 hover:bg-primary/10 rounded-full">
+    <span class="material-symbols-outlined">home</span><span class="text-[10px] font-medium">Home</span>
+  </a>
+  <a href="../eco_sentinel_agritrend/code.html" class="flex flex-col items-center text-[#1c1c17]/50 p-2 hover:bg-primary/10 rounded-full">
+    <span class="material-symbols-outlined">trending_up</span><span class="text-[10px] font-medium">Trends</span>
+  </a>
+  <a href="../ask_krishi_ai_chat_enhanced/code.html" class="flex flex-col items-center text-[#1c1c17]/50 p-2 hover:bg-primary/10 rounded-full">
+    <span class="material-symbols-outlined">psychology</span><span class="text-[10px] font-medium">AI Help</span>
+  </a>
+  <a href="../scheme_radar_final_synced_layout/code.html" class="flex flex-col items-center text-[#1c1c17]/50 p-2 hover:bg-primary/10 rounded-full">
+    <span class="material-symbols-outlined">radar</span><span class="text-[10px] font-medium">Radar</span>
+  </a>
+  <a href="#" class="flex flex-col items-center bg-primary text-white rounded-full p-3 scale-110 -translate-y-2 shadow-lg">
+    <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">psychology_alt</span>
+    <span class="text-[10px] font-medium">Status</span>
+  </a>
+</nav>
+
+<script>
+// ── SHARED AI CALL ──
+async function callAI(message, chatAreaId, context = '') {
+  const chatArea = document.getElementById(chatAreaId);
+  const typingId = 'typing_' + Date.now();
+
+  // typing indicator
+  chatArea.innerHTML += `
+    <div id="${typingId}" class="flex gap-3 msg-in">
+      <div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center flex-shrink-0">
+        <span class="material-symbols-outlined text-white text-sm" style="font-variation-settings:'FILL' 1;">psychology</span>
+      </div>
+      <div class="bg-primary/10 px-4 py-3 rounded-tr-xl rounded-b-xl">
+        <div class="flex gap-1.5 h-4 items-center">
+          <div class="typing-dot w-2 h-2 bg-primary/40 rounded-full"></div>
+          <div class="typing-dot w-2 h-2 bg-primary/40 rounded-full"></div>
+          <div class="typing-dot w-2 h-2 bg-primary/40 rounded-full"></div>
+        </div>
+      </div>
+    </div>`;
+  chatArea.scrollTop = chatArea.scrollHeight;
+
+  try {
+    const res = await fetch('/api/chat/ask', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: context + message, language: 'Hindi', history: [] })
+    });
+    const data = await res.json();
+    document.getElementById(typingId)?.remove();
+    return data.reply || getDemoReply(message);
+  } catch(e) {
+    document.getElementById(typingId)?.remove();
+    return getDemoReply(message);
+  }
+}
+
+function appendAIMsg(chatAreaId, text, isLight = true) {
+  const area = document.getElementById(chatAreaId);
+  const bubble = isLight
+    ? `bg-primary/10 text-on-surface`
+    : `bg-white/10 text-white/90`;
+  area.innerHTML += `
+    <div class="flex gap-3 msg-in">
+      <div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center flex-shrink-0">
+        <span class="material-symbols-outlined text-white text-sm" style="font-variation-settings:'FILL' 1;">psychology</span>
+      </div>
+      <div class="${bubble} px-4 py-3 rounded-tr-xl rounded-b-xl text-sm max-w-lg">${text}</div>
+    </div>`;
+  area.scrollTop = area.scrollHeight;
+}
+
+function appendUserMsg(chatAreaId, text, isLight = true) {
+  const area = document.getElementById(chatAreaId);
+  const bubble = isLight
+    ? `bg-surface-container-high text-on-surface`
+    : `bg-white/20 text-white`;
+  area.innerHTML += `
+    <div class="flex gap-3 flex-row-reverse msg-in">
+      <div class="w-8 h-8 rounded-lg bg-secondary flex items-center justify-center flex-shrink-0">
+        <span class="material-symbols-outlined text-white text-sm" style="font-variation-settings:'FILL' 1;">person</span>
+      </div>
+      <div class="${bubble} px-4 py-3 rounded-tl-xl rounded-b-xl text-sm max-w-sm">${text}</div>
+    </div>`;
+  area.scrollTop = area.scrollHeight;
+}
+
+// ── SECTION 1: SOIL AI ──
+async function askSoilAI() {
+  window.location.href = '../ask_krishi_ai_chat_enhanced/code.html?q=My+soil+nitrogen+is+68%25+and+pH+is+5.2+what+should+I+do';
+}
+
+// ── SECTION 2: CROP CHRONICLES CHAT ──
+async function sendChronicleMsg(prefill) {
+  const input = document.getElementById('chronicleInput');
+  const text = prefill || input.value.trim();
+  if (!text) return;
+  input.value = '';
+
+  appendUserMsg('chronicleChat', text, true);
+
+  const reply = await callAI(text, 'chronicleChat',
+    'I am a farmer asking about crop farming roadmap. My question: ');
+
+  appendAIMsg('chronicleChat', reply, true);
+}
+
+async function askDayPrompt(prompt) {
+  appendUserMsg('chronicleChat', `Tell me about ${prompt}`, true);
+  document.getElementById('chronicleChat').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  const reply = await callAI(prompt, 'chronicleChat',
+    'Farmer asking about their crop care task: ');
+  appendAIMsg('chronicleChat', reply, true);
+}
+
+async function generateBooklet() {
+  const input = document.getElementById('chronicleInput');
+  const cropText = input.value.trim() || 'Mustard Pusa Bold 2 acres';
+  appendUserMsg('chronicleChat', `Generate my complete crop booklet for: ${cropText}`, true);
+
+  try {
+    const res = await fetch('/api/chronicles/booklet', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ crop: cropText, language: 'Hindi' })
+    });
+    const data = await res.json();
+    const typingId = 'typing_' + Date.now();
+    const area = document.getElementById('chronicleChat');
+    area.innerHTML += `<div id="${typingId}" class="flex gap-3"><div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-white text-sm" style="font-variation-settings:'FILL' 1;">psychology</span></div><div class="bg-primary/10 px-4 py-3 rounded-tr-xl rounded-b-xl"><div class="flex gap-1.5 h-4 items-center"><div class="typing-dot w-2 h-2 bg-primary/40 rounded-full"></div><div class="typing-dot w-2 h-2 bg-primary/40 rounded-full"></div><div class="typing-dot w-2 h-2 bg-primary/40 rounded-full"></div></div></div></div>`;
+    await new Promise(r => setTimeout(r, 1800));
+    document.getElementById(typingId)?.remove();
+    appendAIMsg('chronicleChat',
+      `📗 <strong>Your Crop Booklet is Ready!</strong><br/><br/>I've generated a complete 110-day farming roadmap for <strong>${cropText}</strong>. The booklet includes daily care instructions, AI-generated crop images for each growth stage, fertiliser schedule, pest monitoring calendar and harvest guide. <br/><br/><a href="#" class="underline text-primary font-bold">Download PDF Booklet →</a>`, true);
+  } catch(e) {
+    appendAIMsg('chronicleChat',
+      `📗 <strong>Booklet Generated!</strong><br/>Your complete 110-day farming roadmap for <strong>${cropText}</strong> is ready with day-by-day instructions, crop stage images and a harvest guide. Connect the backend to download the PDF.`, true);
+  }
+
+  document.getElementById('chronicleChat').scrollIntoView({ behavior: 'smooth', block: 'end' });
+}
+
+// voice for chronicles
+let chronicleListening = false;
+function toggleChronicleVoice() {
+  if (chronicleListening) { chronicleListening = false; return; }
+  if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) return;
+  chronicleListening = true;
+  const btn = document.getElementById('chronicleMic');
+  btn.querySelector('.material-symbols-outlined').textContent = 'mic_off';
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const r = new SR(); r.lang = 'hi-IN';
+  r.onresult = (e) => {
+    document.getElementById('chronicleInput').value = e.results[0][0].transcript;
+    chronicleListening = false;
+    btn.querySelector('.material-symbols-outlined').textContent = 'mic';
+    setTimeout(sendChronicleMsg, 300);
+  };
+  r.onerror = () => { chronicleListening = false; btn.querySelector('.material-symbols-outlined').textContent = 'mic'; };
+  r.onend   = () => { chronicleListening = false; btn.querySelector('.material-symbols-outlined').textContent = 'mic'; };
+  r.start();
+}
+
+// ── SECTION 3: CROP SWITCH AI ──
+function toggleSwitchPanel() {
+  const panel = document.getElementById('switchPanel');
+  panel.classList.toggle('open');
+  if (panel.classList.contains('open')) {
+    setTimeout(() => panel.scrollIntoView({ behavior: 'smooth', block: 'center' }), 200);
+  }
+}
+
+async function sendSwitchMsg(prefill) {
+  const input = document.getElementById('switchInput');
+  const text = prefill || input.value.trim();
+  if (!text) return;
+  input.value = '';
+
+  appendUserMsg('switchChat', text, false);
+  const reply = await callAI(text, 'switchChat',
+    'Farmer asking about switching from Wheat to Barley crop: ');
+  appendAIMsg('switchChat', reply, false);
+}
+
+// ── SECTION 4: RLHF FEEDBACK ──
+async function submitFeedback(type) {
+  document.getElementById('feedbackBtns').style.opacity = '0.5';
+  document.getElementById('feedbackBtns').style.pointerEvents = 'none';
+
+  if (type === 'negative') {
+    document.getElementById('feedbackPanel').classList.add('open');
+    return;
+  }
+
+  // positive feedback
+  try {
+    await fetch('/api/soil/feedback', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ feedback: 'positive', recommendation: 'urea_2kg_per_acre' })
+    });
+  } catch(e) {}
+
+  document.getElementById('feedbackSuccess').classList.remove('hidden');
+}
+
+async function submitDetailedFeedback() {
+  const text = document.getElementById('feedbackText').value.trim();
+  if (!text) return;
+
+  try {
+    await fetch('/api/soil/feedback', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ feedback: 'negative', detail: text, recommendation: 'urea_2kg_per_acre' })
+    });
+  } catch(e) {}
+
+  document.getElementById('feedbackPanel').classList.remove('open');
+  document.getElementById('feedbackSuccess').classList.remove('hidden');
+}
+
+// ── DEMO REPLIES ──
+function getDemoReply(msg) {
+  const m = msg.toLowerCase();
+  if (m.includes('wheat') || m.includes('mustard') || m.includes('barley'))
+    return 'Great choice! For your selected crop I recommend starting with soil preparation 5 days before sowing. Ensure NPK ratio is balanced — your nitrogen is slightly low, add urea at 2kg/acre before sowing. Want me to generate the full day-by-day roadmap?';
+  if (m.includes('seed') || m.includes('source') || m.includes('buy'))
+    return 'Nearest seed sources in Azamgarh: <strong>1)</strong> IFFCO Outlet, Civil Lines — RD-2552 Barley ₹45/kg <strong>2)</strong> Rajasthan Seeds, Mandi Road — available in 50kg bags <strong>3)</strong> Online via e-NAM portal with home delivery in 3 days.';
+  if (m.includes('profit') || m.includes('income') || m.includes('₹'))
+    return 'For 3 acres of Barley: Input cost ₹28,500 · Expected yield 15 quintals/acre · MSP rate ₹1,735/quintal · <strong>Gross income: ₹78,075</strong> · Net profit after costs: <strong>₹49,575</strong>. That\'s ₹11,575 more than wheat this season.';
+  if (m.includes('sow') || m.includes('time') || m.includes('when'))
+    return 'Best sowing window for Barley in January: <strong>10-25 January</strong> is ideal for your Azamgarh region. Soil temperature should be 10-15°C. Avoid sowing after 28 January as it affects tillering.';
+  if (m.includes('ph') || m.includes('lime') || m.includes('acidic'))
+    return 'Your soil pH is 5.2 — think of it as chai that is too bitter. Apply <strong>agricultural lime at 25kg per acre</strong>. Mix into top 6 inches before sowing. pH will rise to 6.5 in 3-4 weeks — perfect for Barley and Wheat.';
+  return 'I understand. Based on your farm data and current season conditions, I recommend the following action plan. Would you like me to break this down step by step for your specific field size and crop?';
+}
+
+// ── PROFILE DROPDOWN ──
+function toggleProfile() {
+  document.getElementById('profileMenu').classList.toggle('hidden');
+}
+document.addEventListener('click', (e) => {
+  if (!document.getElementById('profileWrapper')?.contains(e.target)) {
+    document.getElementById('profileMenu')?.classList.add('hidden');
+  }
+});
+
+// ── LOAD SOIL DATA FROM BACKEND ──
+async function loadSoilData() {
+  try {
+    const res = await fetch('/api/soil/current');
+    if (!res.ok) return;
+    const d = await res.json();
+    if (d.nitrogen) document.getElementById('nVal').textContent = d.nitrogen + '%';
+    if (d.phosphorus) document.getElementById('pVal').textContent = d.phosphorus + '%';
+    if (d.potassium) document.getElementById('kVal').textContent = d.potassium + '%';
+    if (d.pH) document.getElementById('phVal').textContent = d.pH;
+    if (d.advice) document.getElementById('soilAdviceText').innerHTML = d.advice;
+  } catch(e) { /* use demo data */ }
+}
+
+loadSoilData();
+</script>
+</body>
+</html>
